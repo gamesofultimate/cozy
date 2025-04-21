@@ -108,7 +108,6 @@ impl InputsSystem {
       }
 
       let mut direction = velocity.clone();
-      //log::info!("direction: {:?}", &direction);
       direction.y = 0.0;
 
       if direction != Vector3::zeros() {
@@ -116,11 +115,9 @@ impl InputsSystem {
         movement.direction = direction;
       }
 
-      log::info!("direction: {:?}", &movement.direction);
-
       self
         .physics
-        .set_direction(&physics, -movement.direction);
+        .set_direction(&physics, movement.direction);
       self
         .physics
         .move_controller_velocity(&physics, velocity, delta_time);
