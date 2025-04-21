@@ -82,30 +82,45 @@ impl InputsSystem {
         movement.walking_speed
       };
 
-      let mut velocity = Vector3::new(0.0, 9.8, 0.0);
+      let mut velocity = Vector3::new(0.0, -9.8, 0.0);
+      let mut direction = Vector3::new(0.0, 0.0, -1.0);
 
       if input.state.contains(InputState::IsMouseLocked) {
+        velocity.z += input.forward * *speed;
+        velocity.x += input.right * *speed;
+      } else if input.check(InputState::HasJoystick) {
         if input.forward.abs() > component.deadzone {
-          velocity.z *= input.forward * *speed;
+          velocity.z += input.forward * *speed;
         }
 
         if input.right.abs() > component.deadzone {
-          velocity.x *= input.right * *speed;
+          velocity.x += input.right * *speed;
         }
       }
 
-      if let Some(audio) = maybe_audio {
+      if let Some(audio) = maybe_audio && audio.state == SourceState::Stopped {
         let velocity = Vector3::new(velocity.x, 0.0, velocity.z);
         if velocity.magnitude() > 0.1 {
-          match audio.state {
-            SourceState::Stopped => audio.state = SourceState::Playing,
-            _ => {}
-          }
+          audio.state = SourceState::Playing;
         } else {
           audio.state = SourceState::Stopped;
         }
       }
 
+      let mut direction = velocity.clone();
+      //log::info!("direction: {:?}", &direction);
+      direction.y = 0.0;
+
+      if direction != Vector3::zeros() {
+        let direction = Unit::new_normalize(direction);
+        movement.direction = direction;
+      }
+
+      log::info!("direction: {:?}", &movement.direction);
+
+      self
+        .physics
+        .set_direction(&physics, -movement.direction);
       self
         .physics
         .move_controller_velocity(&physics, velocity, delta_time);

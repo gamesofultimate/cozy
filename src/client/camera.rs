@@ -1,5 +1,6 @@
 use crate::shared::components::{
   Player,
+  CameraFollow,
 };
 
 use engine::{
@@ -37,13 +38,28 @@ impl Initializable for CameraSystem {
 }
 
 impl CameraSystem {
-  fn update_camera_rotation(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
-    for (_, (_, transform, camera)) in scene.query_mut::<(
+  fn update_follow(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
+    let mut camera_transform = None;
+    for (_, (_, transform)) in scene.query_mut::<(
       &SelfComponent,
+      &mut TransformComponent,
+    )>() {
+      camera_transform = Some(transform.clone());
+    }
+    for (entity, (_, transform)) in scene.query_mut::<(&CameraFollow, &mut TransformComponent)>() {
+      if let Some(camera_transform) = camera_transform {
+        transform.translation = camera_transform.translation;
+      }
+    }
+  }
+
+  fn update_camera_rotation(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
+    for (_, (transform, camera)) in scene.query_mut::<(
       &mut TransformComponent,
       &CameraComponent,
     )>() {
       let direction = transform.world_transform().get_forward_direction();
+      //let direction = transform.get_forward_direction();
       if let CameraComponent::Perspective { .. } = camera
         && let Some(camera_config) = backpack.get_mut::<CameraConfig>()
       {
@@ -54,8 +70,7 @@ impl CameraSystem {
   }
 
   fn update_camera_translation(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
-    for (_, (_, transform, camera)) in scene.query_mut::<(
-      &SelfComponent,
+    for (_, (transform, camera)) in scene.query_mut::<(
       &mut TransformComponent,
       &CameraComponent,
     )>() {
@@ -83,6 +98,7 @@ impl System for CameraSystem {
   fn run(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
     let inputs = self.inputs.read();
 
+    self.update_follow(scene, backpack);
     self.update_camera_rotation(scene, backpack);
     self.update_camera_translation(scene, backpack);
   }

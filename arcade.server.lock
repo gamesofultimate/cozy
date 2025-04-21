@@ -215,6 +215,30 @@
     },
     {
       "tag": "Struct",
+      "name": "CameraFollow",
+      "label": "Camera Follow",
+      "default_values": "{ following: (() => { \n            return Symbol.for(\"PrefabId\");\n           })() }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [
+        {
+          "name": "following",
+          "label": "Following",
+          "docs": null,
+          "ty": {
+            "tag": "Reference",
+            "name": "Identifiable",
+            "reference": "Prefab",
+            "default_values": "(() => { \n            return Symbol.for(\"PrefabId\");\n           })()",
+            "duplicate_values": "null",
+            "ty": "PrefabId"
+          }
+        }
+      ],
+      "private": false
+    },
+    {
+      "tag": "Struct",
       "name": "DebugFrustumComponent",
       "label": "Debug Frustum Component",
       "default_values": "{  }",

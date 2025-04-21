@@ -575,6 +575,30 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "773648b94d0e5d620f64f280777445740e61fe701025087ec8b57f45c791888b"
 
 [[package]]
+name = "cozy"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "bitflags 2.9.0",
+ "chrono",
+ "dotenv",
+ "engine",
+ "env_logger",
+ "fix-hidden-lifetime-bug",
+ "instant",
+ "log",
+ "num_cpus",
+ "rand 0.8.5",
+ "serde",
+ "tagged",
+ "tokio",
+ "uuid",
+ "wasm-bindgen",
+ "wasm-bindgen-futures",
+ "wasm-logger",
+]
+
+[[package]]
 name = "crc32fast"
 version = "1.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2719,30 +2743,6 @@ name = "smallvec"
 version = "1.13.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3c5e1a9a646d36c3599cd173a41282daf47c44583ad367b8e6837255952e5c67"
-
-[[package]]
-name = "soccer"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "bitflags 2.9.0",
- "chrono",
- "dotenv",
- "engine",
- "env_logger",
- "fix-hidden-lifetime-bug",
- "instant",
- "log",
- "num_cpus",
- "rand 0.8.5",
- "serde",
- "tagged",
- "tokio",
- "uuid",
- "wasm-bindgen",
- "wasm-bindgen-futures",
- "wasm-logger",
-]
 
 [[package]]
 name = "socket2"

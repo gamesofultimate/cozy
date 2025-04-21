@@ -134,7 +134,7 @@
           "transform": {
             "translation": [
               0,
-              0,
+              1,
               0
             ],
             "rotation": [
@@ -143,9 +143,9 @@
               0
             ],
             "scale": [
-              1,
-              1,
-              1
+              0.25,
+              0.25,
+              0.25
             ]
           }
         },
@@ -163,13 +163,13 @@
                   -8.659560562354933e-17
                 ],
                 "scale": [
-                  1,
-                  1,
-                  1
+                  3,
+                  3,
+                  3
                 ],
                 "translation": [
                   0,
-                  0,
+                  -2,
                   0
                 ]
               }
@@ -243,11 +243,21 @@
           },
           {
             "InputComponent": {
-              "deadzone": 0,
+              "deadzone": 0.001,
               "joystick_sensitivity": 1,
               "mouse_sensitivity": 0.5,
               "speed": {
                 "kph": 2
+              }
+            }
+          },
+          {
+            "Movement": {
+              "running_speed": {
+                "kph": 6
+              },
+              "walking_speed": {
+                "kph": 3
               }
             }
           }
@@ -262,7 +272,7 @@
           "transform": {
             "translation": [
               0,
-              -0.5,
+              -1.0095353,
               0
             ],
             "rotation": [
@@ -281,11 +291,11 @@
           {
             "ModelComponent": {
               "cast_shadows": true,
-              "id": "1df85dc1-9319-4b33-b20d-c7c37dc99de1",
+              "id": "9fb4859d-187f-4b3c-a7c8-4c6aea3452d8",
               "skip": false,
               "transform": {
                 "rotation": [
-                  0,
+                  6.123233995736766e-17,
                   0,
                   0,
                   1
@@ -297,7 +307,7 @@
                 ],
                 "translation": [
                   0,
-                  0,
+                  0.435,
                   0
                 ]
               }
@@ -321,7 +331,7 @@
                   ],
                   "ccd": false,
                   "collider_type": {
-                    "Cube": {
+                    "Ground": {
                       "height": 1,
                       "length": 1,
                       "width": 1
@@ -360,7 +370,7 @@
             "translation": [
               0,
               6,
-              -5
+              -6
             ],
             "rotation": [
               0.7853981633974483,
@@ -376,11 +386,6 @@
         },
         "components": [
           {
-            "ParentComponent": {
-              "parent_id": "a0f3a902-2575-484e-9af1-093f66a1d2d5"
-            }
-          },
-          {
             "CameraComponent": {
               "Perspective": {
                 "fovy": {
@@ -390,6 +395,11 @@
                 "zfar": 200,
                 "znear": 0.1
               }
+            }
+          },
+          {
+            "ParentComponent": {
+              "parent_id": "b798a352-e300-4432-a6b6-b0a859baeca9"
             }
           }
         ]
@@ -402,9 +412,9 @@
         "transform": {
           "transform": {
             "translation": [
-              0.37545684,
-              4.3639965,
-              -6.1711273
+              0,
+              -0.5,
+              0
             ],
             "rotation": [
               0,
@@ -421,8 +431,40 @@
         "components": [
           {
             "Tileset": {
-              "width": 10,
-              "length": 10
+              "width": 100,
+              "length": 100
+            }
+          }
+        ]
+      },
+      "b798a352-e300-4432-a6b6-b0a859baeca9": {
+        "id": "b798a352-e300-4432-a6b6-b0a859baeca9",
+        "tag": {
+          "name": "Camera Position"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              0,
+              1,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "CameraFollow": {
+              "following": "a0f3a902-2575-484e-9af1-093f66a1d2d5"
             }
           }
         ]
@@ -434,14 +476,9 @@
         "source": "models/barry/barry.gltf",
         "maxInstances": 10
       },
-      "1df85dc1-9319-4b33-b20d-c7c37dc99de1": {
-        "id": "1df85dc1-9319-4b33-b20d-c7c37dc99de1",
-        "source": "models/tiles/GrassBlock/SM_GrassBlock1x1.gltf",
-        "maxInstances": 10
-      },
-      "2572ef92-54eb-4df0-8aa3-55feee8a6e28": {
-        "id": "2572ef92-54eb-4df0-8aa3-55feee8a6e28",
-        "source": "models/tiles/GrassTile/SM_GrassTile1x1.gltf",
+      "9fb4859d-187f-4b3c-a7c8-4c6aea3452d8": {
+        "id": "9fb4859d-187f-4b3c-a7c8-4c6aea3452d8",
+        "source": "models/tiles/Grass/FarmBlock.gltf",
         "maxInstances": 10
       }
     },

@@ -23,16 +23,28 @@ impl Registry for GameComponents {
     Pickup::register();
     Player::register();
     Tileset::register();
+    CameraFollow::register();
   }
 }
 
+fn default_direction() -> Unit<Vector3<f32>> { Unit::new_normalize(Vector3::new(0.0, 0.0, -1.0)) }
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
 pub struct Movement {
   pub walking_speed: Kph,
   pub running_speed: Kph,
+
+  #[serde(skip, default = "default_direction")]
+  pub direction: Unit<Vector3<f32>>,
 }
 
 impl ProvideAssets for Movement {}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct CameraFollow {
+  pub following: PrefabId,
+}
+
+impl ProvideAssets for CameraFollow {}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
 pub struct Pickup {}
@@ -47,8 +59,8 @@ impl ProvideAssets for Player {}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
 pub struct Tileset {
-  width: u32,
-  length: u32,
+  pub width: u32,
+  pub length: u32,
 }
 
 impl ProvideAssets for Tileset {

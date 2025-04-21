@@ -1,8 +1,10 @@
 use crate::shared::components::{
   Tileset,
 };
-use engine::application::components::ModelComponent;
-use engine::application::components::TextComponent;
+use engine::application::components::{
+  ModelComponent,
+  TextComponent,
+};
 use engine::{
   application::{
     components::{CameraComponent, InputComponent, PhysicsComponent, SelfComponent},
@@ -47,21 +49,29 @@ impl System for TilesetSystem {
     "TilesetSystem"
   }
 
-  fn attach(&mut self, scene: &mut Scene, _backpack: &mut Backpack) {
-  }
-
   fn run(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
     let mut entities = vec![];
 
-    for (entity, (transform, tileset)) in scene.query_mut::<(&Transform, &Tileset)>() {
+    for (entity, (transform, tileset)) in scene.query_mut::<(&TransformComponent, &Tileset)>() {
       entities.push((entity, transform.clone(), tileset.clone()));
     }
 
-    for (entity, transform, _tileset) in entities {
-      scene.spawn_prefab_with("Tile::Grass", |prefab| {
-        prefab.transform = transform.into();
-      });
-      //scene.add_component(entity, Prev(set));
+    for (entity, transform, tileset) in entities {
+      let half_x = tileset.width / 2;
+      let half_z = tileset.length / 2;
+      for x in 0..tileset.width {
+        for z in 0..tileset.length {
+          scene.spawn_prefab_with("Tile::Grass", |prefab| {
+            let mut transform = transform.clone();
+            transform.translation.x -= half_x as f32;
+            transform.translation.x += x as f32;
+            transform.translation.z -= half_z as f32;
+            transform.translation.z += z as f32;
+
+            prefab.transform = transform.into();
+          });
+        }
+      }
     }
     scene.clear_component::<Tileset>();
   }

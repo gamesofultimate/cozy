@@ -229,9 +229,9 @@ impl Input for GameInput {
 
     if self.horizontal.len() == 1 {
       if self.horizontal.contains(&KeyboardKey::Right) {
-        self.right = 1.0;
-      } else if self.horizontal.contains(&KeyboardKey::Left) {
         self.right = -1.0;
+      } else if self.horizontal.contains(&KeyboardKey::Left) {
+        self.right = 1.0;
       }
     } else {
       self.right = 0.0;
