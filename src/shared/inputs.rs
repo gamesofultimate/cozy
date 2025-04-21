@@ -85,10 +85,7 @@ impl InputsSystem {
       let mut velocity = Vector3::new(0.0, -9.8, 0.0);
       let mut direction = Vector3::new(0.0, 0.0, -1.0);
 
-      if input.state.contains(InputState::IsMouseLocked) {
-        velocity.z += input.forward * *speed;
-        velocity.x += input.right * *speed;
-      } else if input.check(InputState::HasJoystick) {
+      if input.check(InputState::HasJoystick) {
         if input.forward.abs() > component.deadzone {
           velocity.z += input.forward * *speed;
         }
@@ -96,6 +93,9 @@ impl InputsSystem {
         if input.right.abs() > component.deadzone {
           velocity.x += input.right * *speed;
         }
+      } else if input.state.contains(InputState::IsMouseLocked) {
+        velocity.z += input.forward * *speed;
+        velocity.x += input.right * *speed;
       }
 
       if let Some(audio) = maybe_audio && audio.state == SourceState::Stopped {

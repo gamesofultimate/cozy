@@ -2,7 +2,7 @@ use engine::systems::Backpack;
 use engine::{
   application::devices::{
     ButtonState, DeviceEvent, GamepadEvent, KeyboardEvent, KeyboardKey, MouseButton, MouseEvent,
-    WindowEvent,
+    WindowEvent, GamepadButton,
   },
   application::input::Input,
   utils::units::Seconds,
@@ -65,22 +65,42 @@ impl GameInput {
   }
 
   fn handle_joystick(&mut self, event: DeviceEvent) {
+    // Enable joystick
+    match event {
+      DeviceEvent::Gamepad(_, GamepadEvent::Button(..)) => {
+        self.state |= InputState::HasJoystick;
+      }
+      _ => {}
+    }
+
+    match event {
+      DeviceEvent::Gamepad(
+        _,
+        GamepadEvent::Button(ButtonState::Down, GamepadButton::RightShoulder),
+      ) => {
+        self.state |= InputState::IsRunning;
+      }
+      DeviceEvent::Gamepad(
+        _,
+        GamepadEvent::Button(ButtonState::Up, GamepadButton::RightShoulder),
+      ) => {
+        self.state -= InputState::IsRunning;
+      }
+      _ => {}
+    }
+
     match event {
       DeviceEvent::Gamepad(_, GamepadEvent::Joystick { left, right }) => {
         const MIN_EPSILON: f32 = 0.0 - 0.02;
         const MAX_EPSILON: f32 = 0.0 + 0.02;
 
         if left.x > MAX_EPSILON || left.x < MIN_EPSILON {
-          self.right += left.x;
+          self.right += -left.x;
+          self.state |= InputState::HasJoystick;
         }
         if left.y > MAX_EPSILON || left.y < MIN_EPSILON {
           self.forward += -left.y;
-        }
-        if left.x > MAX_EPSILON || left.x < MIN_EPSILON {
-          self.delta.x += right.x;
-        }
-        if left.y > MAX_EPSILON || left.y < MIN_EPSILON {
-          self.delta.y += right.y;
+          self.state |= InputState::HasJoystick;
         }
       }
       _ => {}
@@ -222,10 +242,6 @@ impl Input for GameInput {
   }
 
   fn from_devices(&mut self, event: DeviceEvent, _: Seconds) {
-    self.handle_joystick(event);
-    self.handle_keyboard(event);
-    self.handle_mouse(event);
-    self.handle_window(event);
 
     if self.horizontal.len() == 1 {
       if self.horizontal.contains(&KeyboardKey::Right) {
@@ -246,5 +262,10 @@ impl Input for GameInput {
     } else {
       self.forward = 0.0;
     }
+
+    self.handle_joystick(event);
+    self.handle_keyboard(event);
+    self.handle_mouse(event);
+    self.handle_window(event);
   }
 }
