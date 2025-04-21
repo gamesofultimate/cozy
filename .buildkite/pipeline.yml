@@ -1,0 +1,57 @@
+steps:
+  - label: 'archive deployments'
+    if: 'build.env("BRANCH_DELETED") != null'
+    key: 'archive'
+    command: 'scripts/archiver'
+    env:
+      RUSTFLAGS: '--deny warnings'
+    agents:
+      os: 'linux'
+    notify:
+      - github_commit_status:
+          context: "Archive deployments"
+
+  - label: 'format: Rust'
+    if: 'build.env("BRANCH_DELETED") == null'
+    key: 'lint'
+    command: 'cargo fmt --all -- --check'
+    env:
+      RUSTFLAGS: '--deny warnings'
+    agents:
+      os: 'linux'
+    notify:
+      - github_commit_status:
+          context: "Rust: Format"
+
+  - label: 'build and distribute'
+    if: 'build.env("BRANCH_DELETED") == null'
+    key: 'build'
+    commands:
+      - 'git lfs install'
+      - 'git lfs fetch'
+      - 'scripts/builder'
+    env:
+      RUSTFLAGS: '--deny warnings'
+    agents:
+      os: 'linux-arm'
+    notify:
+      - github_commit_status:
+          context: "Build & Distribute"
+
+  - label: '(Website) build and distribute'
+    key: 'website'
+    command: 'scripts/website'
+    agents:
+      os: 'linux'
+    branches: 'main hotfix/*'
+    depends_on:
+      - 'build'
+
+  - label: notify slack
+    if: 'build.env("BRANCH_DELETED") == null'
+    key: 'notify'
+    command: 'python3 scripts/notify_slack.py'
+    agents:
+      os: 'linux'
+    depends_on:
+      - 'build'

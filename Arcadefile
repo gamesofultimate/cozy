@@ -1,0 +1,61 @@
+id: soccer
+name: Soccer
+description: |
+  Soccer, but with your hands!
+developers:
+  - name: Felipe Rocha
+    email: ["felipe@ultimate.games"]
+test:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 500M
+    limits:
+      cpu: 200m
+      memory: 600M
+build:
+  assets: resources/
+  executables:
+    client: soccer
+    server: soccer
+  client:
+    assets: resources/
+    executable: soccer
+  server:
+    executable: soccer
+    dockerfile: Dockerfile
+  website:
+    location: website/
+  backend:
+    executable: backend
+    location: backend/
+    dockerfile: Dockerfile
+  sidecar: 0.1.0
+gaming:
+  leaderboards:
+    - name: kills
+      title: Kills
+      description: How many total kills in the game
+      mode: Accumulate
+      best: MaxIsBest
+    - name: deaths
+      title: Deaths
+      description: How many total deaths happened in the game
+      mode: Accumulate
+      best: MinIsBest
+    - name: time
+      title: Time
+      description: How many seconds passed in the game
+      mode: Min
+      best: MinIsBest
+  achievements:
+    - name: first-blood
+      title: First Blood
+      description: You killed your first of many enemies
+      achieved_image_url: /test.png
+      unachieved_image_url: /test.png
+    - name: shared
+      title: Share with a friend
+      description: Share the game with a friend
+      achieved_image_url: /test.png
+      unachieved_image_url: /test.png

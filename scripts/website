@@ -1,0 +1,32 @@
+#!/bin/bash
+
+set -e
+
+ENVIRONMENT=$1
+TARGETDIR="/var/lib/buildkite-agent/cache/moonfallen/$BUILDKITE_AGENT_NAME"
+SHA=$(git rev-parse HEAD | cut -c1-10)
+BRANCH=$(git rev-parse --abbrev-ref "$BUILDKITE_BRANCH" | tr '/' '-')
+PUBLIC_URL="https://moonfallen.gg"
+
+echo "Building: Website"
+
+echo "Buildkite: $BUILDKITE_AGENT_NAME"
+echo "Environment: $ENVIRONMENT"
+echo "Target: $TARGETDIR"
+echo "Branch: $BRANCH"
+echo "Sha: $SHA"
+echo "Public Url: $PUBLIC_URL"
+
+# Denies warnings in CI. Makes the build much cleaner
+# over time. We also often communicate deprecations using
+# warnings, by keeping it clean, you get to see those warnings
+# as soon as they happen.
+
+ultimate-games build client --target-dir=$TARGETDIR/client --features production
+
+pushd backend
+cargo build --release --target-dir=$TARGETDIR/backend
+cp $TARGETDIR/backend/release/backend ./backend_server
+popd
+
+ultimate-games website -e production -b test -s $SHA --public-url=$PUBLIC_URL --bucket=moonfallen

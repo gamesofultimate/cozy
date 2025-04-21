@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -e
+
+BRANCH=$(git rev-parse --abbrev-ref "$BRANCH_DELETED" | tr '/' '-')
+
+if [[ "$BRANCH" == "master" ]]; then
+  echo "Skipping archiving for master branch"
+elif [[ "$BRANCH" == "main" ]]; then
+  echo "Skipping archiving for main branch"
+else
+  echo "Archiving deployments for $BRANCH"
+  ultimate-games archive -b $BRANCH -e staging
+fi

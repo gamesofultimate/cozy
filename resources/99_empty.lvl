@@ -1,0 +1,435 @@
+{
+  "version": "v0.0.8",
+  "filename": "99_empty.lvl",
+  "config": {
+    "id": "434f4365-314c-4b0a-b510-0dd832f63da2",
+    "name": "Empty",
+    "bloom": {
+      "threshold": 1,
+      "knee": 0.1,
+      "enabled": true,
+      "hdr": true
+    },
+    "dof": {
+      "focus_point": 8.7,
+      "focus_scale": 2.5,
+      "radius_scale": 5,
+      "enabled": false
+    },
+    "ssao": {
+      "enabled": true,
+      "scale": 4,
+      "radius": 2,
+      "bias": 0.5,
+      "intensity": 1.5
+    },
+    "ambient": {
+      "intensity": 0.55,
+      "fog": 0
+    },
+    "shadows": {
+      "num_cascade_layers": 3,
+      "shadow_multiplier": 10,
+      "debug_paint_cascades": false,
+      "max_distance": 100,
+      "fade_out": 0.5,
+      "bias": [
+        0.0005,
+        0.00005
+      ]
+    },
+    "physics": {
+      "color": [
+        1,
+        0,
+        0
+      ]
+    },
+    "debug": {
+      "empty_shapes": false,
+      "shadow": false,
+      "physics": true,
+      "lighting": false,
+      "render_debug_mode": "None",
+      "grid": false
+    },
+    "camera": {
+      "fovy": {
+        "radians": 0.7853982
+      },
+      "znear": 0.1,
+      "zfar": 200
+    },
+    "fxaa": {
+      "enabled": true,
+      "span_max": 8,
+      "reduce_min": 128,
+      "reduce_mul": 8
+    }
+  },
+  "scene": {
+    "prefabs": {
+      "f226ed76-2b3e-4969-88b8-bd7343ff6b52": {
+        "id": "f226ed76-2b3e-4969-88b8-bd7343ff6b52",
+        "tag": {
+          "name": "Sky"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              0,
+              -0.07982564,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1.5,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "SkyLightComponent": {
+              "Dynamic": {
+                "background_intensity": 1,
+                "id": "123f9457-4476-48e4-adba-c2ba616fe2e2",
+                "lighting_intensity": 0.3,
+                "turbidity": 2
+              }
+            }
+          },
+          {
+            "LightComponent": {
+              "Directional": {
+                "azimuth": {
+                  "radians": 0
+                },
+                "inclination": {
+                  "radians": 0.7853981633974483
+                },
+                "intensity": 1.5,
+                "radiance": [
+                  1,
+                  1,
+                  1
+                ],
+                "should_cast_shadows": false
+              }
+            }
+          }
+        ]
+      },
+      "a0f3a902-2575-484e-9af1-093f66a1d2d5": {
+        "id": "a0f3a902-2575-484e-9af1-093f66a1d2d5",
+        "tag": {
+          "name": "Player"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              0,
+              0,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "ModelComponent": {
+              "cast_shadows": true,
+              "id": "cb7b13ea-5344-44b6-909d-61dbd1c844d6",
+              "skip": false,
+              "transform": {
+                "rotation": [
+                  -1.232595164407831e-32,
+                  -0.7071067811865477,
+                  -0.7071067811865474,
+                  -8.659560562354933e-17
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ],
+                "translation": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          },
+          {
+            "PrefabProviderComponent": {}
+          },
+          {
+            "PhysicsComponent": {
+              "debug": false,
+              "id": "d1564267-680e-4556-ab32-f824ea727f61",
+              "joint": {
+                "body": {
+                  "allow_rotation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "allow_translation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "ccd": false,
+                  "collider_type": {
+                    "CapsuleY": {
+                      "half_height": 1,
+                      "radius": 1
+                    }
+                  },
+                  "density": 1,
+                  "dynamic_type": {
+                    "CharacterController": {
+                      "auto_step": true,
+                      "id": "e93087f5-4c28-4992-bc8d-ba6138c4ba72",
+                      "is_velocity_based": true,
+                      "max_slope_climb_angle": 1,
+                      "min_slope_slide_angle": 0.99,
+                      "shape_offset": 0.01,
+                      "slide": true,
+                      "snap_max_distance": 0.05,
+                      "snap_to_ground": true,
+                      "step_max_height": 0.3,
+                      "step_min_width": 0.2,
+                      "up_vector": [
+                        0,
+                        1,
+                        0
+                      ]
+                    }
+                  },
+                  "friction": 0.1,
+                  "id": "6b1a87d2-a153-4e14-b84e-15a9e97f50cf",
+                  "is_sensor": false,
+                  "restitution": 0.1
+                },
+                "config": null,
+                "id": "89f42152-1b02-4e9c-829e-12f68c78a229",
+                "name": "Joint",
+                "offset": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "5ac52ec0-171b-4fc9-a10b-0163b71e206a": {
+        "id": "5ac52ec0-171b-4fc9-a10b-0163b71e206a",
+        "tag": {
+          "name": "Tile"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              -0.00537917,
+              -0.12915874,
+              -0.10630345
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              2,
+              2,
+              2
+            ]
+          }
+        },
+        "components": [
+          {
+            "ModelComponent": {
+              "cast_shadows": true,
+              "id": "1df85dc1-9319-4b33-b20d-c7c37dc99de1",
+              "skip": false,
+              "transform": {
+                "rotation": [
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ],
+                "translation": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          },
+          {
+            "PhysicsComponent": {
+              "debug": false,
+              "id": "812f0ccc-664e-4096-b2fb-d0675e945ff7",
+              "joint": {
+                "body": {
+                  "allow_rotation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "allow_translation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "ccd": false,
+                  "collider_type": {
+                    "Cube": {
+                      "height": 1,
+                      "length": 1,
+                      "width": 1
+                    }
+                  },
+                  "density": 1,
+                  "dynamic_type": "Static",
+                  "friction": 0.1,
+                  "id": "0f2ecbeb-33a5-45d3-99fc-9a9ccdda6393",
+                  "is_sensor": false,
+                  "restitution": 0.1
+                },
+                "config": null,
+                "id": "d07968f2-f493-4701-b261-7e0fcd126df9",
+                "name": "Joint",
+                "offset": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          },
+          {
+            "PrefabProviderComponent": {}
+          }
+        ]
+      },
+      "551ce049-c52b-418a-91c4-285cbe165035": {
+        "id": "551ce049-c52b-418a-91c4-285cbe165035",
+        "tag": {
+          "name": "Camera"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              0,
+              6,
+              -5
+            ],
+            "rotation": [
+              0.7853981633974483,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "ParentComponent": {
+              "parent_id": "a0f3a902-2575-484e-9af1-093f66a1d2d5"
+            }
+          },
+          {
+            "Player": {}
+          },
+          {
+            "InputComponent": {
+              "deadzone": 0,
+              "joystick_sensitivity": 1,
+              "mouse_sensitivity": 0.5,
+              "speed": {
+                "kph": 2
+              }
+            }
+          },
+          {
+            "CameraComponent": {
+              "Perspective": {
+                "fovy": {
+                  "radians": 0.7853981633974483
+                },
+                "primary": true,
+                "zfar": 200,
+                "znear": 0.1
+              }
+            }
+          }
+        ]
+      }
+    },
+    "models": {
+      "cb7b13ea-5344-44b6-909d-61dbd1c844d6": {
+        "id": "cb7b13ea-5344-44b6-909d-61dbd1c844d6",
+        "source": "models/barry/barry.gltf",
+        "maxInstances": 10
+      },
+      "1df85dc1-9319-4b33-b20d-c7c37dc99de1": {
+        "id": "1df85dc1-9319-4b33-b20d-c7c37dc99de1",
+        "source": "models/tiles/GrassBlock/SM_GrassBlock1x1.gltf",
+        "maxInstances": 10
+      },
+      "2572ef92-54eb-4df0-8aa3-55feee8a6e28": {
+        "id": "2572ef92-54eb-4df0-8aa3-55feee8a6e28",
+        "source": "models/tiles/GrassTile/SM_GrassTile1x1.gltf",
+        "maxInstances": 10
+      }
+    },
+    "trimeshes": {},
+    "textures": {},
+    "particles": {},
+    "animations": {},
+    "terrains": {},
+    "dynamic_backgrounds": {
+      "123f9457-4476-48e4-adba-c2ba616fe2e2": {
+        "id": "123f9457-4476-48e4-adba-c2ba616fe2e2"
+      }
+    },
+    "hdrs": {},
+    "audio": {},
+    "animation_state": {},
+    "heightfields": {},
+    "behavior_tree": {},
+    "planners": {},
+    "sprites": {},
+    "fonts": {},
+    "navmeshes": {}
+  }
+}

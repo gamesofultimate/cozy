@@ -1,0 +1,32 @@
+#!/bin/bash
+
+set -e
+
+ENVIRONMENT=$1
+TARGETDIR="/var/lib/buildkite-agent/cache/moonfallen/$BUILDKITE_AGENT_NAME"
+SHA=$(git rev-parse HEAD | cut -c1-10)
+BRANCH=$(git rev-parse --abbrev-ref "$BUILDKITE_BRANCH" | tr '/' '-')
+
+echo "Building"
+
+echo "Buildkite: $BUILDKITE_AGENT_NAME"
+echo "Environment: $ENVIRONMENT"
+echo "Target: $TARGETDIR"
+echo "Branch: $BRANCH"
+echo "Sha: $SHA"
+
+ultimate-games build client --deny-warnings --target-dir=$TARGETDIR/client
+ultimate-games build server --deny-warnings --target-dir=$TARGETDIR/server
+
+cp $TARGETDIR/server/release/moonfallen_server ./moonfallen_server
+
+if [[ "$BUILDKITE_BRANCH" == "master" ]]; then
+  echo "Deploying to PRODUCTION environment"
+  ultimate-games publish -e production -b $BRANCH -s $SHA
+elif [[ "$BUILDKITE_BRANCH" == "main" ]]; then
+  echo "Deploying to PRODUCTION environment"
+  ultimate-games publish -e production -b $BRANCH -s $SHA
+else
+  echo "Deploying to STAGING environment"
+  ultimate-games publish -e staging -b $BRANCH -s $SHA
+fi
