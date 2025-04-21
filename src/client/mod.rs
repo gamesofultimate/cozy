@@ -1,10 +1,10 @@
 mod camera;
-mod scoring;
 
 use crate::shared::{
   inputs,
   components,
   collision,
+  tileset,
   game_input::GameInput,
 };
 use engine::application::bus::BrowserBus;
@@ -51,11 +51,10 @@ pub fn main(
   scheduler.attach_plugin(hdr);
 
   scheduler.attach_registry::<components::GameComponents>();
-  scheduler.attach_system::<collision::CollisionSystem>();
   scheduler.attach_system::<inputs::InputsSystem>();
-  scheduler.attach_system::<scoring::ScoringSystem>();
-
-  scheduler.attach_middleware_with_subsystem::<camera::CameraMiddleware, camera::CameraSubsystem>();
+  scheduler.attach_system::<tileset::TilesetSystem>();
+  scheduler.attach_system::<collision::CollisionSystem>();
+  scheduler.attach_system::<camera::CameraSystem>();
 
   scheduler
 }

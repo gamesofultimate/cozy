@@ -682,7 +682,7 @@ checksum = "60b1af1c220855b6ceac025d3f6ecdd2b7c4894bfe9cd9bda4fbb4bc7c0d4cf0"
 
 [[package]]
 name = "engine"
-version = "0.4.246"
+version = "0.4.248-alpha.0"
 dependencies = [
  "async-channel",
  "async-recursion",
@@ -2526,7 +2526,7 @@ checksum = "cbf4a6aa5f6d6888f39e980649f3ad6b666acdce1d78e95b8a2cb076e687ae30"
 
 [[package]]
 name = "rsl"
-version = "0.2.25"
+version = "0.2.26"
 dependencies = [
  "convert_case 0.5.0",
  "gltf 1.4.1 (registry+https://github.com/rust-lang/crates.io-index)",

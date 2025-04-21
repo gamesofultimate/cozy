@@ -1,13 +1,9 @@
 use crate::shared::components::{
-  Ball,
-  Goal,
-  GoalId,
+  Tileset,
 };
 use engine::application::components::ModelComponent;
-use engine::application::components::ParentComponent;
 use engine::application::components::TextComponent;
 use engine::{
-  rapier3d::prelude::{QueryFilter, Ray},
   application::{
     components::{CameraComponent, InputComponent, PhysicsComponent, SelfComponent},
     physics3d::RigidBodyHandle,
@@ -29,49 +25,44 @@ use std::f32::consts::PI;
 use std::mem::variant_count;
 use uuid::Uuid;
 
-pub struct ScoringSystem {
+pub struct TilesetSystem {
   physics: PhysicsController,
-  team1_score: usize,
-  team2_score: usize,
 }
 
-impl Initializable for ScoringSystem {
+impl Initializable for TilesetSystem {
   fn initialize(inventory: &Inventory) -> Self {
     let physics = inventory.get::<PhysicsController>().clone();
 
     Self {
       physics,
-      team1_score: 0,
-      team2_score: 0,
     }
   }
 }
 
-impl ScoringSystem {
+impl TilesetSystem {
 }
 
-impl System for ScoringSystem {
+impl System for TilesetSystem {
   fn get_name(&self) -> &'static str {
-    "ScoringSystem"
+    "TilesetSystem"
   }
 
   fn attach(&mut self, scene: &mut Scene, _backpack: &mut Backpack) {
   }
 
   fn run(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
-    for (entity, (goal, _)) in scene.query_mut::<(&Goal, &Collision<Ball, Goal>)>() {
-      match goal.team {
-        GoalId::Team1 => {
-          self.team2_score += 1;
-        }
-        GoalId::Team2 => {
-          self.team1_score += 1;
-        }
-      }
+    let mut entities = vec![];
+
+    for (entity, (transform, tileset)) in scene.query_mut::<(&Transform, &Tileset)>() {
+      entities.push((entity, transform.clone(), tileset.clone()));
     }
 
-    for (entity, score) in scene.query_mut::<&mut TextComponent>() {
-      score.text = format!("{:} v {:}", self.team1_score, self.team2_score);
+    for (entity, transform, _tileset) in entities {
+      scene.spawn_prefab_with("Tile::Grass", |prefab| {
+        prefab.transform = transform.into();
+      });
+      //scene.add_component(entity, Prev(set));
     }
+    scene.clear_component::<Tileset>();
   }
 }

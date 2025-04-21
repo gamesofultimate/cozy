@@ -37,29 +37,12 @@ bitflags! {
     const IsFocused      = 0b00000000000000000000000000000001;
     const IsMouseLocked  = 0b00000000000000000000000000000010;
     const IsFullscreen   = 0b00000000000000000000000000000100;
-    const Shift          = 0b00000000000000000000000000001000;
-    const Control        = 0b00000000000000000000000000010000;
-    const Alt            = 0b00000000000000000000000000100000;
+    const HasMouse       = 0b00000000000000000000000000001000;
+    const HasJoystick    = 0b00000000000000000000000000010000;
+    const LeftClick      = 0b00000000000000000000000000100000;
     const Escape         = 0b00000000000000000000000001000000;
-    const RightClick     = 0b00000000000000000000000010000000;
-    const LeftClick      = 0b00000000000000000000000100000000;
-    const RightShoulder  = 0b00000000000000000000001000000000;
-    const LeftShoulder   = 0b00000000000000000000010000000000;
-    const RightTrigger   = 0b00000000000000000000100000000000;
-    const LeftTrigger    = 0b00000000000000000001000000000000;
-    const BackClick      = 0b00000000000000000010000000000000;
-    const ForwardClick   = 0b00000000000000000100000000000000;
-    const Trackpad       = 0b00000000000000001000000000000000;
-    const MiddleClick    = 0b00000000000000010000000000000000;
-    const Dash           = 0b00000000000000100000000000000000;
-    const Jump           = 0b00000000000001000000000000000000;
-    const Interact       = 0b00000000000010000000000000000000;
-    const WeaponShoot    = 0b00000000000100000000000000000000;
-    const Crouch         = 0b00000000001000000000000000000000;
-    const Respawn        = 0b00000000010000000000000000000000;
-    const HasMouse       = 0b00000000100000000000000000000000;
-    const HasJoystick    = 0b00000001000000000000000000000000;
-    const IsRunning      = 0b00000010000000000000000000000000;
+    const Action         = 0b00000000000000000000000010000000;
+    const IsRunning      = 0b00000000000000000000000100000000;
   }
 }
 
@@ -131,20 +114,8 @@ impl GameInput {
       )) => {
         self.vertical.insert(KeyboardKey::Down);
       }
-      DeviceEvent::Keyboard(KeyboardEvent::Button(ButtonState::Down, KeyboardKey::Space)) => {
-        self.state |= InputState::Jump;
-      }
-      DeviceEvent::Keyboard(KeyboardEvent::Button(ButtonState::Down, KeyboardKey::Q)) => {
-        self.state |= InputState::Dash;
-      }
       DeviceEvent::Keyboard(KeyboardEvent::Button(ButtonState::Down, KeyboardKey::LShift)) => {
         self.state |= InputState::IsRunning;
-      }
-      DeviceEvent::Keyboard(KeyboardEvent::Button(
-        ButtonState::Down,
-        KeyboardKey::C | KeyboardKey::LControl,
-      )) => {
-        self.state |= InputState::Crouch;
       }
       DeviceEvent::Keyboard(KeyboardEvent::Button(ButtonState::Down, KeyboardKey::Escape)) => {
         self.state |= InputState::Escape;
@@ -176,20 +147,8 @@ impl GameInput {
       )) => {
         self.vertical.remove(&KeyboardKey::Down);
       }
-      DeviceEvent::Keyboard(KeyboardEvent::Button(ButtonState::Up, KeyboardKey::Space)) => {
-        self.state -= InputState::Jump;
-      }
-      DeviceEvent::Keyboard(KeyboardEvent::Button(ButtonState::Up, KeyboardKey::Q)) => {
-        self.state -= InputState::Dash;
-      }
       DeviceEvent::Keyboard(KeyboardEvent::Button(ButtonState::Up, KeyboardKey::LShift)) => {
         self.state -= InputState::IsRunning;
-      }
-      DeviceEvent::Keyboard(KeyboardEvent::Button(
-        ButtonState::Up,
-        KeyboardKey::C | KeyboardKey::LControl,
-      )) => {
-        self.state -= InputState::Crouch;
       }
       DeviceEvent::Keyboard(KeyboardEvent::Button(ButtonState::Up, KeyboardKey::Escape)) => {
         self.state -= InputState::Escape;

@@ -14,9 +14,6 @@ use engine::{
 };
 
 use crate::shared::components::{
-  Ball,
-  Goal,
-  Floor,
   Player,
 };
 
@@ -48,6 +45,7 @@ impl System for CollisionSystem {
   fn provide(&mut self, _inventory: &Inventory) {}
 
   fn run(&mut self, scene: &mut Scene, _backpack: &mut Backpack) {
+    /*
     let collisions = self.collisions_reader.read().collect::<Vec<_>>();
 
     for collision_event in collisions {
@@ -61,6 +59,7 @@ impl System for CollisionSystem {
         }
       }
     }
+    */
   }
 }
 
