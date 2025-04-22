@@ -3,7 +3,7 @@ mod network_controller;
 use crate::shared::inputs;
 use crate::shared::collision;
 use crate::shared::components;
-use crate::shared::tileset;
+//use crate::shared::tileset;
 use crate::shared::game_input::GameInput;
 use crate::server::network_controller::NetworkController;
 use engine::systems::hdr::HdrPipeline;
@@ -36,7 +36,7 @@ pub async fn main() {
   scheduler.attach_plugin(hdr);
   scheduler.attach_registry::<components::GameComponents>();
   scheduler.attach_system::<inputs::InputsSystem>();
-  scheduler.attach_system::<tileset::TilesetSystem>();
+  //scheduler.attach_system::<tileset::TilesetSystem>();
   scheduler.attach_system::<collision::CollisionSystem>();
 
   scheduler.run().await;

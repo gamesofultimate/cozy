@@ -134,8 +134,8 @@
           "transform": {
             "translation": [
               0,
-              1,
-              0
+              2,
+              5
             ],
             "rotation": [
               0,
@@ -269,103 +269,6 @@
           }
         ]
       },
-      "5ac52ec0-171b-4fc9-a10b-0163b71e206a": {
-        "id": "5ac52ec0-171b-4fc9-a10b-0163b71e206a",
-        "tag": {
-          "name": "Tile::Grass"
-        },
-        "transform": {
-          "transform": {
-            "translation": [
-              0,
-              -1.0095353,
-              0
-            ],
-            "rotation": [
-              0,
-              0,
-              0
-            ],
-            "scale": [
-              2,
-              2,
-              2
-            ]
-          }
-        },
-        "components": [
-          {
-            "ModelComponent": {
-              "cast_shadows": true,
-              "id": "9fb4859d-187f-4b3c-a7c8-4c6aea3452d8",
-              "skip": false,
-              "transform": {
-                "rotation": [
-                  6.123233995736766e-17,
-                  0,
-                  0,
-                  1
-                ],
-                "scale": [
-                  1,
-                  1,
-                  1
-                ],
-                "translation": [
-                  0,
-                  0.435,
-                  0
-                ]
-              }
-            }
-          },
-          {
-            "PhysicsComponent": {
-              "debug": false,
-              "id": "812f0ccc-664e-4096-b2fb-d0675e945ff7",
-              "joint": {
-                "body": {
-                  "allow_rotation": [
-                    true,
-                    true,
-                    true
-                  ],
-                  "allow_translation": [
-                    true,
-                    true,
-                    true
-                  ],
-                  "ccd": false,
-                  "collider_type": {
-                    "Ground": {
-                      "height": 1,
-                      "length": 1,
-                      "width": 1
-                    }
-                  },
-                  "density": 1,
-                  "dynamic_type": "Static",
-                  "friction": 0.1,
-                  "id": "0f2ecbeb-33a5-45d3-99fc-9a9ccdda6393",
-                  "is_sensor": false,
-                  "restitution": 0.1
-                },
-                "config": null,
-                "id": "d07968f2-f493-4701-b261-7e0fcd126df9",
-                "name": "Joint",
-                "offset": [
-                  0,
-                  0,
-                  0
-                ]
-              }
-            }
-          },
-          {
-            "PrefabProviderComponent": {}
-          }
-        ]
-      },
       "551ce049-c52b-418a-91c4-285cbe165035": {
         "id": "551ce049-c52b-418a-91c4-285cbe165035",
         "tag": {
@@ -410,39 +313,6 @@
           }
         ]
       },
-      "c68c8f71-399e-4c09-97a0-9e51fcc07c22": {
-        "id": "c68c8f71-399e-4c09-97a0-9e51fcc07c22",
-        "tag": {
-          "name": "Tileset"
-        },
-        "transform": {
-          "transform": {
-            "translation": [
-              0,
-              -0.5,
-              0
-            ],
-            "rotation": [
-              0,
-              0,
-              0
-            ],
-            "scale": [
-              1,
-              1,
-              1
-            ]
-          }
-        },
-        "components": [
-          {
-            "Tileset": {
-              "width": 100,
-              "length": 100
-            }
-          }
-        ]
-      },
       "b798a352-e300-4432-a6b6-b0a859baeca9": {
         "id": "b798a352-e300-4432-a6b6-b0a859baeca9",
         "tag": {
@@ -474,6 +344,193 @@
             }
           }
         ]
+      },
+      "d240b205-7037-4782-967f-a95215a1cc01": {
+        "id": "d240b205-7037-4782-967f-a95215a1cc01",
+        "tag": {
+          "name": "Tile::Water"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              0.66297805,
+              4.3441663,
+              6.6127462
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": []
+      },
+      "c9ba6568-de89-4d29-8253-b2742c90cf25": {
+        "id": "c9ba6568-de89-4d29-8253-b2742c90cf25",
+        "tag": {
+          "name": "Ground"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              0,
+              0,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "ModelComponent": {
+              "cast_shadows": true,
+              "id": "8ae81a0f-8736-48b2-a4f7-157cca467157",
+              "skip": false,
+              "transform": {
+                "rotation": [
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ],
+                "translation": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          },
+          {
+            "PhysicsComponent": {
+              "debug": false,
+              "id": "2d5f416c-5410-407d-a0fc-176df75facd8",
+              "joint": {
+                "body": {
+                  "allow_rotation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "allow_translation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "ccd": false,
+                  "collider_type": {
+                    "Trimesh": {
+                      "id": "bf220061-c725-44b7-a4f4-289de5894317"
+                    }
+                  },
+                  "density": 1,
+                  "dynamic_type": "Static",
+                  "friction": 0.1,
+                  "id": "ee7787d3-39db-4e0f-82ab-57d538755cf9",
+                  "is_sensor": false,
+                  "restitution": 0.1
+                },
+                "config": null,
+                "id": "9bbdaa51-6422-4d56-8fae-91a01c4632b5",
+                "name": "Joint",
+                "offset": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "4f85c358-73d0-4599-a211-87f5c5a56f20": {
+        "id": "4f85c358-73d0-4599-a211-87f5c5a56f20",
+        "tag": {
+          "name": "Floor Collider"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              0,
+              -0.03,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              120,
+              0.1,
+              120
+            ]
+          }
+        },
+        "components": [
+          {
+            "PhysicsComponent": {
+              "debug": false,
+              "id": "d8c283ec-d1ba-4959-a8b6-53d4e5d8bb7b",
+              "joint": {
+                "body": {
+                  "allow_rotation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "allow_translation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "ccd": false,
+                  "collider_type": {
+                    "Ground": {
+                      "height": 1,
+                      "length": 1,
+                      "width": 1
+                    }
+                  },
+                  "density": 1,
+                  "dynamic_type": "Static",
+                  "friction": 0.1,
+                  "id": "edb3d37f-d9a9-4b53-801f-7ec32ce73076",
+                  "is_sensor": false,
+                  "restitution": 0.1
+                },
+                "config": null,
+                "id": "933ca1fb-7a7c-49e1-883f-03502ecbc9c5",
+                "name": "Joint",
+                "offset": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        ]
       }
     },
     "models": {
@@ -486,25 +543,37 @@
         "id": "9fb4859d-187f-4b3c-a7c8-4c6aea3452d8",
         "source": "models/tiles/Grass/FarmBlock.gltf",
         "maxInstances": 10
+      },
+      "a152f452-89a5-49d7-bc66-0ca3cadf90d4": {
+        "id": "a152f452-89a5-49d7-bc66-0ca3cadf90d4",
+        "source": "models/tiles/Dirt/DirtBlock.gltf",
+        "maxInstances": 10
+      },
+      "db41626d-2a8e-4d0d-8ba9-1af11436ffdd": {
+        "id": "db41626d-2a8e-4d0d-8ba9-1af11436ffdd",
+        "source": "models/tiles/Sand/SandBlock.gltf",
+        "maxInstances": 10
+      },
+      "7d87ccf0-457b-4788-8d41-9d5defccf3cd": {
+        "id": "7d87ccf0-457b-4788-8d41-9d5defccf3cd",
+        "source": "models/tiles/Water/WaterBlock.gltf",
+        "maxInstances": 10
+      },
+      "8ae81a0f-8736-48b2-a4f7-157cca467157": {
+        "id": "8ae81a0f-8736-48b2-a4f7-157cca467157",
+        "source": "models/Map01/Map01.gltf",
+        "maxInstances": 10
       }
     },
-    "trimeshes": {},
+    "trimeshes": {
+      "bf220061-c725-44b7-a4f4-289de5894317": {
+        "id": "bf220061-c725-44b7-a4f4-289de5894317",
+        "source": "models/C_Level.gltf"
+      }
+    },
     "textures": {},
     "particles": {},
     "animations": {
-      "fb39814c-5736-4363-b28a-060a3b9a2380": {
-        "id": "fb39814c-5736-4363-b28a-060a3b9a2380",
-        "source": "animations/A_Barry_Idle.gltf",
-        "definitions": [
-          {
-            "id": "6f4aed48-5456-4f26-b33a-da6f80fda5a6",
-            "collection_id": "fb39814c-5736-4363-b28a-060a3b9a2380",
-            "name": "Armature|mixamo.com|Layer0",
-            "loops": true
-          }
-        ],
-        "loops": true
-      },
       "259421cb-5a8c-4d4a-839b-56014603a46a": {
         "id": "259421cb-5a8c-4d4a-839b-56014603a46a",
         "source": "animations/A_Walk.gltf",

@@ -22,7 +22,7 @@ impl Registry for GameComponents {
     Movement::register();
     Pickup::register();
     Player::register();
-    Tileset::register();
+    //Tileset::register();
     CameraFollow::register();
   }
 }
@@ -57,6 +57,7 @@ pub struct Player {
 
 impl ProvideAssets for Player {}
 
+/*
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
 pub struct Tileset {
   pub width: u32,
@@ -69,3 +70,4 @@ impl ProvideAssets for Tileset {
         //ids.push(*self.grenadier_grenade_explosion);
     }
 }
+*/

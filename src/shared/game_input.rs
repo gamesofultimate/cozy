@@ -243,6 +243,7 @@ impl Input for GameInput {
 
   fn from_devices(&mut self, event: DeviceEvent, _: Seconds) {
 
+    self.handle_keyboard(event);
     if self.horizontal.len() == 1 {
       if self.horizontal.contains(&KeyboardKey::Right) {
         self.right = -1.0;
@@ -264,7 +265,6 @@ impl Input for GameInput {
     }
 
     self.handle_joystick(event);
-    self.handle_keyboard(event);
     self.handle_mouse(event);
     self.handle_window(event);
   }

@@ -586,6 +586,7 @@ dependencies = [
  "env_logger",
  "fix-hidden-lifetime-bug",
  "instant",
+ "kahuna",
  "log",
  "num_cpus",
  "rand 0.8.5",
@@ -1599,6 +1600,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "29c15563dc2726973df627357ce0c9ddddbea194836909d655df6a75d2cf296d"
 dependencies = [
  "wasm-bindgen",
+]
+
+[[package]]
+name = "kahuna"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "16758a1bbb67428f9d37ecc0a161fcb531ca35a02a339b9d1feac0b907781607"
+dependencies = [
+ "rand 0.8.5",
 ]
 
 [[package]]

@@ -2505,43 +2505,6 @@
     },
     {
       "tag": "Struct",
-      "name": "Tileset",
-      "label": "Tileset",
-      "default_values": "{ length: 0, width: 0 }",
-      "duplicate_values": "null",
-      "docs": null,
-      "fields": [
-        {
-          "name": "width",
-          "label": "Width",
-          "docs": null,
-          "ty": {
-            "tag": "Primitive",
-            "ty": {
-              "tag": "U32"
-            },
-            "default_values": "0",
-            "duplicate_values": "null"
-          }
-        },
-        {
-          "name": "length",
-          "label": "Length",
-          "docs": null,
-          "ty": {
-            "tag": "Primitive",
-            "ty": {
-              "tag": "U32"
-            },
-            "default_values": "0",
-            "duplicate_values": "null"
-          }
-        }
-      ],
-      "private": false
-    },
-    {
-      "tag": "Struct",
       "name": "TransformComponent",
       "label": "Transform Component",
       "default_values": "{ transform: { rotation: [0.0, 0.0, 0.0], scale: [0.0, 0.0, 0.0], translation: [0.0, 0.0, 0.0] } }",
