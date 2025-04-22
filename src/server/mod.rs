@@ -1,5 +1,6 @@
 mod network_controller;
 
+use crate::planners::idling;
 use crate::shared::inputs;
 use crate::shared::collision;
 use crate::shared::components;
@@ -35,6 +36,7 @@ pub async fn main() {
   let mut scheduler = Scheduler::new(FRAMES_PER_SECOND);
   scheduler.attach_plugin(hdr);
   scheduler.attach_registry::<components::GameComponents>();
+  scheduler.attach_registry::<idling::IdleRegistry>();
   scheduler.attach_system::<inputs::InputsSystem>();
   //scheduler.attach_system::<tileset::TilesetSystem>();
   scheduler.attach_system::<collision::CollisionSystem>();

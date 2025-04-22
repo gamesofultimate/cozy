@@ -22,8 +22,10 @@ impl Registry for GameComponents {
     Movement::register();
     Pickup::register();
     Player::register();
-    //Tileset::register();
     CameraFollow::register();
+    Npc::register();
+    Flower::register();
+    Seat::register();
   }
 }
 
@@ -56,6 +58,27 @@ pub struct Player {
 }
 
 impl ProvideAssets for Player {}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct Npc {
+  pub rest_level: f32,
+  pub total_energy: f32,
+}
+
+impl ProvideAssets for Npc {}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct Flower {
+}
+
+impl ProvideAssets for Flower {}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct Seat {
+  pub resting_factor: f32,
+}
+
+impl ProvideAssets for Seat {}
 
 /*
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]

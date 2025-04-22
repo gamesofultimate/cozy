@@ -1,5 +1,8 @@
 mod camera;
 
+use crate::planners::{
+  idling,
+};
 use crate::shared::{
   inputs,
   components,
@@ -51,6 +54,7 @@ pub fn main(
   scheduler.attach_plugin(hdr);
 
   scheduler.attach_registry::<components::GameComponents>();
+  scheduler.attach_registry::<idling::IdleRegistry>();
   scheduler.attach_system::<inputs::InputsSystem>();
   //scheduler.attach_system::<tileset::TilesetSystem>();
   scheduler.attach_system::<collision::CollisionSystem>();

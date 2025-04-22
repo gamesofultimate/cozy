@@ -269,6 +269,16 @@
     },
     {
       "tag": "Struct",
+      "name": "Flower",
+      "label": "Flower",
+      "default_values": "{  }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [],
+      "private": false
+    },
+    {
+      "tag": "Struct",
       "name": "GoalComponent",
       "label": "Goal Component",
       "default_values": "{ id: (() => { \n      function uuidv4() {\n        return \"10000000-1000-4000-8000-100000000000\".replace(/[018]/g, c =>\n          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)\n        );\n      };\n      return uuidv4()\n     })(), navmesh_id: null, planner_id: (() => { \n            return Symbol.for(\"PlannerId\");\n           })() }",
@@ -654,6 +664,43 @@
             "docs": null,
             "fields": [],
             "private": false
+          }
+        }
+      ],
+      "private": false
+    },
+    {
+      "tag": "Struct",
+      "name": "Npc",
+      "label": "Npc",
+      "default_values": "{ rest_level: 0.0, total_energy: 0.0 }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [
+        {
+          "name": "rest_level",
+          "label": "Rest Level",
+          "docs": null,
+          "ty": {
+            "tag": "Primitive",
+            "ty": {
+              "tag": "F32"
+            },
+            "default_values": "0.0",
+            "duplicate_values": "null"
+          }
+        },
+        {
+          "name": "total_energy",
+          "label": "Total Energy",
+          "docs": null,
+          "ty": {
+            "tag": "Primitive",
+            "ty": {
+              "tag": "F32"
+            },
+            "default_values": "0.0",
+            "duplicate_values": "null"
           }
         }
       ],
@@ -1754,6 +1801,30 @@
       "duplicate_values": "null",
       "docs": null,
       "fields": [],
+      "private": false
+    },
+    {
+      "tag": "Struct",
+      "name": "Seat",
+      "label": "Seat",
+      "default_values": "{ resting_factor: 0.0 }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [
+        {
+          "name": "resting_factor",
+          "label": "Resting Factor",
+          "docs": null,
+          "ty": {
+            "tag": "Primitive",
+            "ty": {
+              "tag": "F32"
+            },
+            "default_values": "0.0",
+            "duplicate_values": "null"
+          }
+        }
+      ],
       "private": false
     },
     {
@@ -4176,9 +4247,65 @@
       "private": false
     }
   ],
-  "goals": [],
-  "actions": [],
-  "sensors": [],
+  "goals": [
+    {
+      "tag": "Struct",
+      "name": "Idling",
+      "label": "Idling",
+      "default_values": "{  }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [],
+      "private": false
+    }
+  ],
+  "actions": [
+    {
+      "tag": "Struct",
+      "name": "SitDown",
+      "label": "Sit Down",
+      "default_values": "{  }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [],
+      "private": false
+    }
+  ],
+  "sensors": [
+    {
+      "tag": "Struct",
+      "name": "SenseSeats",
+      "label": "Sense Seats",
+      "default_values": "{ max_distance: { meters: 0.0 } }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [
+        {
+          "name": "max_distance",
+          "label": "Max Distance",
+          "docs": null,
+          "ty": {
+            "tag": "Custom",
+            "name": "Meters",
+            "default_values": "{ meters: 0.0 }",
+            "duplicate_values": "null",
+            "ty": "Meters"
+          }
+        }
+      ],
+      "private": false
+    },
+    {
+      "tag": "Struct",
+      "name": "SenseSelf",
+      "label": "Sense Self",
+      "default_values": "{  }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [],
+      "private": false
+    }
+  ],
   "audioNodes": [
     {
       "tag": "Struct",

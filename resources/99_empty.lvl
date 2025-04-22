@@ -538,10 +538,10 @@
               "skip": false,
               "transform": {
                 "rotation": [
+                  3.749399456654644e-33,
                   6.123233995736766e-17,
-                  1,
-                  0,
-                  0
+                  6.123233995736766e-17,
+                  -1
                 ],
                 "scale": [
                   1,
@@ -621,6 +621,128 @@
                 ]
               }
             }
+          },
+          {
+            "GoalComponent": {
+              "id": "03e75e11-2c29-47dd-a2e9-d88eb2f748ae",
+              "navmesh_id": null,
+              "planner_id": "0c1bd228-047f-429c-bc3f-d0265eaa45ae"
+            }
+          },
+          {
+            "Npc": {
+              "rest_level": 0.1,
+              "total_energy": 5
+            }
+          },
+          {
+            "Movement": {
+              "running_speed": {
+                "kph": 4
+              },
+              "walking_speed": {
+                "kph": 4
+              }
+            }
+          }
+        ]
+      },
+      "aaffa6e5-5aaf-4d50-a1dd-4f25d1edbf97": {
+        "id": "aaffa6e5-5aaf-4d50-a1dd-4f25d1edbf97",
+        "tag": {
+          "name": "Bench"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              5.730914,
+              -0.002417326,
+              -4.9520364
+            ],
+            "rotation": [
+              0,
+              0.91078377,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "ModelComponent": {
+              "cast_shadows": true,
+              "id": "d3786a9d-49d7-40a7-a5e0-4aa6915fa6c4",
+              "skip": false,
+              "transform": {
+                "rotation": [
+                  0.7071067811865476,
+                  0,
+                  0,
+                  -0.7071067811865475
+                ],
+                "scale": [
+                  0.1,
+                  0.1,
+                  0.1
+                ],
+                "translation": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          },
+          {
+            "PhysicsComponent": {
+              "debug": false,
+              "id": "de93ed5d-c55b-4766-b068-3d2a94facb53",
+              "joint": {
+                "body": {
+                  "allow_rotation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "allow_translation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "ccd": false,
+                  "collider_type": {
+                    "Cube": {
+                      "height": 1,
+                      "length": 1,
+                      "width": 2
+                    }
+                  },
+                  "density": 1,
+                  "dynamic_type": "Static",
+                  "friction": 0.1,
+                  "id": "d8b75235-f44b-4a25-932d-8d1f91e39237",
+                  "is_sensor": false,
+                  "restitution": 0.1
+                },
+                "config": null,
+                "id": "5a0366ab-406d-4577-b459-1cc52decf51c",
+                "name": "Joint",
+                "offset": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          },
+          {
+            "Seat": {
+              "resting_factor": 0.01
+            }
           }
         ]
       }
@@ -659,6 +781,11 @@
       "8cec0d83-0d2c-42c7-b3e7-79cbb7d41a24": {
         "id": "8cec0d83-0d2c-42c7-b3e7-79cbb7d41a24",
         "source": "models/misty/misty.gltf",
+        "maxInstances": 10
+      },
+      "d3786a9d-49d7-40a7-a5e0-4aa6915fa6c4": {
+        "id": "d3786a9d-49d7-40a7-a5e0-4aa6915fa6c4",
+        "source": "models/green-bench/green-bench.gltf",
         "maxInstances": 10
       }
     },
@@ -963,7 +1090,34 @@
     },
     "heightfields": {},
     "behavior_tree": {},
-    "planners": {},
+    "planners": {
+      "0c1bd228-047f-429c-bc3f-d0265eaa45ae": {
+        "id": "0c1bd228-047f-429c-bc3f-d0265eaa45ae",
+        "name": "Misty Goals",
+        "goals": [
+          {
+            "Idling": {}
+          }
+        ],
+        "actions": [
+          {
+            "SitDown": {}
+          }
+        ],
+        "sensors": [
+          {
+            "SenseSeats": {
+              "max_distance": {
+                "meters": 1000
+              }
+            }
+          },
+          {
+            "SenseSelf": {}
+          }
+        ]
+      }
+    },
     "sprites": {},
     "fonts": {},
     "navmeshes": {}

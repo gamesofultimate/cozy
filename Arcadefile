@@ -1,5 +1,5 @@
-id: soccer
-name: Soccer
+id: cozy
+name: Cozy
 description: |
   Soccer, but with your hands!
 developers:
@@ -16,13 +16,13 @@ test:
 build:
   assets: resources/
   executables:
-    client: soccer
-    server: soccer
+    client: cozy
+    server: cozy
   client:
     assets: resources/
-    executable: soccer
+    executable: cozy
   server:
-    executable: soccer
+    executable: cozy
     dockerfile: Dockerfile
   website:
     location: website/
