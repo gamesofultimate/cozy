@@ -660,11 +660,6 @@
         "id": "8cec0d83-0d2c-42c7-b3e7-79cbb7d41a24",
         "source": "models/misty/misty.gltf",
         "maxInstances": 10
-      },
-      "d9e3494d-6904-4ca1-8ce1-ff7db6f2ddec": {
-        "id": "d9e3494d-6904-4ca1-8ce1-ff7db6f2ddec",
-        "source": "models/byron/byron.gltf",
-        "maxInstances": 10
       }
     },
     "trimeshes": {
