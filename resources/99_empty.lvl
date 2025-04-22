@@ -143,9 +143,9 @@
               0
             ],
             "scale": [
-              0.25,
-              0.25,
-              0.25
+              1,
+              1,
+              1
             ]
           }
         },
@@ -163,13 +163,13 @@
                   -1
                 ],
                 "scale": [
-                  3,
-                  3,
-                  3
+                  1,
+                  1,
+                  1
                 ],
                 "translation": [
                   0,
-                  -2,
+                  -0.65,
                   0
                 ]
               }
@@ -197,8 +197,8 @@
                   "ccd": false,
                   "collider_type": {
                     "CapsuleY": {
-                      "half_height": 1,
-                      "radius": 1
+                      "half_height": 0.2,
+                      "radius": 0.5
                     }
                   },
                   "density": 1,
@@ -344,32 +344,6 @@
             }
           }
         ]
-      },
-      "d240b205-7037-4782-967f-a95215a1cc01": {
-        "id": "d240b205-7037-4782-967f-a95215a1cc01",
-        "tag": {
-          "name": "Tile::Water"
-        },
-        "transform": {
-          "transform": {
-            "translation": [
-              0.66297805,
-              4.3441663,
-              6.6127462
-            ],
-            "rotation": [
-              0,
-              0,
-              0
-            ],
-            "scale": [
-              1,
-              1,
-              1
-            ]
-          }
-        },
-        "components": []
       },
       "c9ba6568-de89-4d29-8253-b2742c90cf25": {
         "id": "c9ba6568-de89-4d29-8253-b2742c90cf25",
@@ -531,6 +505,124 @@
             }
           }
         ]
+      },
+      "5fe63bd0-01e6-4cf3-93e1-7fcd944b96ad": {
+        "id": "5fe63bd0-01e6-4cf3-93e1-7fcd944b96ad",
+        "tag": {
+          "name": "Misty"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              0,
+              2,
+              7
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              0.75,
+              0.75,
+              0.75
+            ]
+          }
+        },
+        "components": [
+          {
+            "ModelComponent": {
+              "cast_shadows": true,
+              "id": "8cec0d83-0d2c-42c7-b3e7-79cbb7d41a24",
+              "skip": false,
+              "transform": {
+                "rotation": [
+                  6.123233995736766e-17,
+                  1,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ],
+                "translation": [
+                  0,
+                  -1.4,
+                  0
+                ]
+              }
+            }
+          },
+          {
+            "StateMachineComponent": {
+              "id": "3d2a48fe-e3a2-4c51-8f3d-5be1f4515827",
+              "machine_id": "06ae850e-62d0-4707-b8bb-b419e0531e7a"
+            }
+          },
+          {
+            "PhysicsComponent": {
+              "debug": false,
+              "id": "2497016a-0b63-442f-8636-27287a4f4022",
+              "joint": {
+                "body": {
+                  "allow_rotation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "allow_translation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "ccd": false,
+                  "collider_type": {
+                    "CapsuleY": {
+                      "half_height": 0.8,
+                      "radius": 0.6
+                    }
+                  },
+                  "density": 1,
+                  "dynamic_type": {
+                    "CharacterController": {
+                      "auto_step": false,
+                      "id": "fc20d8b9-c336-45f6-bb0e-3e05b053005a",
+                      "is_velocity_based": true,
+                      "max_slope_climb_angle": 1,
+                      "min_slope_slide_angle": 0.99,
+                      "shape_offset": 0.01,
+                      "slide": true,
+                      "snap_max_distance": 0.05,
+                      "snap_to_ground": true,
+                      "step_max_height": 0.3,
+                      "step_min_width": 0.2,
+                      "up_vector": [
+                        0,
+                        1,
+                        0
+                      ]
+                    }
+                  },
+                  "friction": 0.1,
+                  "id": "ed5c7f72-8063-46e2-bebb-8b275f5f71a5",
+                  "is_sensor": false,
+                  "restitution": 0.1
+                },
+                "config": null,
+                "id": "07623776-dd98-498d-bc46-13084537e7ec",
+                "name": "Joint",
+                "offset": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        ]
       }
     },
     "models": {
@@ -562,6 +654,16 @@
       "8ae81a0f-8736-48b2-a4f7-157cca467157": {
         "id": "8ae81a0f-8736-48b2-a4f7-157cca467157",
         "source": "models/Map01/Map01.gltf",
+        "maxInstances": 10
+      },
+      "8cec0d83-0d2c-42c7-b3e7-79cbb7d41a24": {
+        "id": "8cec0d83-0d2c-42c7-b3e7-79cbb7d41a24",
+        "source": "models/misty/misty.gltf",
+        "maxInstances": 10
+      },
+      "d9e3494d-6904-4ca1-8ce1-ff7db6f2ddec": {
+        "id": "d9e3494d-6904-4ca1-8ce1-ff7db6f2ddec",
+        "source": "models/byron/byron.gltf",
         "maxInstances": 10
       }
     },
@@ -619,6 +721,45 @@
           {
             "id": "9509d05b-f885-4518-a863-9b1e7ff7d8db",
             "collection_id": "07355af1-e7f8-4a05-b5a4-53f0ddddec9f",
+            "name": "Armature|mixamo.com|Layer0",
+            "loops": true
+          }
+        ],
+        "loops": true
+      },
+      "1d3f9dcd-4654-407d-889a-6ef7d25ff900": {
+        "id": "1d3f9dcd-4654-407d-889a-6ef7d25ff900",
+        "source": "animations/misty/a_idle/a_idle.gltf",
+        "definitions": [
+          {
+            "id": "5d10fa9e-6ae5-425e-8cd1-fc0c33c60afa",
+            "collection_id": "1d3f9dcd-4654-407d-889a-6ef7d25ff900",
+            "name": "Armature|mixamo.com|Layer0",
+            "loops": true
+          }
+        ],
+        "loops": true
+      },
+      "66abc177-bc88-4002-8cbe-5ce2249033b4": {
+        "id": "66abc177-bc88-4002-8cbe-5ce2249033b4",
+        "source": "models/byron/byron.gltf",
+        "definitions": [
+          {
+            "id": "431490d8-6d22-4ff8-aaa1-8e796b76ed0b",
+            "collection_id": "66abc177-bc88-4002-8cbe-5ce2249033b4",
+            "name": "Armature.001|mixamo.com|Layer0",
+            "loops": true
+          }
+        ],
+        "loops": true
+      },
+      "b068af1e-fb15-4a8f-82ec-07cd81b9d1dd": {
+        "id": "b068af1e-fb15-4a8f-82ec-07cd81b9d1dd",
+        "source": "models/misty/misty.gltf",
+        "definitions": [
+          {
+            "id": "37dfe64b-de80-4062-9401-c1b3a29bff26",
+            "collection_id": "b068af1e-fb15-4a8f-82ec-07cd81b9d1dd",
             "name": "Armature|mixamo.com|Layer0",
             "loops": true
           }
@@ -746,11 +887,11 @@
       },
       "06ae850e-62d0-4707-b8bb-b419e0531e7a": {
         "id": "06ae850e-62d0-4707-b8bb-b419e0531e7a",
-        "name": "Unknown",
+        "name": "Misty - Animation",
         "rate": 1,
         "starting_node": "c5134286-e0fc-4993-be6c-26ce00c0409d",
         "sockets": [],
-        "target_skeleton": null,
+        "target_skeleton": "d9e3494d-6904-4ca1-8ce1-ff7db6f2ddec",
         "nodes": [
           {
             "id": "c5134286-e0fc-4993-be6c-26ce00c0409d",
@@ -759,8 +900,8 @@
               "y": 0
             },
             "animation_id": [
-              "6f4aed48-5456-4f26-b33a-da6f80fda5a6",
-              "fb39814c-5736-4363-b28a-060a3b9a2380"
+              "37dfe64b-de80-4062-9401-c1b3a29bff26",
+              "b068af1e-fb15-4a8f-82ec-07cd81b9d1dd"
             ],
             "transitions": []
           }
