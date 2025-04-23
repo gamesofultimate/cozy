@@ -29,12 +29,13 @@ impl Registry for IdleRegistry {
   fn register() {
     {
       use engine::application::goap::goal_registry::Access;
-      Idling::register();
+      Bored::register();
+      Rest::register();
     }
     {
       use engine::application::goap::action_registry::Access;
       SitDown::register();
-      Bored::register();
+      Nothing::register();
     }
     {
       use engine::application::goap::sensor_registry::Access;
@@ -45,26 +46,26 @@ impl Registry for IdleRegistry {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Schema, Registerable, Duplicate)]
-pub struct Idling {}
-impl Goal for Idling {
+pub struct Bored {}
+impl Goal for Bored {
   fn name(&self) -> &'static str {
-    "Rest"
+    "Bored"
   }
 
   fn get_goal(&self, _: Entity, _: &mut Scene, _: &mut Backpack) -> Blackboard {
     let mut blackboard = Blackboard::new();
     // NOTE: An idle goal doesn't make much sense to me. Other things should lead into an idle state
-    blackboard.insert_bool("rested", true);
+    blackboard.insert_bool("bored", true);
     blackboard
   }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Schema, Registerable, Duplicate)]
-pub struct Bored {}
+pub struct Nothing {}
 
-impl Action for Bored {
+impl Action for Nothing {
   fn name(&self) -> &'static str {
-    "Bored"
+    "Nothing"
   }
 
   fn cost(&self, local: &Backpack, _: &Blackboard) -> f32 {
@@ -98,6 +99,21 @@ impl Action for Bored {
   }
 
   fn execute(&mut self, entity: Entity, scene: &mut Scene, _: &mut Backpack, local: &mut Backpack) {
+  }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Schema, Registerable, Duplicate)]
+pub struct Rest {}
+impl Goal for Rest {
+  fn name(&self) -> &'static str {
+    "Rest"
+  }
+
+  fn get_goal(&self, _: Entity, _: &mut Scene, _: &mut Backpack) -> Blackboard {
+    let mut blackboard = Blackboard::new();
+    // NOTE: An idle goal doesn't make much sense to me. Other things should lead into an idle state
+    blackboard.insert_bool("rested", true);
+    blackboard
   }
 }
 

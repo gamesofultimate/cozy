@@ -1139,12 +1139,18 @@
         "name": "Misty Goals",
         "goals": [
           {
-            "Idling": {}
+            "Bored": {}
+          },
+          {
+            "Rest": {}
           }
         ],
         "actions": [
           {
-            "Bored": {}
+            "Nothing": {}
+          },
+          {
+            "SitDown": {}
           }
         ],
         "sensors": [

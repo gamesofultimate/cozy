@@ -4300,8 +4300,18 @@
   "goals": [
     {
       "tag": "Struct",
-      "name": "Idling",
-      "label": "Idling",
+      "name": "Bored",
+      "label": "Bored",
+      "default_values": "{  }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [],
+      "private": false
+    },
+    {
+      "tag": "Struct",
+      "name": "Rest",
+      "label": "Rest",
       "default_values": "{  }",
       "duplicate_values": "null",
       "docs": null,
@@ -4312,8 +4322,8 @@
   "actions": [
     {
       "tag": "Struct",
-      "name": "Bored",
-      "label": "Bored",
+      "name": "Nothing",
+      "label": "Nothing",
       "default_values": "{  }",
       "duplicate_values": "null",
       "docs": null,

@@ -89,8 +89,8 @@ pub struct TimeOfDay {
 }
 
 impl TimeOfDay {
-  fn get_percent(&self) -> f32 {
-    time_of_day.current_time / time_of_day.total_time
+  pub fn get_percent(&self) -> f32 {
+    self.current_time / self.total_time
   }
 }
 
