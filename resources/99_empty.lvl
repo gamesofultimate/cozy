@@ -773,7 +773,7 @@
         "components": [
           {
             "TimeOfDay": {
-              "current_time": 0,
+              "current_time": 1000,
               "delta_time": 4,
               "total_time": 2400
             }
@@ -798,6 +798,153 @@
               "opacity": 1,
               "text": "10:00 am",
               "text_alignment": "Left"
+            }
+          }
+        ]
+      },
+      "ba3bbcc8-329b-4187-958c-9a7c5f6c8c01": {
+        "id": "ba3bbcc8-329b-4187-958c-9a7c5f6c8c01",
+        "tag": {
+          "name": "Prefab::Log"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              -3.084361,
+              2.7449627,
+              5.780269
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              0.75,
+              0.75,
+              0.75
+            ]
+          }
+        },
+        "components": [
+          {
+            "ModelComponent": {
+              "cast_shadows": true,
+              "id": "b4997f28-d559-4d0a-8baf-ee746e21b149",
+              "skip": false,
+              "transform": {
+                "rotation": [
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ],
+                "translation": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          },
+          {
+            "PhysicsComponent": {
+              "debug": false,
+              "id": "40e9087e-d9ec-4b68-8e4b-ace7a04688e7",
+              "joint": {
+                "body": {
+                  "allow_rotation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "allow_translation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "ccd": false,
+                  "collider_type": {
+                    "CapsuleX": {
+                      "half_height": 0.4,
+                      "radius": 0.15
+                    }
+                  },
+                  "density": 1,
+                  "dynamic_type": {
+                    "CharacterController": {
+                      "auto_step": false,
+                      "id": "9f904b88-91b3-4b94-b847-78008b974342",
+                      "is_velocity_based": true,
+                      "max_slope_climb_angle": 1,
+                      "min_slope_slide_angle": 0.99,
+                      "shape_offset": 0.01,
+                      "slide": false,
+                      "snap_max_distance": 0.05,
+                      "snap_to_ground": false,
+                      "step_max_height": 0.3,
+                      "step_min_width": 0.2,
+                      "up_vector": [
+                        0,
+                        1,
+                        0
+                      ]
+                    }
+                  },
+                  "friction": 0.1,
+                  "id": "a47bfd50-8ad2-4360-87b6-c31ba1e986bc",
+                  "is_sensor": false,
+                  "restitution": 0.1
+                },
+                "config": null,
+                "id": "ad76a8bc-5f8f-4844-af58-04eb43862d7b",
+                "name": "Joint",
+                "offset": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          },
+          {
+            "PrefabProviderComponent": {}
+          }
+        ]
+      },
+      "2825b9cb-3dee-49ac-b77d-a097ec816270": {
+        "id": "2825b9cb-3dee-49ac-b77d-a097ec816270",
+        "tag": {
+          "name": "Test::Log"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              8.411443,
+              0.19078302,
+              2.82931
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "PrefabComponent": {
+              "id": "ba3bbcc8-329b-4187-958c-9a7c5f6c8c01"
             }
           }
         ]
@@ -842,6 +989,11 @@
       "d3786a9d-49d7-40a7-a5e0-4aa6915fa6c4": {
         "id": "d3786a9d-49d7-40a7-a5e0-4aa6915fa6c4",
         "source": "models/green-bench/green-bench.gltf",
+        "maxInstances": 10
+      },
+      "b4997f28-d559-4d0a-8baf-ee746e21b149": {
+        "id": "b4997f28-d559-4d0a-8baf-ee746e21b149",
+        "source": "models/log/Log.gltf",
         "maxInstances": 10
       }
     },
