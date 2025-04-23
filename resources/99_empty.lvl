@@ -948,6 +948,80 @@
             }
           }
         ]
+      },
+      "8a00e672-1883-4c01-b6f3-2a6fa3c2168c": {
+        "id": "8a00e672-1883-4c01-b6f3-2a6fa3c2168c",
+        "tag": {
+          "name": "Action Socket"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              0,
+              0,
+              0.95830584
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "ParentComponent": {
+              "parent_id": "a0f3a902-2575-484e-9af1-093f66a1d2d5"
+            }
+          },
+          {
+            "PhysicsComponent": {
+              "debug": false,
+              "id": "71b8180a-5b0d-4d68-a77d-d500b60df0c9",
+              "joint": {
+                "body": {
+                  "allow_rotation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "allow_translation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "ccd": false,
+                  "collider_type": {
+                    "Cube": {
+                      "height": 1.75,
+                      "length": 0.75,
+                      "width": 0.75
+                    }
+                  },
+                  "density": 1,
+                  "dynamic_type": "Position",
+                  "friction": 0.1,
+                  "id": "3fa98d58-bf4c-45bc-8743-19141db2c0f4",
+                  "is_sensor": false,
+                  "restitution": 0.1
+                },
+                "config": null,
+                "id": "76bf10dd-991a-4c54-bed0-e0c9ae6ac3ba",
+                "name": "Joint",
+                "offset": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        ]
       }
     },
     "models": {
@@ -1109,7 +1183,7 @@
       "26684034-a35c-4e02-9fa1-1267ecac6c0a": {
         "id": "26684034-a35c-4e02-9fa1-1267ecac6c0a",
         "name": "Barry - Animation",
-        "rate": 1,
+        "rate": 1.5,
         "starting_node": "a1d1b1c1-489a-404a-b1b2-0ab053bcdfc7",
         "sockets": [],
         "target_skeleton": null,

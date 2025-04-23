@@ -1,18 +1,14 @@
 use engine::{
   application::scene::{PrefabId, ProvideAssets},
-  resources::{audio::AudioId, model::ModelId, particles::ParticleId, sprite::SpriteId},
   systems::Registry,
   utils::{
-    easing::Easing,
-    interpolation::Interpolator,
-    units::{Decibels, Degrees, Kph, Meters, Mps, Rps, Seconds},
+    units::Kph,
   },
   nalgebra::{Unit, Vector3},
 };
 use tagged::{Duplicate, Registerable, Schema};
 
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
 
 pub struct GameComponents;
 
@@ -27,6 +23,8 @@ impl Registry for GameComponents {
     Flower::register();
     Seat::register();
     TimeOfDay::register();
+    Action::register();
+    Log::register();
   }
 }
 
@@ -96,17 +94,14 @@ impl TimeOfDay {
 
 impl ProvideAssets for TimeOfDay {}
 
-/*
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
-pub struct Tileset {
-  pub width: u32,
-  pub length: u32,
+pub struct Action {
 }
 
-impl ProvideAssets for Tileset {
-    fn provide_assets(&self, ids: &mut Vec<Uuid>) {
-        //ids.push(*self.grenadier_throw_grenade);
-        //ids.push(*self.grenadier_grenade_explosion);
-    }
+impl ProvideAssets for Action {}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct Log {
 }
-*/
+
+impl ProvideAssets for Log {}

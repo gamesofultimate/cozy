@@ -20,7 +20,6 @@ use crate::shared::components::{
   Movement,
 };
 
-pub struct Tiredness(f32);
 pub struct SeatLocation { translation: Vector3<f32>, distance: Meters, resting_factor: f32 }
 
 pub struct IdleRegistry {}
@@ -68,11 +67,11 @@ impl Action for Nothing {
     "Nothing"
   }
 
-  fn cost(&self, local: &Backpack, _: &Blackboard) -> f32 {
+  fn cost(&self, _: &Backpack, _: &Blackboard) -> f32 {
     9999.0
   }
 
-  fn check_readyness(&mut self, _local: &Backpack, blackboard: &Blackboard) -> bool {
+  fn check_readyness(&mut self, _: &Backpack, _: &Blackboard) -> bool {
     true
   }
 
@@ -80,17 +79,17 @@ impl Action for Nothing {
     blackboard.insert_bool("bored", true);
   }
 
-  fn within_range(&mut self, local: &Backpack, _: Option<Arc<Navmesh>>) -> bool {
+  fn within_range(&mut self, _: &Backpack, _: Option<Arc<Navmesh>>) -> bool {
     false
   }
 
   fn move_towards(
     &mut self,
-    entity: Entity,
-    scene: &mut Scene,
-    _backpack: &mut Backpack,
-    local: &mut Backpack,
-    _navmesh: Option<Arc<Navmesh>>,
+    _: Entity,
+    _: &mut Scene,
+    _: &mut Backpack,
+    _: &mut Backpack,
+    _: Option<Arc<Navmesh>>,
   ) -> Option<(Vector3<f32>, Vector3<f32>)> {
     let linear_velocity = Vector3::y() * -9.8;
     let angular_velocity = Vector3::zeros();
@@ -98,7 +97,7 @@ impl Action for Nothing {
     return Some((linear_velocity, angular_velocity));
   }
 
-  fn execute(&mut self, entity: Entity, scene: &mut Scene, _: &mut Backpack, local: &mut Backpack) {
+  fn execute(&mut self, _: Entity, _: &mut Scene, _: &mut Backpack, _: &mut Backpack) {
   }
 }
 
@@ -134,14 +133,14 @@ impl Action for SitDown {
   }
 
   fn check_readyness(&mut self, _local: &Backpack, blackboard: &Blackboard) -> bool {
-    blackboard.get_bool("tired")
+    blackboard.get_bool("tired") && blackboard.get_bool("found_resting_place")
   }
 
   fn apply_effect(&mut self, _: &mut Backpack, blackboard: &mut Blackboard) {
     blackboard.insert_bool("tired", false);
     blackboard.insert_bool("rested", true);
     blackboard.insert_bool("bored", true);
-    blackboard.insert_bool("sitted", true);
+    blackboard.insert_bool("sitting", true);
   }
 
   fn within_range(&mut self, local: &Backpack, _: Option<Arc<Navmesh>>) -> bool {
@@ -278,8 +277,10 @@ impl Sensor for SenseSeats {
     match distance_to_seat {
       Some((translation, distance, resting_factor)) => {
         local.insert(SeatLocation { translation, distance: Meters::new(distance), resting_factor });
+        blackboard.insert_bool("found_resting_place", true);
       }
       None => {
+        blackboard.insert_bool("found_resting_place", false);
         local.take::<SeatLocation>();
       }
     }

@@ -1,6 +1,5 @@
 use engine::{
   application::{
-    components::PhysicsComponent,
     physics3d::{ColliderHandle, CollisionEvent},
     scene::Scene,
   },
@@ -14,7 +13,8 @@ use engine::{
 };
 
 use crate::shared::components::{
-  Player,
+  Action,
+  Pickup,
 };
 
 
@@ -45,21 +45,19 @@ impl System for CollisionSystem {
   fn provide(&mut self, _inventory: &Inventory) {}
 
   fn run(&mut self, scene: &mut Scene, _backpack: &mut Backpack) {
-    /*
     let collisions = self.collisions_reader.read().collect::<Vec<_>>();
 
     for collision_event in collisions {
       match collision_event {
         CollisionEvent::Started(collider1, collider2, _) => {
-          self.handle_collision_start::<Ball, Goal>(scene, collider1, collider2);
+          self.handle_collision_start::<Action, Pickup>(scene, collider1, collider2);
         }
 
         CollisionEvent::Stopped(collider1, collider2, _) => {
-          self.handle_collision_stop::<Ball, Goal>(scene, collider1, collider2);
+          self.handle_collision_stop::<Action, Pickup>(scene, collider1, collider2);
         }
       }
     }
-    */
   }
 }
 

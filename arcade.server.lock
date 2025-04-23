@@ -2,6 +2,16 @@
   "components": [
     {
       "tag": "Struct",
+      "name": "Action",
+      "label": "Action",
+      "default_values": "{  }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [],
+      "private": false
+    },
+    {
+      "tag": "Struct",
       "name": "AudioListenerComponent",
       "label": "Audio Listener Component",
       "default_values": "{ active: false, id: (() => { \n      function uuidv4() {\n        return \"10000000-1000-4000-8000-100000000000\".replace(/[018]/g, c =>\n          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)\n        );\n      };\n      return uuidv4()\n     })() }",
@@ -494,6 +504,16 @@
       "tag": "Struct",
       "name": "LevelLoaderRoot",
       "label": "Level Loader Root",
+      "default_values": "{  }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [],
+      "private": false
+    },
+    {
+      "tag": "Struct",
+      "name": "Log",
+      "label": "Log",
       "default_values": "{  }",
       "duplicate_values": "null",
       "docs": null,

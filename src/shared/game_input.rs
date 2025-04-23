@@ -47,7 +47,7 @@ bitflags! {
 }
 
 impl GameInput {
-  pub fn new(width: u32, height: u32) -> Self {
+  pub fn new() -> Self {
     Self {
       up: 0.0,
       right: 0.0,
@@ -90,7 +90,7 @@ impl GameInput {
     }
 
     match event {
-      DeviceEvent::Gamepad(_, GamepadEvent::Joystick { left, right }) => {
+      DeviceEvent::Gamepad(_, GamepadEvent::Joystick { left, .. }) => {
         const MIN_EPSILON: f32 = 0.0 - 0.02;
         const MAX_EPSILON: f32 = 0.0 + 0.02;
 
@@ -190,7 +190,7 @@ impl GameInput {
       // End: Mouse buttons
 
       // Start: Mouse motion
-      DeviceEvent::Mouse(MouseEvent::Motion(position, delta)) => {
+      DeviceEvent::Mouse(MouseEvent::Motion(_, delta)) => {
         self.delta += delta;
       }
       // End: Mouse motion
@@ -225,7 +225,7 @@ impl GameInput {
 
 impl Default for GameInput {
   fn default() -> Self {
-    Self::new(1920, 1080)
+    Self::new()
   }
 }
 

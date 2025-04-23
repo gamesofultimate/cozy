@@ -11,7 +11,7 @@ use crate::shared::{
   game_input::GameInput,
 };
 use engine::application::bus::BrowserBus;
-use engine::systems::browser::BrowserActor;
+//use engine::systems::browser::BrowserActor;
 use engine::systems::hdr::HdrMultiplayerPipeline;
 use engine::systems::Scheduler;
 use engine::utils::browser::grow_memory;
@@ -25,7 +25,7 @@ const GROW_MEMORY_IN_MB: u32 = 800;
 pub fn main(
   canvas_id: String,
   assets_location: String,
-  bus: BrowserBus,
+  _bus: BrowserBus,
   session_id: String,
   connection_id: String,
   unique_id: String,

@@ -1,27 +1,18 @@
 use crate::shared::components::{
-  Player,
   CameraFollow,
 };
 
 use engine::{
   application::{
-    components::{CameraComponent, InputComponent, SelfComponent, SocketComponent},
-    scene::{Collision, Scene, TransformComponent},
+    components::{CameraComponent, SelfComponent},
+    scene::{Scene, TransformComponent},
     input::InputsReader, 
   },
-  resources::node::Transform,
-  systems::{rendering::CameraConfig, Backpack, Initializable, Inventory, System, Subsystem},
-  utils::{easing::*, units::Seconds},
-  Entity,
+  systems::{rendering::CameraConfig, Backpack, Initializable, Inventory, System},
   nalgebra::{Unit, Vector3},
-  glm,
 };
 
-use crate::shared::game_input::{GameInput, InputState};
-use engine::application::scene::IdComponent;
-use std::collections::HashSet;
-
-use rand::Rng;
+use crate::shared::game_input::GameInput;
 
 pub struct CameraSystem {
   inputs: InputsReader<GameInput>,
@@ -38,7 +29,7 @@ impl Initializable for CameraSystem {
 }
 
 impl CameraSystem {
-  fn update_follow(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
+  fn update_follow(&mut self, scene: &mut Scene, _: &mut Backpack) {
     let mut camera_transform = None;
     for (_, (_, transform)) in scene.query_mut::<(
       &SelfComponent,
@@ -46,7 +37,7 @@ impl CameraSystem {
     )>() {
       camera_transform = Some(transform.clone());
     }
-    for (entity, (_, transform)) in scene.query_mut::<(&CameraFollow, &mut TransformComponent)>() {
+    for (_, (_, transform)) in scene.query_mut::<(&CameraFollow, &mut TransformComponent)>() {
       if let Some(camera_transform) = camera_transform {
         transform.translation = camera_transform.translation;
       }
@@ -96,8 +87,6 @@ impl System for CameraSystem {
   }
 
   fn run(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
-    let inputs = self.inputs.read();
-
     self.update_follow(scene, backpack);
     self.update_camera_rotation(scene, backpack);
     self.update_camera_translation(scene, backpack);
