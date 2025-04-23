@@ -26,6 +26,7 @@ impl Registry for GameComponents {
     Npc::register();
     Flower::register();
     Seat::register();
+    TimeOfDay::register();
   }
 }
 
@@ -79,6 +80,21 @@ pub struct Seat {
 }
 
 impl ProvideAssets for Seat {}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct TimeOfDay {
+  pub current_time: f32,
+  pub total_time: f32,
+  pub delta_time: f32,
+}
+
+impl TimeOfDay {
+  fn get_percent(&self) -> f32 {
+    time_of_day.current_time / time_of_day.total_time
+  }
+}
+
+impl ProvideAssets for TimeOfDay {}
 
 /*
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]

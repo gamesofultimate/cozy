@@ -3,6 +3,7 @@ mod network_controller;
 use crate::planners::idling;
 use crate::shared::inputs;
 use crate::shared::collision;
+use crate::shared::timeofday;
 use crate::shared::components;
 //use crate::shared::tileset;
 use crate::shared::game_input::GameInput;
@@ -38,6 +39,7 @@ pub async fn main() {
   scheduler.attach_registry::<components::GameComponents>();
   scheduler.attach_registry::<idling::IdleRegistry>();
   scheduler.attach_system::<inputs::InputsSystem>();
+  scheduler.attach_system::<timeofday::TimeOfDaySystem>();
   //scheduler.attach_system::<tileset::TilesetSystem>();
   scheduler.attach_system::<collision::CollisionSystem>();
 

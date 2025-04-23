@@ -2576,6 +2576,56 @@
     },
     {
       "tag": "Struct",
+      "name": "TimeOfDay",
+      "label": "Time Of Day",
+      "default_values": "{ current_time: 0.0, delta_time: 0.0, total_time: 0.0 }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [
+        {
+          "name": "current_time",
+          "label": "Current Time",
+          "docs": null,
+          "ty": {
+            "tag": "Primitive",
+            "ty": {
+              "tag": "F32"
+            },
+            "default_values": "0.0",
+            "duplicate_values": "null"
+          }
+        },
+        {
+          "name": "total_time",
+          "label": "Total Time",
+          "docs": null,
+          "ty": {
+            "tag": "Primitive",
+            "ty": {
+              "tag": "F32"
+            },
+            "default_values": "0.0",
+            "duplicate_values": "null"
+          }
+        },
+        {
+          "name": "delta_time",
+          "label": "Delta Time",
+          "docs": null,
+          "ty": {
+            "tag": "Primitive",
+            "ty": {
+              "tag": "F32"
+            },
+            "default_values": "0.0",
+            "duplicate_values": "null"
+          }
+        }
+      ],
+      "private": false
+    },
+    {
+      "tag": "Struct",
       "name": "TransformComponent",
       "label": "Transform Component",
       "default_values": "{ transform: { rotation: [0.0, 0.0, 0.0], scale: [0.0, 0.0, 0.0], translation: [0.0, 0.0, 0.0] } }",
@@ -4260,6 +4310,16 @@
     }
   ],
   "actions": [
+    {
+      "tag": "Struct",
+      "name": "Bored",
+      "label": "Bored",
+      "default_values": "{  }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [],
+      "private": false
+    },
     {
       "tag": "Struct",
       "name": "SitDown",

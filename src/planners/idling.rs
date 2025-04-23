@@ -34,6 +34,7 @@ impl Registry for IdleRegistry {
     {
       use engine::application::goap::action_registry::Access;
       SitDown::register();
+      Bored::register();
     }
     {
       use engine::application::goap::sensor_registry::Access;
@@ -59,6 +60,48 @@ impl Goal for Idling {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Schema, Registerable, Duplicate)]
+pub struct Bored {}
+
+impl Action for Bored {
+  fn name(&self) -> &'static str {
+    "Bored"
+  }
+
+  fn cost(&self, local: &Backpack, _: &Blackboard) -> f32 {
+    9999.0
+  }
+
+  fn check_readyness(&mut self, _local: &Backpack, blackboard: &Blackboard) -> bool {
+    true
+  }
+
+  fn apply_effect(&mut self, _: &mut Backpack, blackboard: &mut Blackboard) {
+    blackboard.insert_bool("bored", true);
+  }
+
+  fn within_range(&mut self, local: &Backpack, _: Option<Arc<Navmesh>>) -> bool {
+    false
+  }
+
+  fn move_towards(
+    &mut self,
+    entity: Entity,
+    scene: &mut Scene,
+    _backpack: &mut Backpack,
+    local: &mut Backpack,
+    _navmesh: Option<Arc<Navmesh>>,
+  ) -> Option<(Vector3<f32>, Vector3<f32>)> {
+    let linear_velocity = Vector3::y() * -9.8;
+    let angular_velocity = Vector3::zeros();
+
+    return Some((linear_velocity, angular_velocity));
+  }
+
+  fn execute(&mut self, entity: Entity, scene: &mut Scene, _: &mut Backpack, local: &mut Backpack) {
+  }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Schema, Registerable, Duplicate)]
 pub struct SitDown {}
 
 impl Action for SitDown {
@@ -66,9 +109,12 @@ impl Action for SitDown {
     "SitDown"
   }
 
-  fn cost(&self, _local: &Backpack, _: &Blackboard) -> f32 {
-    // Note: should be distance
-    1.0
+  fn cost(&self, local: &Backpack, _: &Blackboard) -> f32 {
+    if let Some(seat) = local.get::<SeatLocation>() {
+      *seat.distance
+    } else {
+      9999.0
+    }
   }
 
   fn check_readyness(&mut self, _local: &Backpack, blackboard: &Blackboard) -> bool {
@@ -78,6 +124,8 @@ impl Action for SitDown {
   fn apply_effect(&mut self, _: &mut Backpack, blackboard: &mut Blackboard) {
     blackboard.insert_bool("tired", false);
     blackboard.insert_bool("rested", true);
+    blackboard.insert_bool("bored", true);
+    blackboard.insert_bool("sitted", true);
   }
 
   fn within_range(&mut self, local: &Backpack, _: Option<Arc<Navmesh>>) -> bool {
@@ -149,17 +197,14 @@ impl Sensor for SenseSelf {
         let tiredness = npc.rest_level / npc.total_energy;
         if tiredness < 0.3 {
           blackboard.insert_bool("tired", true);
-          local.insert(Tiredness(tiredness))
         } else {
           blackboard.insert_bool("tired", false);
-          local.take::<Tiredness>();
         }
 
         local.insert(transform.clone())
       },
       None => {
         blackboard.insert_bool("tired", false);
-        local.take::<Tiredness>();
       },
     };
   }

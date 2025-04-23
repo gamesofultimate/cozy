@@ -745,6 +745,62 @@
             }
           }
         ]
+      },
+      "581936d2-73c6-47ad-a12c-2061d8b06690": {
+        "id": "581936d2-73c6-47ad-a12c-2061d8b06690",
+        "tag": {
+          "name": "Time Controller"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              20,
+              20,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "TimeOfDay": {
+              "current_time": 0,
+              "delta_time": 4,
+              "total_time": 2400
+            }
+          },
+          {
+            "TextComponent": {
+              "block_alignment": {
+                "horizontal": "Left",
+                "vertical": "Bottom"
+              },
+              "color": [
+                1,
+                1,
+                1,
+                1
+              ],
+              "font": "a0d8e5bd-892d-45fe-843a-b73fea988678",
+              "font_size": 46,
+              "kerning": 1.2,
+              "line_height": 1.5,
+              "max_width": 300,
+              "opacity": 1,
+              "text": "10:00 am",
+              "text_alignment": "Left"
+            }
+          }
+        ]
       }
     },
     "models": {
@@ -857,19 +913,6 @@
             "id": "5d10fa9e-6ae5-425e-8cd1-fc0c33c60afa",
             "collection_id": "1d3f9dcd-4654-407d-889a-6ef7d25ff900",
             "name": "Armature|mixamo.com|Layer0",
-            "loops": true
-          }
-        ],
-        "loops": true
-      },
-      "66abc177-bc88-4002-8cbe-5ce2249033b4": {
-        "id": "66abc177-bc88-4002-8cbe-5ce2249033b4",
-        "source": "models/byron/byron.gltf",
-        "definitions": [
-          {
-            "id": "431490d8-6d22-4ff8-aaa1-8e796b76ed0b",
-            "collection_id": "66abc177-bc88-4002-8cbe-5ce2249033b4",
-            "name": "Armature.001|mixamo.com|Layer0",
             "loops": true
           }
         ],
@@ -1101,7 +1144,7 @@
         ],
         "actions": [
           {
-            "SitDown": {}
+            "Bored": {}
           }
         ],
         "sensors": [
@@ -1119,7 +1162,12 @@
       }
     },
     "sprites": {},
-    "fonts": {},
+    "fonts": {
+      "a0d8e5bd-892d-45fe-843a-b73fea988678": {
+        "id": "a0d8e5bd-892d-45fe-843a-b73fea988678",
+        "source": "fonts/Quicksand-Bold.ttf"
+      }
+    },
     "navmeshes": {}
   }
 }
