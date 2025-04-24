@@ -1,5 +1,6 @@
 use crate::shared::components::{
   CameraFollow,
+  Player,
 };
 
 use engine::{
@@ -31,8 +32,9 @@ impl Initializable for CameraSystem {
 impl CameraSystem {
   fn update_follow(&mut self, scene: &mut Scene, _: &mut Backpack) {
     let mut camera_transform = None;
-    for (_, (_, transform)) in scene.query_mut::<(
+    for (_, (_, _, transform)) in scene.query_mut::<(
       &SelfComponent,
+      &Player,
       &mut TransformComponent,
     )>() {
       camera_transform = Some(transform.clone());

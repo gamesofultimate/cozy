@@ -8,6 +8,7 @@ use crate::shared::{
   components,
   collision,
   timeofday,
+  pickups,
   game_input::GameInput,
 };
 use engine::application::bus::BrowserBus;
@@ -57,6 +58,7 @@ pub fn main(
   scheduler.attach_registry::<idling::IdleRegistry>();
   scheduler.attach_system::<inputs::InputsSystem>();
   scheduler.attach_system::<timeofday::TimeOfDaySystem>();
+  scheduler.attach_system::<pickups::PickupsSystem>();
   //scheduler.attach_system::<tileset::TilesetSystem>();
   scheduler.attach_system::<collision::CollisionSystem>();
   scheduler.attach_system::<camera::CameraSystem>();

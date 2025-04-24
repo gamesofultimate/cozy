@@ -914,6 +914,12 @@
           },
           {
             "PrefabProviderComponent": {}
+          },
+          {
+            "Pickup": {}
+          },
+          {
+            "Log": {}
           }
         ]
       },
@@ -1007,7 +1013,7 @@
                   "dynamic_type": "Position",
                   "friction": 0.1,
                   "id": "3fa98d58-bf4c-45bc-8743-19141db2c0f4",
-                  "is_sensor": false,
+                  "is_sensor": true,
                   "restitution": 0.1
                 },
                 "config": null,
@@ -1020,6 +1026,9 @@
                 ]
               }
             }
+          },
+          {
+            "Action": {}
           }
         ]
       }
