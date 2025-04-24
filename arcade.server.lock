@@ -1772,6 +1772,16 @@
     },
     {
       "tag": "Struct",
+      "name": "PickupSpace",
+      "label": "Pickup Space",
+      "default_values": "{  }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [],
+      "private": false
+    },
+    {
+      "tag": "Struct",
       "name": "Player",
       "label": "Player",
       "default_values": "{  }",

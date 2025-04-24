@@ -25,6 +25,7 @@ impl Registry for GameComponents {
     TimeOfDay::register();
     Action::register();
     Log::register();
+    PickupSpace::register();
   }
 }
 
@@ -105,3 +106,9 @@ pub struct Log {
 }
 
 impl ProvideAssets for Log {}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct PickupSpace {
+}
+
+impl ProvideAssets for PickupSpace {}

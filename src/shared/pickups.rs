@@ -1,20 +1,23 @@
+use std::f32::consts::PI;
+use std::collections::HashMap;
+use crate::shared::game_input::{GameInput, InputState};
 use crate::shared::components::{
   TimeOfDay,
   Pickup,
   Action,
   Log,
+  PickupSpace,
 };
 use engine::{
   application::{
-    components::{TextComponent, LightComponent},
-    scene::{Scene, Collision},
+    components::{TextComponent, LightComponent, NetworkedPlayerComponent, ParentComponent},
+    scene::{Scene, Collision, IdComponent, TransformComponent},
   },
   systems::{
     Backpack, Initializable, Inventory, System,
   },
   utils::units::{Seconds, Framerate, Radians},
 };
-use std::f32::consts::PI;
 
 pub struct PickupsSystem {
 }
@@ -39,9 +42,26 @@ impl System for PickupsSystem {
 
     // TODO: Should be running 4 times the speed of normal time
 
+
+    let mut spaces = HashMap::new();
+    for (_, (id, network, _)) in scene.query_mut::<(&IdComponent, &NetworkedPlayerComponent, &PickupSpace)>() {
+      log::info!("space: {:?}", &id);
+      spaces.insert(*network.connection_id, *id);
+    }
+
+    let mut insertions = vec![];
     //for (_, (log, _)) in scene.query_mut::<(&mut Log, &Collision<Action, Pickup>)>() {
-    for (_, _) in scene.query_mut::<&Collision<Action, Pickup>>() {
-      log::info!("log");
+    for (_, (id, input, network, collision)) in scene.query_mut::<(&IdComponent, &GameInput, &NetworkedPlayerComponent, &Collision<Action, Pickup>)>() {
+      if input.check(InputState::Action) && let Some(id) = spaces.get(&network.connection_id) {
+        //pickups.insert(network.connection_id, *id, collision.other);
+        log::info!("log: {:?}", input);
+        insertions.push((collision.other, *id));
+      }
+    }
+
+    for (entity, parent_id) in insertions {
+      scene.add_component(entity, ParentComponent::new(*parent_id));
+      scene.add_component(entity, TransformComponent::default());
     }
   }
 }

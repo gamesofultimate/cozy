@@ -1031,6 +1031,41 @@
             "Action": {}
           }
         ]
+      },
+      "85b4a858-8432-4e75-b263-ce7b7c0aad38": {
+        "id": "85b4a858-8432-4e75-b263-ce7b7c0aad38",
+        "tag": {
+          "name": "Pick Up Space"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              0,
+              1.2,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "ParentComponent": {
+              "parent_id": "a0f3a902-2575-484e-9af1-093f66a1d2d5"
+            }
+          },
+          {
+            "PickupSpace": {}
+          }
+        ]
       }
     },
     "models": {
