@@ -349,6 +349,30 @@
     },
     {
       "tag": "Struct",
+      "name": "HouseEntrance",
+      "label": "House Entrance",
+      "default_values": "{ owner: (() => { \n            return Symbol.for(\"PrefabId\");\n           })() }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [
+        {
+          "name": "owner",
+          "label": "Owner",
+          "docs": null,
+          "ty": {
+            "tag": "Reference",
+            "name": "Identifiable",
+            "reference": "Prefab",
+            "default_values": "(() => { \n            return Symbol.for(\"PrefabId\");\n           })()",
+            "duplicate_values": "null",
+            "ty": "PrefabId"
+          }
+        }
+      ],
+      "private": false
+    },
+    {
+      "tag": "Struct",
       "name": "IdComponent",
       "label": "Id Component",
       "default_values": "{  }",
@@ -4347,9 +4371,29 @@
       "docs": null,
       "fields": [],
       "private": false
+    },
+    {
+      "tag": "Struct",
+      "name": "Sleep",
+      "label": "Sleep",
+      "default_values": "{  }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [],
+      "private": false
     }
   ],
   "actions": [
+    {
+      "tag": "Struct",
+      "name": "GoToSleep",
+      "label": "Go To Sleep",
+      "default_values": "{  }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [],
+      "private": false
+    },
     {
       "tag": "Struct",
       "name": "Nothing",
@@ -4372,6 +4416,16 @@
     }
   ],
   "sensors": [
+    {
+      "tag": "Struct",
+      "name": "SenseHome",
+      "label": "Sense Home",
+      "default_values": "{  }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [],
+      "private": false
+    },
     {
       "tag": "Struct",
       "name": "SenseSeats",
@@ -4399,6 +4453,16 @@
       "tag": "Struct",
       "name": "SenseSelf",
       "label": "Sense Self",
+      "default_values": "{  }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [],
+      "private": false
+    },
+    {
+      "tag": "Struct",
+      "name": "SenseTimeOfDay",
+      "label": "Sense Time Of Day",
       "default_values": "{  }",
       "duplicate_values": "null",
       "docs": null,

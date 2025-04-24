@@ -5,7 +5,7 @@ use tagged::{Duplicate, Registerable, Schema};
 use engine::{
   application::{
     goap::{Action, Blackboard, Goal, Sensor},
-    scene::{Scene, TransformComponent},
+    scene::{Scene, IdComponent, TransformComponent},
   },
   utils::{physics, units::{Meters, Rps}},
   nalgebra::{Vector3, Unit},
@@ -18,27 +18,32 @@ use crate::shared::components::{
   Seat,
   Npc,
   Movement,
+  HouseEntrance,
+  TimeOfDay,
 };
 
-pub struct SeatLocation { translation: Vector3<f32>, distance: Meters, resting_factor: f32 }
+pub struct HomeLocation {
+  translation: Vector3<f32>,
+  distance: Meters,
+}
 
-pub struct IdleRegistry {}
+pub struct LifeRegistry {}
 
-impl Registry for IdleRegistry {
+impl Registry for LifeRegistry {
   fn register() {
     {
       use engine::application::goap::goal_registry::Access;
-      Bored::register();
-      Rest::register();
+      Sleep::register();
     }
     {
       use engine::application::goap::action_registry::Access;
-      SitDown::register();
-      Nothing::register();
+      GoToSleep::register();
     }
     {
       use engine::application::goap::sensor_registry::Access;
-      SenseSeats::register();
+      SenseTimeOfDay::register();
+      SenseSelf::register();
+      SenseHome::register();
     }
   }
 }
@@ -58,6 +63,7 @@ impl Goal for Bored {
   }
 }
 
+/*
 #[derive(Debug, Clone, Serialize, Deserialize, Schema, Registerable, Duplicate)]
 pub struct Nothing {}
 
@@ -99,51 +105,53 @@ impl Action for Nothing {
   fn execute(&mut self, _: Entity, _: &mut Scene, _: &mut Backpack, _: &mut Backpack) {
   }
 }
+*/
 
 #[derive(Debug, Clone, Serialize, Deserialize, Schema, Registerable, Duplicate)]
-pub struct Rest {}
-impl Goal for Rest {
+pub struct Sleep {}
+impl Goal for Sleep {
   fn name(&self) -> &'static str {
-    "Rest"
+    "Sleep"
   }
 
   fn get_goal(&self, _: Entity, _: &mut Scene, _: &mut Backpack) -> Blackboard {
     let mut blackboard = Blackboard::new();
     // NOTE: An idle goal doesn't make much sense to me. Other things should lead into an idle state
-    blackboard.insert_bool("rested", true);
+    blackboard.insert_bool("sleepy", false);
     blackboard
   }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Schema, Registerable, Duplicate)]
-pub struct SitDown {}
+pub struct GoToSleep {}
 
-impl Action for SitDown {
+impl Action for GoToSleep {
   fn name(&self) -> &'static str {
     "SitDown"
   }
 
-  fn cost(&self, local: &Backpack, _: &Blackboard) -> f32 {
-    if let Some(seat) = local.get::<SeatLocation>() {
-      *seat.distance
+  fn cost(&self, local: &Backpack, blackboard: &Blackboard) -> f32 {
+    if blackboard.get_bool("sleepy") {
+      0.0
     } else {
-      9999.0
+      300.0
     }
   }
 
   fn check_readyness(&mut self, _local: &Backpack, blackboard: &Blackboard) -> bool {
-    blackboard.get_bool("tired") && blackboard.get_bool("found_resting_place")
+    // We always know where home is for now
+    blackboard.get_bool("sleepy")
   }
 
   fn apply_effect(&mut self, _: &mut Backpack, blackboard: &mut Blackboard) {
     blackboard.insert_bool("tired", false);
     blackboard.insert_bool("rested", true);
-    blackboard.insert_bool("bored", true);
-    blackboard.insert_bool("sitting", true);
+    blackboard.insert_bool("sleepy", false);
+    blackboard.insert_bool("laying-down", true);
   }
 
   fn within_range(&mut self, local: &Backpack, _: Option<Arc<Navmesh>>) -> bool {
-    if let Some(seat) = local.get::<SeatLocation>() {
+    if let Some(seat) = local.get::<HomeLocation>() {
       seat.distance < Meters::new(1.6)
     } else {
       false
@@ -158,7 +166,7 @@ impl Action for SitDown {
     local: &mut Backpack,
     _navmesh: Option<Arc<Navmesh>>,
   ) -> Option<(Vector3<f32>, Vector3<f32>)> {
-    let SeatLocation { translation, .. } = local.get::<SeatLocation>()?;
+    let HomeLocation { translation, .. } = local.get::<HomeLocation>()?;
     let (transform, movement) = scene.get_components_mut::<(&TransformComponent, &Movement)>(entity)?;
 
     let mut start_direction = transform.get_forward_direction().into_inner();
@@ -180,22 +188,23 @@ impl Action for SitDown {
   }
 
   fn execute(&mut self, entity: Entity, scene: &mut Scene, _: &mut Backpack, local: &mut Backpack) {
-    if let Some(SeatLocation { resting_factor, .. }) = local.get::<SeatLocation>()
+    if let Some(HomeLocation { .. }) = local.get::<HomeLocation>()
       && let Some(npc) = scene.get_components_mut::<&mut Npc>(entity)
     {
-      npc.rest_level = (npc.rest_level + resting_factor).min(npc.total_energy);
+      //npc.rest_level = (npc.rest_level + resting_factor).min(npc.total_energy);
+      npc.rest_level = (npc.rest_level + 0.01).min(npc.total_energy);
     }
   }
 }
 
+// NOTE: Should probably be two sensors: SenseSelf and SenseRest
 #[derive(Debug, Clone, Serialize, Deserialize, Schema, Registerable, Duplicate)]
-pub struct SenseSeats {
-  max_distance: Meters,
+pub struct SenseSelf {
 }
 
-impl Sensor for SenseSeats {
+impl Sensor for SenseSelf {
   fn name(&self) -> &'static str {
-    "SenseSeats"
+    "SenseSelf"
   }
 
   fn sense(
@@ -206,45 +215,92 @@ impl Sensor for SenseSeats {
     local: &mut Backpack,
     blackboard: &mut Blackboard,
   ) {
-    /*
-    if let Some(Some(_)) = scene.get_components_mut::<Option<&Gun>>(entity) {
-      local.insert(GunLocation::Inventory);
-      blackboard.insert_bool("has_gun", true);
-      return;
-    }
-    */
+    match scene.get_components_mut::<(&TransformComponent, &Npc)>(entity) {
+      Some((transform, npc)) => {
+        let tiredness = npc.rest_level / npc.total_energy;
+        if tiredness < 0.3 {
+          blackboard.insert_bool("tired", true);
+        } else {
+          blackboard.insert_bool("tired", false);
+        }
 
-    let entity_transform = match scene.get_components_mut::<&TransformComponent>(entity) {
-      Some(transform) => transform.clone(),
+        local.insert(transform.clone())
+      },
+      None => {
+        blackboard.insert_bool("tired", false);
+      },
+    };
+  }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Schema, Registerable, Duplicate)]
+pub struct SenseTimeOfDay {
+}
+
+impl Sensor for SenseTimeOfDay {
+  fn name(&self) -> &'static str {
+    "SenseTimeOfDay"
+  }
+
+  fn sense(
+    &mut self,
+    entity: Entity,
+    scene: &mut Scene,
+    _: &mut Backpack,
+    local: &mut Backpack,
+    blackboard: &mut Blackboard,
+  ) {
+    if let Some((_, time_of_day)) = scene.query_one::<&mut TimeOfDay>() {
+      let hour = time_of_day.get_hours();
+
+      if hour > 22 || hour < 6 { 
+        blackboard.insert_bool("sleepy", true);
+      } else if hour > 6 || hour < 8 {
+        blackboard.insert_bool("get-ready", true);
+        blackboard.insert_bool("socialize", true);
+      } else if hour > 8 || hour < 16 {
+        blackboard.insert_bool("work", true);
+      } else if hour > 16 || hour < 18 {
+        blackboard.insert_bool("wind-down", true);
+        blackboard.insert_bool("socialize", true);
+      } else if hour > 18 || hour < 23 {
+      } else {
+        blackboard.insert_bool("sleepy", false);
+      }
+    }
+  }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Schema, Registerable, Duplicate)]
+pub struct SenseHome {
+}
+
+impl Sensor for SenseHome {
+  fn name(&self) -> &'static str {
+    "SenseHome"
+  }
+
+  fn sense(
+    &mut self,
+    entity: Entity,
+    scene: &mut Scene,
+    _: &mut Backpack,
+    local: &mut Backpack,
+    blackboard: &mut Blackboard,
+  ) {
+    let (id, entity_transform) = match scene.get_components_mut::<(&IdComponent, &TransformComponent)>(entity) {
+      Some((id, transform)) => (*id, transform.clone()),
       None => return,
     };
 
-    let mut distance_to_seat = None;
-    for (_, (transform, seat)) in scene.query_mut::<(&TransformComponent, &Seat)>() {
-      let distance = Vector3::metric_distance(
-        &entity_transform.translation,
-        &transform.translation,
-      );
+    for (_, (transform, home)) in scene.query_mut::<(&TransformComponent, &HouseEntrance)>() {
+      if *id == home.owner {
+        let distance = Vector3::metric_distance(
+          &entity_transform.translation,
+          &transform.translation,
+        );
 
-      if distance > *self.max_distance { continue }
-
-      match distance_to_seat {
-        Some((_, current_distance, _)) if distance < current_distance => {
-          distance_to_seat = Some((transform.translation, distance, seat.resting_factor))
-        }
-        None => distance_to_seat = Some((transform.translation, distance, seat.resting_factor)),
-        _ => {}
-      }
-    }
-
-    match distance_to_seat {
-      Some((translation, distance, resting_factor)) => {
-        local.insert(SeatLocation { translation, distance: Meters::new(distance), resting_factor });
-        blackboard.insert_bool("found_resting_place", true);
-      }
-      None => {
-        blackboard.insert_bool("found_resting_place", false);
-        local.take::<SeatLocation>();
+        local.insert(HomeLocation { translation: transform.translation, distance: Meters::new(distance) });
       }
     }
   }

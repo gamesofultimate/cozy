@@ -26,6 +26,7 @@ impl Registry for GameComponents {
     Action::register();
     Log::register();
     PickupSpace::register();
+    HouseEntrance::register();
   }
 }
 
@@ -91,6 +92,14 @@ impl TimeOfDay {
   pub fn get_percent(&self) -> f32 {
     self.current_time / self.total_time
   }
+
+  pub fn get_hours(&self) -> u32 {
+    (self.current_time as u32 / 6000) % 12
+  }
+
+  pub fn get_minutes(&self) -> u32 {
+    (60.0 * ((self.current_time % 6000.0) / 6000.0)) as u32
+  }
 }
 
 impl ProvideAssets for TimeOfDay {}
@@ -112,3 +121,10 @@ pub struct PickupSpace {
 }
 
 impl ProvideAssets for PickupSpace {}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct HouseEntrance {
+  pub owner: PrefabId,
+}
+
+impl ProvideAssets for HouseEntrance {}

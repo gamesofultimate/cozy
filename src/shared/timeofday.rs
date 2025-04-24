@@ -38,13 +38,14 @@ impl System for TimeOfDaySystem {
 
     if let Some((_, (time_of_day, text))) = scene.query_one::<(&mut TimeOfDay, &mut TextComponent)>() {
       time_of_day.current_time = (time_of_day.current_time + time_of_day.delta_time * *Seconds::from(Framerate::new(60.0))) % time_of_day.total_time;
-      let hour = time_of_day.current_time as u32 / 100;
-      let minute = (60.0 * ((time_of_day.current_time % 100.0) / 100.0)) as u32;
 
+      let hour = time_of_day.get_hours();
+      let minute = time_of_day.get_minutes();
       let percent = time_of_day.get_percent();
+
       sun_inclination = Radians::new((PI * 2.0) * percent + PI);
 
-      text.text = format!("{:02}:{:02} {:}", hour, minute, if time_of_day.current_time > 1200.0 { "pm" } else { "am" });
+      text.text = format!("{:02}:{:02} {:}", hour, minute, if time_of_day.current_time > time_of_day.total_time / 2.0 { "pm" } else { "am" });
     }
 
     for (_, light) in scene.query_mut::<&mut LightComponent>() {

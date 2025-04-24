@@ -45,7 +45,6 @@ impl System for PickupsSystem {
 
     let mut spaces = HashMap::new();
     for (_, (id, network, _)) in scene.query_mut::<(&IdComponent, &NetworkedPlayerComponent, &PickupSpace)>() {
-      log::info!("space: {:?}", &id);
       spaces.insert(*network.connection_id, *id);
     }
 
@@ -54,7 +53,6 @@ impl System for PickupsSystem {
     for (_, (id, input, network, collision)) in scene.query_mut::<(&IdComponent, &GameInput, &NetworkedPlayerComponent, &Collision<Action, Pickup>)>() {
       if input.check(InputState::Action) && let Some(id) = spaces.get(&network.connection_id) {
         //pickups.insert(network.connection_id, *id, collision.other);
-        log::info!("log: {:?}", input);
         insertions.push((collision.other, *id));
       }
     }

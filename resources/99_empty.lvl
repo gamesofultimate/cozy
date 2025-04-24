@@ -773,9 +773,9 @@
         "components": [
           {
             "TimeOfDay": {
-              "current_time": 1000,
-              "delta_time": 4,
-              "total_time": 2400
+              "current_time": 60000,
+              "delta_time": 100,
+              "total_time": 144000
             }
           },
           {
@@ -1064,6 +1064,80 @@
           },
           {
             "PickupSpace": {}
+          }
+        ]
+      },
+      "d502d638-e0d5-4559-831d-d36bd202fd16": {
+        "id": "d502d638-e0d5-4559-831d-d36bd202fd16",
+        "tag": {
+          "name": "Misty's House Entrance"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              15.099317,
+              1.3758487,
+              12.884355
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "PhysicsComponent": {
+              "debug": false,
+              "id": "af9efd8b-892c-4011-a6cf-96fc8ab99538",
+              "joint": {
+                "body": {
+                  "allow_rotation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "allow_translation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "ccd": false,
+                  "collider_type": {
+                    "Cube": {
+                      "height": 2,
+                      "length": 2,
+                      "width": 0.5
+                    }
+                  },
+                  "density": 1,
+                  "dynamic_type": "Position",
+                  "friction": 0.1,
+                  "id": "0c2fe78c-0c80-418a-aea8-2f14bf23518e",
+                  "is_sensor": true,
+                  "restitution": 0.1
+                },
+                "config": null,
+                "id": "f59b04c9-bb4d-4b99-9cb9-9ee8a2123f73",
+                "name": "Joint",
+                "offset": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          },
+          {
+            "HouseEntrance": {
+              "owner": "5fe63bd0-01e6-4cf3-93e1-7fcd944b96ad"
+            }
           }
         ]
       }
@@ -1413,6 +1487,9 @@
           },
           {
             "Rest": {}
+          },
+          {
+            "Sleep": {}
           }
         ],
         "actions": [
@@ -1421,6 +1498,9 @@
           },
           {
             "SitDown": {}
+          },
+          {
+            "GoToSleep": {}
           }
         ],
         "sensors": [
@@ -1433,6 +1513,12 @@
           },
           {
             "SenseSelf": {}
+          },
+          {
+            "SenseHome": {}
+          },
+          {
+            "SenseTimeOfDay": {}
           }
         ]
       }
