@@ -241,6 +241,7 @@ impl Sensor for SenseHome {
         );
 
         local.insert(HomeLocation { translation: transform.translation, distance: Meters::new(distance) });
+        break;
       }
     }
   }

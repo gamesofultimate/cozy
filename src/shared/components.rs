@@ -130,3 +130,9 @@ pub struct HouseEntrance {
 }
 
 impl ProvideAssets for HouseEntrance {}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct Friend {
+}
+
+impl ProvideAssets for Friend {}

@@ -133,13 +133,13 @@
         "transform": {
           "transform": {
             "translation": [
-              0,
+              32.097195,
               2,
-              5
+              11.350803
             ],
             "rotation": [
               0,
-              0,
+              3.141592653589793,
               0
             ],
             "scale": [
@@ -373,7 +373,7 @@
           {
             "ModelComponent": {
               "cast_shadows": true,
-              "id": "8ae81a0f-8736-48b2-a4f7-157cca467157",
+              "id": "814dfca2-4e25-4b40-b507-3df1660ab750",
               "skip": false,
               "transform": {
                 "rotation": [
@@ -414,7 +414,7 @@
                   "ccd": false,
                   "collider_type": {
                     "Trimesh": {
-                      "id": "bf220061-c725-44b7-a4f4-289de5894317"
+                      "id": "688a8b1e-d790-497d-98b4-c82a0896daeb"
                     }
                   },
                   "density": 1,
@@ -652,7 +652,7 @@
       "aaffa6e5-5aaf-4d50-a1dd-4f25d1edbf97": {
         "id": "aaffa6e5-5aaf-4d50-a1dd-4f25d1edbf97",
         "tag": {
-          "name": "Bench"
+          "name": "Prefab::Bench"
         },
         "transform": {
           "transform": {
@@ -745,6 +745,9 @@
             "Seat": {
               "resting_factor": 0.01
             }
+          },
+          {
+            "PrefabProviderComponent": {}
           }
         ]
       },
@@ -933,9 +936,9 @@
         "transform": {
           "transform": {
             "translation": [
-              8.411443,
+              33.342365,
               0.19078302,
-              2.82931
+              8.366515
             ],
             "rotation": [
               0,
@@ -1268,7 +1271,7 @@
           },
           {
             "Npc": {
-              "rest_level": 0.1,
+              "rest_level": 4.8,
               "total_energy": 5,
               "social_level": 0.1,
               "total_social": 5
@@ -1282,6 +1285,554 @@
               "walking_speed": {
                 "kph": 4
               }
+            }
+          }
+        ]
+      },
+      "66dd1ff2-7809-43f1-8fe2-1345aaaacc2a": {
+        "id": "66dd1ff2-7809-43f1-8fe2-1345aaaacc2a",
+        "tag": {
+          "name": "Guy's House Entrance"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              -5.670826,
+              1.236474,
+              23.559492
+            ],
+            "rotation": [
+              0,
+              -0.2951436,
+              0
+            ],
+            "scale": [
+              1,
+              2,
+              0.5
+            ]
+          }
+        },
+        "components": [
+          {
+            "PhysicsComponent": {
+              "debug": false,
+              "id": "58febfaf-704c-4c0f-a0b3-02c2c25fc03a",
+              "joint": {
+                "body": {
+                  "allow_rotation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "allow_translation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "ccd": false,
+                  "collider_type": {
+                    "Cube": {
+                      "height": 1,
+                      "length": 1,
+                      "width": 1
+                    }
+                  },
+                  "density": 1,
+                  "dynamic_type": "Position",
+                  "friction": 0.1,
+                  "id": "2e3478ba-1558-4384-907b-ce802b2dade4",
+                  "is_sensor": true,
+                  "restitution": 0.1
+                },
+                "config": null,
+                "id": "af61bc62-37ac-4d65-bf40-a8e5b93f4f48",
+                "name": "Joint",
+                "offset": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          },
+          {
+            "HouseEntrance": {
+              "owner": "723d77a4-b0d4-481d-af59-f156e14ce88a"
+            }
+          }
+        ]
+      },
+      "304e79f2-c0d2-4c06-9562-3dea926abd08": {
+        "id": "304e79f2-c0d2-4c06-9562-3dea926abd08",
+        "tag": {
+          "name": "Player's House"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              35.16452,
+              0,
+              17.965221
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "ModelComponent": {
+              "cast_shadows": true,
+              "id": "1ebf41ec-c831-4c5a-815a-0650ef0e3c56",
+              "skip": false,
+              "transform": {
+                "rotation": [
+                  4.329780281177467e-17,
+                  -0.7071067811865475,
+                  4.329780281177466e-17,
+                  0.7071067811865476
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ],
+                "translation": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          },
+          {
+            "PhysicsComponent": {
+              "debug": false,
+              "id": "6608cef7-8275-484b-882b-da7291ba9167",
+              "joint": {
+                "body": {
+                  "allow_rotation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "allow_translation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "ccd": false,
+                  "collider_type": {
+                    "Cube": {
+                      "height": 8,
+                      "length": 4.25,
+                      "width": 4.25
+                    }
+                  },
+                  "density": 1,
+                  "dynamic_type": "Static",
+                  "friction": 0.1,
+                  "id": "b77f069d-308d-48b5-9f81-09c59120e0c0",
+                  "is_sensor": false,
+                  "restitution": 0.1
+                },
+                "config": null,
+                "id": "06aed936-6e1a-4c80-967d-9a0c53318062",
+                "name": "Joint",
+                "offset": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "2936cf51-13f7-48e7-b0f1-b0f6803258e3": {
+        "id": "2936cf51-13f7-48e7-b0f1-b0f6803258e3",
+        "tag": {
+          "name": "Shrub"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              -2.9003983,
+              -0.17077541,
+              -0.806643
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "ModelComponent": {
+              "cast_shadows": true,
+              "id": "2014d04e-4af1-4deb-8feb-ee389b29fcaa",
+              "skip": false,
+              "transform": {
+                "rotation": [
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ],
+                "translation": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          },
+          {
+            "ParentComponent": {
+              "parent_id": "304e79f2-c0d2-4c06-9562-3dea926abd08"
+            }
+          }
+        ]
+      },
+      "3a9c6455-81cc-4717-921f-acd53dae5e11": {
+        "id": "3a9c6455-81cc-4717-921f-acd53dae5e11",
+        "tag": {
+          "name": "Shrub"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              2.75494,
+              0,
+              -1.2543716
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "ParentComponent": {
+              "parent_id": "304e79f2-c0d2-4c06-9562-3dea926abd08"
+            }
+          },
+          {
+            "ModelComponent": {
+              "cast_shadows": true,
+              "id": "7fefa3fe-fc4c-4b70-ade4-99a6b1217c4d",
+              "skip": false,
+              "transform": {
+                "rotation": [
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ],
+                "translation": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "71ed2072-a1e2-4a57-9b55-acddd295ff4d": {
+        "id": "71ed2072-a1e2-4a57-9b55-acddd295ff4d",
+        "tag": {
+          "name": "Prefab::Tree"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              0,
+              0,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "ModelComponent": {
+              "cast_shadows": true,
+              "id": "3afb4b17-3273-4146-b839-bd0a1aedc427",
+              "skip": false,
+              "transform": {
+                "rotation": [
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ],
+                "translation": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          },
+          {
+            "PrefabProviderComponent": {}
+          }
+        ]
+      },
+      "0b681df5-efd3-4803-bb2d-83c33306c679": {
+        "id": "0b681df5-efd3-4803-bb2d-83c33306c679",
+        "tag": {
+          "name": "Tree Group"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              43.679306,
+              1.7859387,
+              15.930867
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": []
+      },
+      "65315503-fe79-42b5-90ff-662ac799e17b": {
+        "id": "65315503-fe79-42b5-90ff-662ac799e17b",
+        "tag": {
+          "name": "Tree"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              0,
+              -1.7492809,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "ParentComponent": {
+              "parent_id": "0b681df5-efd3-4803-bb2d-83c33306c679"
+            }
+          },
+          {
+            "PrefabComponent": {
+              "id": "71ed2072-a1e2-4a57-9b55-acddd295ff4d"
+            }
+          }
+        ]
+      },
+      "306854fa-1241-414a-b750-2c0e5bf954ed": {
+        "id": "306854fa-1241-414a-b750-2c0e5bf954ed",
+        "tag": {
+          "name": "Tree"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              1.0117531,
+              -1.784338,
+              -1.7518654
+            ],
+            "rotation": [
+              0,
+              1.2217304763960306,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "ParentComponent": {
+              "parent_id": "0b681df5-efd3-4803-bb2d-83c33306c679"
+            }
+          },
+          {
+            "PrefabComponent": {
+              "id": "71ed2072-a1e2-4a57-9b55-acddd295ff4d"
+            }
+          }
+        ]
+      },
+      "f1a05ef9-f610-410e-8eb8-079c1103e1cc": {
+        "id": "f1a05ef9-f610-410e-8eb8-079c1103e1cc",
+        "tag": {
+          "name": "House Entrance"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              0,
+              0.93041945,
+              -2.2532501
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "ParentComponent": {
+              "parent_id": "304e79f2-c0d2-4c06-9562-3dea926abd08"
+            }
+          },
+          {
+            "HouseEntrance": {
+              "owner": "a0f3a902-2575-484e-9af1-093f66a1d2d5"
+            }
+          },
+          {
+            "PhysicsComponent": {
+              "debug": false,
+              "id": "6d64f40b-f425-4dd3-8529-6ee405e82fb9",
+              "joint": {
+                "body": {
+                  "allow_rotation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "allow_translation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "ccd": false,
+                  "collider_type": {
+                    "Cube": {
+                      "height": 2,
+                      "length": 1,
+                      "width": 2
+                    }
+                  },
+                  "density": 1,
+                  "dynamic_type": "Position",
+                  "friction": 0.1,
+                  "id": "f5a62797-0d7e-4ae2-b008-fd9070164993",
+                  "is_sensor": true,
+                  "restitution": 0.1
+                },
+                "config": null,
+                "id": "11057b80-b49f-4d64-af9b-22115d09d611",
+                "name": "Joint",
+                "offset": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "b04544b0-6e12-41c8-abc2-2a63da180b4b": {
+        "id": "b04544b0-6e12-41c8-abc2-2a63da180b4b",
+        "tag": {
+          "name": "Bench"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              27.094662,
+              -0.012929559,
+              16.245068
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "PrefabComponent": {
+              "id": "aaffa6e5-5aaf-4d50-a1dd-4f25d1edbf97"
             }
           }
         ]
@@ -1337,12 +1888,41 @@
         "id": "9131d4bf-0cee-4a56-825e-9efffd847840",
         "source": "models/generic-guy/generic-guy.gltf",
         "maxInstances": 10
+      },
+      "814dfca2-4e25-4b40-b507-3df1660ab750": {
+        "id": "814dfca2-4e25-4b40-b507-3df1660ab750",
+        "source": "models/floor/SM_Floor.gltf",
+        "maxInstances": 10
+      },
+      "1ebf41ec-c831-4c5a-815a-0650ef0e3c56": {
+        "id": "1ebf41ec-c831-4c5a-815a-0650ef0e3c56",
+        "source": "models/SmallFarmHouse/SmallFarmHouse.gltf",
+        "maxInstances": 10
+      },
+      "2014d04e-4af1-4deb-8feb-ee389b29fcaa": {
+        "id": "2014d04e-4af1-4deb-8feb-ee389b29fcaa",
+        "source": "models/Shrub01/Shrub01.gltf",
+        "maxInstances": 10
+      },
+      "7fefa3fe-fc4c-4b70-ade4-99a6b1217c4d": {
+        "id": "7fefa3fe-fc4c-4b70-ade4-99a6b1217c4d",
+        "source": "models/Shrub02/Shrub02.gltf",
+        "maxInstances": 10
+      },
+      "3afb4b17-3273-4146-b839-bd0a1aedc427": {
+        "id": "3afb4b17-3273-4146-b839-bd0a1aedc427",
+        "source": "models/SM_Tree/SM_Tree.gltf",
+        "maxInstances": 10
       }
     },
     "trimeshes": {
       "bf220061-c725-44b7-a4f4-289de5894317": {
         "id": "bf220061-c725-44b7-a4f4-289de5894317",
         "source": "models/C_Level.gltf"
+      },
+      "688a8b1e-d790-497d-98b4-c82a0896daeb": {
+        "id": "688a8b1e-d790-497d-98b4-c82a0896daeb",
+        "source": "models/CM_Fence/CM_Fence/CM_Fence.gltf"
       }
     },
     "textures": {},

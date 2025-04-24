@@ -1,10 +1,15 @@
 use crate::shared::components::{
   TimeOfDay,
+  Friend,
+};
+use crate::planners::social::{
+  Friends,
+  FriendLocation,
 };
 use engine::{
   application::{
     components::{TextComponent, LightComponent},
-    scene::Scene,
+    scene::{Scene, IdComponent, TransformComponent},
   },
   systems::{
     Backpack, Initializable, Inventory, System,
@@ -24,14 +29,7 @@ impl Initializable for TimeOfDaySystem {
 }
 
 impl TimeOfDaySystem {
-}
-
-impl System for TimeOfDaySystem {
-  fn get_name(&self) -> &'static str {
-    "TimeOfDaySystem"
-  }
-
-  fn run(&mut self, scene: &mut Scene, _: &mut Backpack) {
+  pub fn position_sun(&mut self, scene: &mut Scene) {
     let mut sun_inclination = Radians::new(0.0);
 
     // TODO: Should be running 4 times the speed of normal time
@@ -53,5 +51,24 @@ impl System for TimeOfDaySystem {
         *inclination = sun_inclination;
       }
     }
+  }
+
+  pub fn friends_map(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
+    let mut friends = backpack.entry::<Friends>().or_insert_with(|| Friends::new());
+
+    for (_, (id, transform, home)) in scene.query_mut::<(&IdComponent, &TransformComponent, &Friend)>() {
+      friends.insert(**id, transform.translation);
+    }
+  }
+}
+
+impl System for TimeOfDaySystem {
+  fn get_name(&self) -> &'static str {
+    "TimeOfDaySystem"
+  }
+
+  fn run(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
+    self.position_sun(scene);
+    self.friends_map(scene, backpack);
   }
 }

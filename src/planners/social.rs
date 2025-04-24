@@ -1,3 +1,4 @@
+use std::collections::{HashMap, hash_map::Iter};
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use tagged::{Duplicate, Registerable, Schema};
@@ -5,7 +6,7 @@ use tagged::{Duplicate, Registerable, Schema};
 use engine::{
   application::{
     goap::{Action, Blackboard, Goal, Sensor},
-    scene::{Scene, IdComponent, TransformComponent},
+    scene::{Scene, PrefabId, IdComponent, TransformComponent},
   },
   utils::{physics, units::{Meters, Rps}},
   nalgebra::{Vector3, Unit},
@@ -20,11 +21,32 @@ use crate::shared::components::{
   Movement,
   HouseEntrance,
   TimeOfDay,
+  Friend,
 };
 
-pub struct HomeLocation {
-  translation: Vector3<f32>,
-  distance: Meters,
+pub struct Friends {
+  data: HashMap<PrefabId, FriendLocation>,
+}
+
+pub struct FriendLocation {
+  location: Vector3<f32>,
+  interacting_with: Option<(PrefabId, Meters)>,
+}
+
+impl Friends {
+  pub fn new() -> Self {
+    Self {
+      data: HashMap::new(),
+    }
+  }
+
+  pub fn insert(&mut self, id: PrefabId, location: Vector3<f32>) {
+    self.data.entry(id).or_insert(FriendLocation { location, interacting_with: None });
+  }
+
+  pub fn iter(&self) -> Iter<'_, PrefabId, FriendLocation> {
+    self.data.iter()
+  }
 }
 
 pub struct SocialRegistry {}
@@ -187,26 +209,17 @@ impl Sensor for SenseFriends {
     &mut self,
     entity: Entity,
     scene: &mut Scene,
-    _: &mut Backpack,
+    global: &mut Backpack,
     local: &mut Backpack,
     blackboard: &mut Blackboard,
   ) {
-    /*
-    let (id, entity_transform) = match scene.get_components_mut::<(&IdComponent, &TransformComponent)>(entity) {
-      Some((id, transform)) => (*id, transform.clone()),
-      None => return,
-    };
+    if let Some(friends) = global.get_mut::<Friends>() {
+      let entity_transform = match scene.get_components_mut::<&TransformComponent>(entity) {
+        Some(transform) => transform.clone(),
+        None => return,
+      };
 
-    for (_, (transform, home)) in scene.query_mut::<(&TransformComponent, &HouseEntrance)>() {
-      if *id == home.owner {
-        let distance = Vector3::metric_distance(
-          &entity_transform.translation,
-          &transform.translation,
-        );
-
-        local.insert(HomeLocation { translation: transform.translation, distance: Meters::new(distance) });
-      }
+      // TODO: Find interactions
     }
-    */
   }
 }
