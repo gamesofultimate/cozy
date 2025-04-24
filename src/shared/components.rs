@@ -64,6 +64,8 @@ impl ProvideAssets for Player {}
 pub struct Npc {
   pub rest_level: f32,
   pub total_energy: f32,
+  pub social_level: f32,
+  pub total_social: f32,
 }
 
 impl ProvideAssets for Npc {}

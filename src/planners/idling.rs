@@ -52,7 +52,6 @@ impl Goal for Bored {
 
   fn get_goal(&self, _: Entity, _: &mut Scene, _: &mut Backpack) -> Blackboard {
     let mut blackboard = Blackboard::new();
-    // NOTE: An idle goal doesn't make much sense to me. Other things should lead into an idle state
     blackboard.insert_bool("bored", true);
     blackboard
   }
@@ -109,7 +108,6 @@ impl Goal for Rest {
 
   fn get_goal(&self, _: Entity, _: &mut Scene, _: &mut Backpack) -> Blackboard {
     let mut blackboard = Blackboard::new();
-    // NOTE: An idle goal doesn't make much sense to me. Other things should lead into an idle state
     blackboard.insert_bool("rested", true);
     blackboard
   }
@@ -206,14 +204,6 @@ impl Sensor for SenseSeats {
     local: &mut Backpack,
     blackboard: &mut Blackboard,
   ) {
-    /*
-    if let Some(Some(_)) = scene.get_components_mut::<Option<&Gun>>(entity) {
-      local.insert(GunLocation::Inventory);
-      blackboard.insert_bool("has_gun", true);
-      return;
-    }
-    */
-
     let entity_transform = match scene.get_components_mut::<&TransformComponent>(entity) {
       Some(transform) => transform.clone(),
       None => return,

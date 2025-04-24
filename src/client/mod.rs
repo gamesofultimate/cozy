@@ -3,6 +3,7 @@ mod camera;
 use crate::planners::{
   idling,
   life,
+  social,
 };
 use crate::shared::{
   inputs,
@@ -58,6 +59,7 @@ pub fn main(
   scheduler.attach_registry::<components::GameComponents>();
   scheduler.attach_registry::<idling::IdleRegistry>();
   scheduler.attach_registry::<life::LifeRegistry>();
+  scheduler.attach_registry::<social::SocialRegistry>();
   scheduler.attach_system::<inputs::InputsSystem>();
   scheduler.attach_system::<timeofday::TimeOfDaySystem>();
   scheduler.attach_system::<pickups::PickupsSystem>();

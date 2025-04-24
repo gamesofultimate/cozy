@@ -2,6 +2,7 @@ mod network_controller;
 
 use crate::planners::idling;
 use crate::planners::life;
+use crate::planners::social;
 use crate::shared::inputs;
 use crate::shared::collision;
 use crate::shared::timeofday;
@@ -41,6 +42,7 @@ pub async fn main() {
   scheduler.attach_registry::<components::GameComponents>();
   scheduler.attach_registry::<idling::IdleRegistry>();
   scheduler.attach_registry::<life::LifeRegistry>();
+  scheduler.attach_registry::<social::SocialRegistry>();
   scheduler.attach_system::<inputs::InputsSystem>();
   scheduler.attach_system::<timeofday::TimeOfDaySystem>();
   scheduler.attach_system::<pickups::PickupsSystem>();

@@ -27,41 +27,41 @@ pub struct HomeLocation {
   distance: Meters,
 }
 
-pub struct LifeRegistry {}
+pub struct SocialRegistry {}
 
-impl Registry for LifeRegistry {
+impl Registry for SocialRegistry {
   fn register() {
     {
       use engine::application::goap::goal_registry::Access;
-      Sleep::register();
+      Socialize::register();
     }
     {
       use engine::application::goap::action_registry::Access;
-      GoToSleep::register();
+      //GoToSleep::register();
     }
     {
       use engine::application::goap::sensor_registry::Access;
-      SenseTimeOfDay::register();
-      SenseSelf::register();
-      SenseHome::register();
+      SenseSocialNeed::register();
+      SenseFriends::register();
     }
   }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Schema, Registerable, Duplicate)]
-pub struct Sleep {}
-impl Goal for Sleep {
+pub struct Socialize {}
+impl Goal for Socialize {
   fn name(&self) -> &'static str {
-    "Sleep"
+    "Socialize"
   }
 
   fn get_goal(&self, _: Entity, _: &mut Scene, _: &mut Backpack) -> Blackboard {
     let mut blackboard = Blackboard::new();
-    blackboard.insert_bool("sleepy", false);
+    blackboard.insert_bool("want-to-socialize", true);
     blackboard
   }
 }
 
+/*
 #[derive(Debug, Clone, Serialize, Deserialize, Schema, Registerable, Duplicate)]
 pub struct GoToSleep {}
 
@@ -136,15 +136,16 @@ impl Action for GoToSleep {
     }
   }
 }
+*/
 
 // NOTE: Should probably be two sensors: SenseSelf and SenseRest
 #[derive(Debug, Clone, Serialize, Deserialize, Schema, Registerable, Duplicate)]
-pub struct SenseSelf {
+pub struct SenseSocialNeed {
 }
 
-impl Sensor for SenseSelf {
+impl Sensor for SenseSocialNeed {
   fn name(&self) -> &'static str {
-    "SenseSelf"
+    "SenseSocialNeed"
   }
 
   fn sense(
@@ -157,29 +158,29 @@ impl Sensor for SenseSelf {
   ) {
     match scene.get_components_mut::<(&TransformComponent, &Npc)>(entity) {
       Some((transform, npc)) => {
-        let tiredness = npc.rest_level / npc.total_energy;
-        if tiredness < 0.3 {
-          blackboard.insert_bool("tired", true);
+        let social_need = npc.social_level / npc.total_social;
+        if social_need < 0.8 {
+          blackboard.insert_bool("want-to-socialize", true);
         } else {
-          blackboard.insert_bool("tired", false);
+          blackboard.insert_bool("want-to-socialize", false);
         }
 
         local.insert(transform.clone())
       },
       None => {
-        blackboard.insert_bool("tired", false);
+        blackboard.insert_bool("want-to-socialize", false);
       },
     };
   }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Schema, Registerable, Duplicate)]
-pub struct SenseTimeOfDay {
+pub struct SenseFriends {
 }
 
-impl Sensor for SenseTimeOfDay {
+impl Sensor for SenseFriends {
   fn name(&self) -> &'static str {
-    "SenseTimeOfDay"
+    "SenseFriends"
   }
 
   fn sense(
@@ -190,44 +191,7 @@ impl Sensor for SenseTimeOfDay {
     local: &mut Backpack,
     blackboard: &mut Blackboard,
   ) {
-    if let Some((_, time_of_day)) = scene.query_one::<&mut TimeOfDay>() {
-      let hour = time_of_day.get_hours();
-
-      if hour > 22 || hour < 6 { 
-        blackboard.insert_bool("sleepy", true);
-      } else if hour > 6 || hour < 8 {
-        blackboard.insert_bool("get-ready", true);
-        blackboard.insert_bool("socialize", true);
-      } else if hour > 8 || hour < 16 {
-        blackboard.insert_bool("work", true);
-      } else if hour > 16 || hour < 18 {
-        blackboard.insert_bool("wind-down", true);
-        blackboard.insert_bool("socialize", true);
-      } else if hour > 18 || hour < 23 {
-      } else {
-        blackboard.insert_bool("sleepy", false);
-      }
-    }
-  }
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, Schema, Registerable, Duplicate)]
-pub struct SenseHome {
-}
-
-impl Sensor for SenseHome {
-  fn name(&self) -> &'static str {
-    "SenseHome"
-  }
-
-  fn sense(
-    &mut self,
-    entity: Entity,
-    scene: &mut Scene,
-    _: &mut Backpack,
-    local: &mut Backpack,
-    blackboard: &mut Blackboard,
-  ) {
+    /*
     let (id, entity_transform) = match scene.get_components_mut::<(&IdComponent, &TransformComponent)>(entity) {
       Some((id, transform)) => (*id, transform.clone()),
       None => return,
@@ -243,5 +207,6 @@ impl Sensor for SenseHome {
         local.insert(HomeLocation { translation: transform.translation, distance: Meters::new(distance) });
       }
     }
+    */
   }
 }

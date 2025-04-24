@@ -717,7 +717,7 @@
       "tag": "Struct",
       "name": "Npc",
       "label": "Npc",
-      "default_values": "{ rest_level: 0.0, total_energy: 0.0 }",
+      "default_values": "{ rest_level: 0.0, social_level: 0.0, total_energy: 0.0, total_social: 0.0 }",
       "duplicate_values": "null",
       "docs": null,
       "fields": [
@@ -737,6 +737,32 @@
         {
           "name": "total_energy",
           "label": "Total Energy",
+          "docs": null,
+          "ty": {
+            "tag": "Primitive",
+            "ty": {
+              "tag": "F32"
+            },
+            "default_values": "0.0",
+            "duplicate_values": "null"
+          }
+        },
+        {
+          "name": "social_level",
+          "label": "Social Level",
+          "docs": null,
+          "ty": {
+            "tag": "Primitive",
+            "ty": {
+              "tag": "F32"
+            },
+            "default_values": "0.0",
+            "duplicate_values": "null"
+          }
+        },
+        {
+          "name": "total_social",
+          "label": "Total Social",
           "docs": null,
           "ty": {
             "tag": "Primitive",
@@ -4381,6 +4407,16 @@
       "docs": null,
       "fields": [],
       "private": false
+    },
+    {
+      "tag": "Struct",
+      "name": "Socialize",
+      "label": "Socialize",
+      "default_values": "{  }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [],
+      "private": false
     }
   ],
   "actions": [
@@ -4418,6 +4454,16 @@
   "sensors": [
     {
       "tag": "Struct",
+      "name": "SenseFriends",
+      "label": "Sense Friends",
+      "default_values": "{  }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [],
+      "private": false
+    },
+    {
+      "tag": "Struct",
       "name": "SenseHome",
       "label": "Sense Home",
       "default_values": "{  }",
@@ -4453,6 +4499,16 @@
       "tag": "Struct",
       "name": "SenseSelf",
       "label": "Sense Self",
+      "default_values": "{  }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [],
+      "private": false
+    },
+    {
+      "tag": "Struct",
+      "name": "SenseSocialNeed",
+      "label": "Sense Social Need",
       "default_values": "{  }",
       "duplicate_values": "null",
       "docs": null,
