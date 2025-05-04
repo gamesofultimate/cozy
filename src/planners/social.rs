@@ -177,6 +177,7 @@ impl Sensor for SenseSocialNeed {
     _: &mut Backpack,
     local: &mut Backpack,
     blackboard: &mut Blackboard,
+    _: Option<Arc<Navmesh>>,
   ) {
     match scene.get_components_mut::<(&TransformComponent, &Npc)>(entity) {
       Some((transform, npc)) => {
@@ -212,6 +213,7 @@ impl Sensor for SenseFriends {
     global: &mut Backpack,
     local: &mut Backpack,
     blackboard: &mut Blackboard,
+    _: Option<Arc<Navmesh>>,
   ) {
     if let Some(friends) = global.get_mut::<Friends>() {
       let entity_transform = match scene.get_components_mut::<&TransformComponent>(entity) {

@@ -203,6 +203,7 @@ impl Sensor for SenseSeats {
     _: &mut Backpack,
     local: &mut Backpack,
     blackboard: &mut Blackboard,
+    _: Option<Arc<Navmesh>>,
   ) {
     let entity_transform = match scene.get_components_mut::<&TransformComponent>(entity) {
       Some(transform) => transform.clone(),

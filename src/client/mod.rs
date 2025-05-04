@@ -7,7 +7,9 @@ use crate::planners::{
 };
 use crate::shared::{
   inputs,
+  loading,
   components,
+  ui_components,
   collision,
   timeofday,
   pickups,
@@ -57,9 +59,11 @@ pub fn main(
   scheduler.attach_plugin(hdr);
 
   scheduler.attach_registry::<components::GameComponents>();
+  scheduler.attach_registry::<ui_components::UiComponents>();
   scheduler.attach_registry::<idling::IdleRegistry>();
   scheduler.attach_registry::<life::LifeRegistry>();
   scheduler.attach_registry::<social::SocialRegistry>();
+  scheduler.attach_system::<loading::LoadingSystem>();
   scheduler.attach_system::<inputs::InputsSystem>();
   scheduler.attach_system::<timeofday::TimeOfDaySystem>();
   scheduler.attach_system::<pickups::PickupsSystem>();

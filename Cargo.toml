@@ -43,7 +43,7 @@ engine = { path = "../../engine", features = [
   "enable-physics-debugging",
   "brotli",
   #"debug-goap",
-  #"physics-networking",
+  "physics-networking",
 ], registry = "ultimate-shared" }
 
 #tagged = { path = "../../tagged" }

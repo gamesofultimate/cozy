@@ -50,7 +50,8 @@ impl ChannelEvents for NetworkController {
   fn on_session_start(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
     let level_path = match backpack.get::<Level>() {
       Some(level) => level.0.clone(),
-      None => "99_empty.lvl".to_string(),
+      //None => "01_loading.lvl".to_string(),
+      None => "10_main.lvl".to_string(),
     };
 
     // split path by '/resources/'

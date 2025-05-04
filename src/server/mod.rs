@@ -8,6 +8,7 @@ use crate::shared::collision;
 use crate::shared::timeofday;
 use crate::shared::pickups;
 use crate::shared::components;
+use crate::shared::ui_components;
 //use crate::shared::tileset;
 use crate::shared::game_input::GameInput;
 use crate::server::network_controller::NetworkController;
@@ -40,6 +41,7 @@ pub async fn main() {
   let mut scheduler = Scheduler::new(FRAMES_PER_SECOND);
   scheduler.attach_plugin(hdr);
   scheduler.attach_registry::<components::GameComponents>();
+  scheduler.attach_registry::<ui_components::UiComponents>();
   scheduler.attach_registry::<idling::IdleRegistry>();
   scheduler.attach_registry::<life::LifeRegistry>();
   scheduler.attach_registry::<social::SocialRegistry>();

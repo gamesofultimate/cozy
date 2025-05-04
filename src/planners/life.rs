@@ -154,6 +154,7 @@ impl Sensor for SenseSelf {
     _: &mut Backpack,
     local: &mut Backpack,
     blackboard: &mut Blackboard,
+    _: Option<Arc<Navmesh>>,
   ) {
     match scene.get_components_mut::<(&TransformComponent, &Npc)>(entity) {
       Some((transform, npc)) => {
@@ -189,6 +190,7 @@ impl Sensor for SenseTimeOfDay {
     _: &mut Backpack,
     local: &mut Backpack,
     blackboard: &mut Blackboard,
+    _: Option<Arc<Navmesh>>,
   ) {
     if let Some((_, time_of_day)) = scene.query_one::<&mut TimeOfDay>() {
       let hour = time_of_day.get_hours();
@@ -227,6 +229,7 @@ impl Sensor for SenseHome {
     _: &mut Backpack,
     local: &mut Backpack,
     blackboard: &mut Blackboard,
+    _: Option<Arc<Navmesh>>,
   ) {
     let (id, entity_transform) = match scene.get_components_mut::<(&IdComponent, &TransformComponent)>(entity) {
       Some((id, transform)) => (*id, transform.clone()),

@@ -536,6 +536,16 @@
     },
     {
       "tag": "Struct",
+      "name": "LoadingIndicator",
+      "label": "Loading Indicator",
+      "default_values": "{  }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [],
+      "private": false
+    },
+    {
+      "tag": "Struct",
       "name": "Log",
       "label": "Log",
       "default_values": "{  }",
@@ -1001,6 +1011,13 @@
                             "name": "Position",
                             "docs": null,
                             "default_values": "\"Position\"",
+                            "duplicate_values": "null"
+                          },
+                          {
+                            "tag": "Unit",
+                            "name": "Manual",
+                            "docs": null,
+                            "default_values": "\"Manual\"",
                             "duplicate_values": "null"
                           },
                           {
@@ -2113,6 +2130,16 @@
     },
     {
       "tag": "Struct",
+      "name": "StartInstructions",
+      "label": "Start Instructions",
+      "default_values": "{  }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [],
+      "private": false
+    },
+    {
+      "tag": "Struct",
       "name": "StateMachineComponent",
       "label": "State Machine Component",
       "default_values": "{ id: (() => { \n      function uuidv4() {\n        return \"10000000-1000-4000-8000-100000000000\".replace(/[018]/g, c =>\n          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)\n        );\n      };\n      return uuidv4()\n     })(), machine_id: (() => { \n            return Symbol.for(\"AnimationStateMachineId\");\n           })() }",
@@ -2177,7 +2204,7 @@
       "tag": "Struct",
       "name": "TerrainComponent",
       "label": "Terrain Component",
-      "default_values": "{ download_threshold: { meters: 1000.0 }, grass: { blade_color: [0.0, 1.0, 0.0], blade_width: { meters: 0.1 }, density: 256, enabled: true, max_height: { meters: 0.3 }, max_lean: { radians: 0.785 }, max_rotation: { radians: 0.785 }, min_height: { meters: 0.1 }, min_lean: { radians: 0.0 }, min_rotation: { radians: 0.0 } }, id: (() => { \n            return Symbol.for(\"TerrainId\");\n           })(), terrain: { extra_detail: 0, height: { meters: 200.0 }, number_of_cascades: 5, terrain_length: { meters: 400.0 } } }",
+      "default_values": "{ download_threshold: { meters: 1000.0 }, grass: { blade_color: [0.0, 1.0, 0.0], blade_width: { meters: 0.1 }, density: 256, enabled: true, max_height: { meters: 0.3 }, max_lean: { radians: 0.785 }, max_rotation: { radians: 0.785 }, min_height: { meters: 0.1 }, min_lean: { radians: 0.0 }, min_rotation: { radians: 0.0 } }, id: (() => { \n            return Symbol.for(\"TerrainId\");\n           })(), materials: { material_1: { height_scale: 0.0, scale: 0.0 }, material_2: { height_scale: 0.0, scale: 0.0 }, material_3: { height_scale: 0.0, scale: 0.0 }, material_4: { height_scale: 0.0, scale: 0.0 } }, terrain: { extra_detail: 0, height: { meters: 200.0 }, number_of_cascades: 5, terrain_length: { meters: 400.0 } } }",
       "duplicate_values": "null",
       "docs": "Attach a terrain to a given component\nThe terrain itself needs to be built with the Software\ncalled Gaea: (Link: https://quadspinner.com/), and exported\n\nusing multiple tiles (at least 2x2).\n\nOnce exported, follow the following naming convention:\nterrain.{name}.{material-map|height}.x{x}.y{y}\n\nThe material map is a splat map\n\nExport the material node as png, rgba8\nExport the height node as raw, r32",
       "fields": [
@@ -2392,6 +2419,190 @@
                   "default_values": "[0.0, 0.0, 0.0]",
                   "duplicate_values": "null",
                   "ty": "Vector3<f32>"
+                }
+              }
+            ],
+            "private": false
+          }
+        },
+        {
+          "name": "materials",
+          "label": "Materials",
+          "docs": null,
+          "ty": {
+            "tag": "Struct",
+            "name": "MaterialConfigs",
+            "label": "Material Configs",
+            "default_values": "{ material_1: { height_scale: 0.0, scale: 0.0 }, material_2: { height_scale: 0.0, scale: 0.0 }, material_3: { height_scale: 0.0, scale: 0.0 }, material_4: { height_scale: 0.0, scale: 0.0 } }",
+            "duplicate_values": "null",
+            "docs": null,
+            "fields": [
+              {
+                "name": "material_1",
+                "label": "Material 1",
+                "docs": null,
+                "ty": {
+                  "tag": "Struct",
+                  "name": "MaterialConfiguration",
+                  "label": "Material Configuration",
+                  "default_values": "{ height_scale: 0.0, scale: 0.0 }",
+                  "duplicate_values": "null",
+                  "docs": null,
+                  "fields": [
+                    {
+                      "name": "scale",
+                      "label": "Scale",
+                      "docs": null,
+                      "ty": {
+                        "tag": "Primitive",
+                        "ty": {
+                          "tag": "F32"
+                        },
+                        "default_values": "0.0",
+                        "duplicate_values": "null"
+                      }
+                    },
+                    {
+                      "name": "height_scale",
+                      "label": "Height Scale",
+                      "docs": null,
+                      "ty": {
+                        "tag": "Primitive",
+                        "ty": {
+                          "tag": "F32"
+                        },
+                        "default_values": "0.0",
+                        "duplicate_values": "null"
+                      }
+                    }
+                  ],
+                  "private": false
+                }
+              },
+              {
+                "name": "material_2",
+                "label": "Material 2",
+                "docs": null,
+                "ty": {
+                  "tag": "Struct",
+                  "name": "MaterialConfiguration",
+                  "label": "Material Configuration",
+                  "default_values": "{ height_scale: 0.0, scale: 0.0 }",
+                  "duplicate_values": "null",
+                  "docs": null,
+                  "fields": [
+                    {
+                      "name": "scale",
+                      "label": "Scale",
+                      "docs": null,
+                      "ty": {
+                        "tag": "Primitive",
+                        "ty": {
+                          "tag": "F32"
+                        },
+                        "default_values": "0.0",
+                        "duplicate_values": "null"
+                      }
+                    },
+                    {
+                      "name": "height_scale",
+                      "label": "Height Scale",
+                      "docs": null,
+                      "ty": {
+                        "tag": "Primitive",
+                        "ty": {
+                          "tag": "F32"
+                        },
+                        "default_values": "0.0",
+                        "duplicate_values": "null"
+                      }
+                    }
+                  ],
+                  "private": false
+                }
+              },
+              {
+                "name": "material_3",
+                "label": "Material 3",
+                "docs": null,
+                "ty": {
+                  "tag": "Struct",
+                  "name": "MaterialConfiguration",
+                  "label": "Material Configuration",
+                  "default_values": "{ height_scale: 0.0, scale: 0.0 }",
+                  "duplicate_values": "null",
+                  "docs": null,
+                  "fields": [
+                    {
+                      "name": "scale",
+                      "label": "Scale",
+                      "docs": null,
+                      "ty": {
+                        "tag": "Primitive",
+                        "ty": {
+                          "tag": "F32"
+                        },
+                        "default_values": "0.0",
+                        "duplicate_values": "null"
+                      }
+                    },
+                    {
+                      "name": "height_scale",
+                      "label": "Height Scale",
+                      "docs": null,
+                      "ty": {
+                        "tag": "Primitive",
+                        "ty": {
+                          "tag": "F32"
+                        },
+                        "default_values": "0.0",
+                        "duplicate_values": "null"
+                      }
+                    }
+                  ],
+                  "private": false
+                }
+              },
+              {
+                "name": "material_4",
+                "label": "Material 4",
+                "docs": null,
+                "ty": {
+                  "tag": "Struct",
+                  "name": "MaterialConfiguration",
+                  "label": "Material Configuration",
+                  "default_values": "{ height_scale: 0.0, scale: 0.0 }",
+                  "duplicate_values": "null",
+                  "docs": null,
+                  "fields": [
+                    {
+                      "name": "scale",
+                      "label": "Scale",
+                      "docs": null,
+                      "ty": {
+                        "tag": "Primitive",
+                        "ty": {
+                          "tag": "F32"
+                        },
+                        "default_values": "0.0",
+                        "duplicate_values": "null"
+                      }
+                    },
+                    {
+                      "name": "height_scale",
+                      "label": "Height Scale",
+                      "docs": null,
+                      "ty": {
+                        "tag": "Primitive",
+                        "ty": {
+                          "tag": "F32"
+                        },
+                        "default_values": "0.0",
+                        "duplicate_values": "null"
+                      }
+                    }
+                  ],
+                  "private": false
                 }
               }
             ],

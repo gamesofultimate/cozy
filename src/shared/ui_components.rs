@@ -7,11 +7,22 @@ use tagged::{Duplicate, Registerable, Schema};
 
 use serde::{Deserialize, Serialize};
 
-pub struct UIComponents;
+pub struct UiComponents;
 
-impl Registry for UIComponents {
+impl Registry for UiComponents {
   fn register() {
     use engine::application::scene::component_registry::Access;
+    StartInstructions::register();
+    LoadingIndicator::register();
   }
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct StartInstructions {}
+
+impl ProvideAssets for StartInstructions {}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct LoadingIndicator {}
+
+impl ProvideAssets for LoadingIndicator {}

@@ -1,0 +1,1366 @@
+{
+  "version": "v0.0.8",
+  "filename": "01_loading.lvl",
+  "config": {
+    "id": "434f4365-314c-4b0a-b510-0dd832f63da2",
+    "name": "Empty",
+    "bloom": {
+      "threshold": 1,
+      "knee": 0.1,
+      "enabled": true,
+      "hdr": true
+    },
+    "dof": {
+      "focus_point": 8.7,
+      "focus_scale": 2.5,
+      "radius_scale": 5,
+      "enabled": false
+    },
+    "ssao": {
+      "enabled": true,
+      "scale": 4,
+      "radius": 2,
+      "bias": 0.5,
+      "intensity": 1.5
+    },
+    "ambient": {
+      "intensity": 0.55,
+      "fog": 0
+    },
+    "shadows": {
+      "num_cascade_layers": 3,
+      "shadow_multiplier": 5,
+      "debug_paint_cascades": false,
+      "max_distance": 100,
+      "fade_out": 0.5,
+      "bias": [
+        0.005,
+        0.00005
+      ]
+    },
+    "physics": {
+      "color": [
+        1,
+        0,
+        0
+      ]
+    },
+    "debug": {
+      "empty_shapes": false,
+      "shadow": false,
+      "physics": true,
+      "lighting": false,
+      "render_debug_mode": "None",
+      "grid": false
+    },
+    "camera": {
+      "fovy": {
+        "radians": 0.7853982
+      },
+      "znear": 0.1,
+      "zfar": 200
+    },
+    "fxaa": {
+      "enabled": true,
+      "span_max": 8,
+      "reduce_min": 128,
+      "reduce_mul": 8
+    }
+  },
+  "scene": {
+    "prefabs": {
+      "a0f3a902-2575-484e-9af1-093f66a1d2d5": {
+        "id": "a0f3a902-2575-484e-9af1-093f66a1d2d5",
+        "tag": {
+          "name": "Player"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              0,
+              0,
+              0
+            ],
+            "rotation": [
+              0,
+              3.141592653589793,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "ModelComponent": {
+              "cast_shadows": true,
+              "id": "cb7b13ea-5344-44b6-909d-61dbd1c844d6",
+              "skip": false,
+              "transform": {
+                "rotation": [
+                  6.123233995736766e-17,
+                  0,
+                  0,
+                  -1
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ],
+                "translation": [
+                  0,
+                  -0.65,
+                  0
+                ]
+              }
+            }
+          },
+          {
+            "PrefabProviderComponent": {}
+          },
+          {
+            "PhysicsComponent": {
+              "debug": false,
+              "id": "d1564267-680e-4556-ab32-f824ea727f61",
+              "joint": {
+                "body": {
+                  "allow_rotation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "allow_translation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "ccd": false,
+                  "collider_type": {
+                    "CapsuleY": {
+                      "half_height": 0.2,
+                      "radius": 0.5
+                    }
+                  },
+                  "density": 1,
+                  "dynamic_type": {
+                    "CharacterController": {
+                      "auto_step": true,
+                      "id": "e93087f5-4c28-4992-bc8d-ba6138c4ba72",
+                      "is_velocity_based": true,
+                      "max_slope_climb_angle": 1,
+                      "min_slope_slide_angle": 0.99,
+                      "shape_offset": 0.01,
+                      "slide": true,
+                      "snap_max_distance": 0.05,
+                      "snap_to_ground": true,
+                      "step_max_height": 0.3,
+                      "step_min_width": 0.2,
+                      "up_vector": [
+                        0,
+                        1,
+                        0
+                      ]
+                    }
+                  },
+                  "friction": 0.1,
+                  "id": "6b1a87d2-a153-4e14-b84e-15a9e97f50cf",
+                  "is_sensor": false,
+                  "restitution": 0.1
+                },
+                "config": null,
+                "id": "89f42152-1b02-4e9c-829e-12f68c78a229",
+                "name": "Joint",
+                "offset": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          },
+          {
+            "Player": {}
+          },
+          {
+            "InputComponent": {
+              "deadzone": 0.001,
+              "joystick_sensitivity": 1,
+              "mouse_sensitivity": 0.5,
+              "speed": {
+                "kph": 2
+              }
+            }
+          },
+          {
+            "Movement": {
+              "running_speed": {
+                "kph": 8
+              },
+              "walking_speed": {
+                "kph": 4
+              }
+            }
+          },
+          {
+            "StateMachineComponent": {
+              "id": "f506a105-dab2-45a8-b595-6f903a110c37",
+              "machine_id": "26684034-a35c-4e02-9fa1-1267ecac6c0a"
+            }
+          },
+          {
+            "PriorityDownload": {}
+          }
+        ]
+      },
+      "551ce049-c52b-418a-91c4-285cbe165035": {
+        "id": "551ce049-c52b-418a-91c4-285cbe165035",
+        "tag": {
+          "name": "Camera"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              0,
+              1,
+              -3
+            ],
+            "rotation": [
+              0.2617993877991494,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "CameraComponent": {
+              "Perspective": {
+                "fovy": {
+                  "radians": 0.7853981633974483
+                },
+                "primary": true,
+                "zfar": 200,
+                "znear": 0.1
+              }
+            }
+          },
+          {
+            "ParentComponent": {
+              "parent_id": "b798a352-e300-4432-a6b6-b0a859baeca9"
+            }
+          },
+          {
+            "AudioListenerComponent": {
+              "active": true,
+              "id": "41afa0f3-f716-4ef4-b02f-2d5b21a56511"
+            }
+          }
+        ]
+      },
+      "b798a352-e300-4432-a6b6-b0a859baeca9": {
+        "id": "b798a352-e300-4432-a6b6-b0a859baeca9",
+        "tag": {
+          "name": "Camera Position"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              0,
+              1,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "CameraFollow": {
+              "following": "a0f3a902-2575-484e-9af1-093f66a1d2d5"
+            }
+          }
+        ]
+      },
+      "091f786d-f03a-4285-b40b-b3d7a1d33493": {
+        "id": "091f786d-f03a-4285-b40b-b3d7a1d33493",
+        "tag": {
+          "name": "Sky"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              0.4235406,
+              2.9727075,
+              -5.704779
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "SkyLightComponent": {
+              "Dynamic": {
+                "background_intensity": 0,
+                "id": "123f9457-4476-48e4-adba-c2ba616fe2e2",
+                "lighting_intensity": 0.3,
+                "turbidity": 2
+              }
+            }
+          },
+          {
+            "LightComponent": {
+              "Directional": {
+                "azimuth": {
+                  "radians": 0
+                },
+                "inclination": {
+                  "radians": 1
+                },
+                "intensity": 1.7,
+                "radiance": [
+                  1,
+                  1,
+                  1
+                ],
+                "should_cast_shadows": false
+              }
+            }
+          },
+          {
+            "AudioSourceComponent": {
+              "audio_id": "f5b94c32-5f29-4a7a-b008-a6649343eec8",
+              "id": "dbea7de7-87a4-4f84-b0d1-4d1faef7c990",
+              "should_loop": false,
+              "spatial": null,
+              "state": "Playing",
+              "volume": 0.8
+            }
+          }
+        ]
+      },
+      "745e190f-3812-4182-9f5f-1328cdc60bd8": {
+        "id": "745e190f-3812-4182-9f5f-1328cdc60bd8",
+        "tag": {
+          "name": "Floor"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              0,
+              -1,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              10,
+              0.1,
+              10
+            ]
+          }
+        },
+        "components": [
+          {
+            "PhysicsComponent": {
+              "debug": false,
+              "id": "01213ee5-1dc8-4861-8db6-5cce8a8baa6e",
+              "joint": {
+                "body": {
+                  "allow_rotation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "allow_translation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "ccd": false,
+                  "collider_type": {
+                    "Ground": {
+                      "height": 1,
+                      "length": 1,
+                      "width": 1
+                    }
+                  },
+                  "density": 1,
+                  "dynamic_type": "Static",
+                  "friction": 0.1,
+                  "id": "31a6ad40-11bc-43eb-87ee-a0158ff7c693",
+                  "is_sensor": false,
+                  "restitution": 0.1
+                },
+                "config": null,
+                "id": "d34db39d-5d4e-491e-84f8-81cfb6c5619d",
+                "name": "Joint",
+                "offset": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "7b517adf-1311-4d67-9217-282d5ba34bbd": {
+        "id": "7b517adf-1311-4d67-9217-282d5ba34bbd",
+        "tag": {
+          "name": "Wall W"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              5,
+              0,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              0.1,
+              2,
+              10
+            ]
+          }
+        },
+        "components": [
+          {
+            "PhysicsComponent": {
+              "debug": false,
+              "id": "52a71f7b-e39e-4baa-9a94-1b7d09d5ac3c",
+              "joint": {
+                "body": {
+                  "allow_rotation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "allow_translation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "ccd": false,
+                  "collider_type": {
+                    "Ground": {
+                      "height": 1,
+                      "length": 1,
+                      "width": 1
+                    }
+                  },
+                  "density": 1,
+                  "dynamic_type": "Static",
+                  "friction": 0.1,
+                  "id": "8c5fdb5e-4407-40c1-9b01-d00d4893ad02",
+                  "is_sensor": false,
+                  "restitution": 0.1
+                },
+                "config": null,
+                "id": "6df4965f-0dd6-443f-bfa9-61bbb2f599f2",
+                "name": "Joint",
+                "offset": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "ae60e55d-5405-4e81-9eca-5b5af9524a26": {
+        "id": "ae60e55d-5405-4e81-9eca-5b5af9524a26",
+        "tag": {
+          "name": "Wall E"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              -5,
+              0,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              0.1,
+              2,
+              10
+            ]
+          }
+        },
+        "components": [
+          {
+            "PhysicsComponent": {
+              "debug": false,
+              "id": "fc8c61a6-fb87-44ba-91c5-6fd7b1cde3c5",
+              "joint": {
+                "body": {
+                  "allow_rotation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "allow_translation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "ccd": false,
+                  "collider_type": {
+                    "Ground": {
+                      "height": 1,
+                      "length": 1,
+                      "width": 1
+                    }
+                  },
+                  "density": 1,
+                  "dynamic_type": "Static",
+                  "friction": 0.1,
+                  "id": "a5dd597f-8c0f-48de-8848-ddad94c51c7f",
+                  "is_sensor": false,
+                  "restitution": 0.1
+                },
+                "config": null,
+                "id": "2627a535-9303-40eb-a42d-bdead6f04c74",
+                "name": "Joint",
+                "offset": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "c91105d8-7cfc-4a3d-9a43-815ead82f262": {
+        "id": "c91105d8-7cfc-4a3d-9a43-815ead82f262",
+        "tag": {
+          "name": "Wall S"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              0,
+              0,
+              -5
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              10,
+              2,
+              0.1
+            ]
+          }
+        },
+        "components": [
+          {
+            "PhysicsComponent": {
+              "debug": false,
+              "id": "c6b7adb4-4daf-45eb-a978-f21a0ad681e0",
+              "joint": {
+                "body": {
+                  "allow_rotation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "allow_translation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "ccd": false,
+                  "collider_type": {
+                    "Ground": {
+                      "height": 1,
+                      "length": 1,
+                      "width": 1
+                    }
+                  },
+                  "density": 1,
+                  "dynamic_type": "Static",
+                  "friction": 0.1,
+                  "id": "6d100215-a183-4fa0-a5f7-b7bb995dbf10",
+                  "is_sensor": false,
+                  "restitution": 0.1
+                },
+                "config": null,
+                "id": "4092c1ca-1bac-4efb-9103-ac88d506cf85",
+                "name": "Joint",
+                "offset": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "678eac51-ad43-454c-86ba-2319737764fc": {
+        "id": "678eac51-ad43-454c-86ba-2319737764fc",
+        "tag": {
+          "name": "Wall N"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              0,
+              0,
+              5
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              10,
+              2,
+              0.1
+            ]
+          }
+        },
+        "components": [
+          {
+            "PhysicsComponent": {
+              "debug": false,
+              "id": "f81e1cb7-ea33-4802-93e8-0bb59b30a053",
+              "joint": {
+                "body": {
+                  "allow_rotation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "allow_translation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "ccd": false,
+                  "collider_type": {
+                    "Ground": {
+                      "height": 1,
+                      "length": 1,
+                      "width": 1
+                    }
+                  },
+                  "density": 1,
+                  "dynamic_type": "Static",
+                  "friction": 0.1,
+                  "id": "fd9204fc-c02a-4081-bd01-471a54edc605",
+                  "is_sensor": false,
+                  "restitution": 0.1
+                },
+                "config": null,
+                "id": "3283c8d1-ede2-42fc-9fce-75c93e82b32c",
+                "name": "Joint",
+                "offset": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "0d0d6c0c-0ea2-4488-ad6e-d022d977edfe": {
+        "id": "0d0d6c0c-0ea2-4488-ad6e-d022d977edfe",
+        "tag": {
+          "name": "Loading Progress"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              5,
+              5,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "TextComponent": {
+              "block_alignment": {
+                "horizontal": "Left",
+                "vertical": "Bottom"
+              },
+              "color": [
+                1,
+                1,
+                1,
+                1
+              ],
+              "font": "a0d8e5bd-892d-45fe-843a-b73fea988678",
+              "font_size": 16,
+              "kerning": 1.2,
+              "line_height": 1.5,
+              "max_width": 300,
+              "opacity": 1,
+              "text": "0 / 0 / 0 / 0",
+              "text_alignment": "Left"
+            }
+          }
+        ]
+      },
+      "9ebd41a6-bb13-4458-8af2-fff8ac7badbb": {
+        "id": "9ebd41a6-bb13-4458-8af2-fff8ac7badbb",
+        "tag": {
+          "name": "Ready Indicator"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              0,
+              -100,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "TextComponent": {
+              "block_alignment": {
+                "horizontal": "Middle",
+                "vertical": "Middle"
+              },
+              "color": [
+                1,
+                1,
+                1,
+                1
+              ],
+              "font": "a0d8e5bd-892d-45fe-843a-b73fea988678",
+              "font_size": 46,
+              "kerning": 1.2,
+              "line_height": 1.5,
+              "max_width": 400,
+              "opacity": 1,
+              "text": "Click here to start",
+              "text_alignment": "Middle"
+            }
+          }
+        ]
+      },
+      "94acec1d-bdfe-4674-a520-d8088948aaa3": {
+        "id": "94acec1d-bdfe-4674-a520-d8088948aaa3",
+        "tag": {
+          "name": "Loader"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              0,
+              0,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "LevelDownloaderVolume": {
+              "level": "10_main.lvl",
+              "radius": 100
+            }
+          }
+        ]
+      }
+    },
+    "models": {
+      "cb7b13ea-5344-44b6-909d-61dbd1c844d6": {
+        "id": "cb7b13ea-5344-44b6-909d-61dbd1c844d6",
+        "source": "models/barry/barry.gltf",
+        "maxInstances": 10
+      },
+      "9fb4859d-187f-4b3c-a7c8-4c6aea3452d8": {
+        "id": "9fb4859d-187f-4b3c-a7c8-4c6aea3452d8",
+        "source": "models/tiles/Grass/FarmBlock.gltf",
+        "maxInstances": 10
+      },
+      "a152f452-89a5-49d7-bc66-0ca3cadf90d4": {
+        "id": "a152f452-89a5-49d7-bc66-0ca3cadf90d4",
+        "source": "models/tiles/Dirt/DirtBlock.gltf",
+        "maxInstances": 10
+      },
+      "db41626d-2a8e-4d0d-8ba9-1af11436ffdd": {
+        "id": "db41626d-2a8e-4d0d-8ba9-1af11436ffdd",
+        "source": "models/tiles/Sand/SandBlock.gltf",
+        "maxInstances": 10
+      },
+      "7d87ccf0-457b-4788-8d41-9d5defccf3cd": {
+        "id": "7d87ccf0-457b-4788-8d41-9d5defccf3cd",
+        "source": "models/tiles/Water/WaterBlock.gltf",
+        "maxInstances": 10
+      },
+      "8ae81a0f-8736-48b2-a4f7-157cca467157": {
+        "id": "8ae81a0f-8736-48b2-a4f7-157cca467157",
+        "source": "models/Map01/Map01.gltf",
+        "maxInstances": 10
+      },
+      "8cec0d83-0d2c-42c7-b3e7-79cbb7d41a24": {
+        "id": "8cec0d83-0d2c-42c7-b3e7-79cbb7d41a24",
+        "source": "models/misty/misty.gltf",
+        "maxInstances": 10
+      },
+      "d3786a9d-49d7-40a7-a5e0-4aa6915fa6c4": {
+        "id": "d3786a9d-49d7-40a7-a5e0-4aa6915fa6c4",
+        "source": "models/green-bench/green-bench.gltf",
+        "maxInstances": 10
+      },
+      "b4997f28-d559-4d0a-8baf-ee746e21b149": {
+        "id": "b4997f28-d559-4d0a-8baf-ee746e21b149",
+        "source": "models/log/Log.gltf",
+        "maxInstances": 10
+      },
+      "9131d4bf-0cee-4a56-825e-9efffd847840": {
+        "id": "9131d4bf-0cee-4a56-825e-9efffd847840",
+        "source": "models/generic-guy/generic-guy.gltf",
+        "maxInstances": 10
+      },
+      "814dfca2-4e25-4b40-b507-3df1660ab750": {
+        "id": "814dfca2-4e25-4b40-b507-3df1660ab750",
+        "source": "models/floor/SM_Floor.gltf",
+        "maxInstances": 10
+      },
+      "1ebf41ec-c831-4c5a-815a-0650ef0e3c56": {
+        "id": "1ebf41ec-c831-4c5a-815a-0650ef0e3c56",
+        "source": "models/SmallFarmHouse/SmallFarmHouse.gltf",
+        "maxInstances": 10
+      },
+      "2014d04e-4af1-4deb-8feb-ee389b29fcaa": {
+        "id": "2014d04e-4af1-4deb-8feb-ee389b29fcaa",
+        "source": "models/Shrub01/Shrub01.gltf",
+        "maxInstances": 10
+      },
+      "7fefa3fe-fc4c-4b70-ade4-99a6b1217c4d": {
+        "id": "7fefa3fe-fc4c-4b70-ade4-99a6b1217c4d",
+        "source": "models/Shrub02/Shrub02.gltf",
+        "maxInstances": 10
+      },
+      "3afb4b17-3273-4146-b839-bd0a1aedc427": {
+        "id": "3afb4b17-3273-4146-b839-bd0a1aedc427",
+        "source": "models/SM_Tree/SM_Tree.gltf",
+        "maxInstances": 10
+      }
+    },
+    "trimeshes": {
+      "bf220061-c725-44b7-a4f4-289de5894317": {
+        "id": "bf220061-c725-44b7-a4f4-289de5894317",
+        "source": "models/C_Level.gltf"
+      },
+      "688a8b1e-d790-497d-98b4-c82a0896daeb": {
+        "id": "688a8b1e-d790-497d-98b4-c82a0896daeb",
+        "source": "models/CM_Fence/CM_Fence/CM_Fence.gltf"
+      }
+    },
+    "textures": {},
+    "particles": {},
+    "animations": {
+      "259421cb-5a8c-4d4a-839b-56014603a46a": {
+        "id": "259421cb-5a8c-4d4a-839b-56014603a46a",
+        "source": "animations/A_Walk.gltf",
+        "definitions": [
+          {
+            "id": "c6e69e5b-5b55-4d54-b6fc-62a2a366ba5c",
+            "collection_id": "259421cb-5a8c-4d4a-839b-56014603a46a",
+            "name": "Armature|mixamo.com|Layer0",
+            "loops": true
+          },
+          {
+            "id": "59affd23-a407-4d40-a35f-8f0f33a547ba",
+            "collection_id": "259421cb-5a8c-4d4a-839b-56014603a46a",
+            "name": "Armature|mixamo.com|Layer0.001",
+            "loops": true
+          },
+          {
+            "id": "37b75cc2-4cc7-4b42-be2a-bc31bdebb05a",
+            "collection_id": "259421cb-5a8c-4d4a-839b-56014603a46a",
+            "name": "Armature|mixamo.com|Layer0.002",
+            "loops": true
+          }
+        ],
+        "loops": true
+      },
+      "a9466e07-7ef6-478c-9db6-76ffb470ac47": {
+        "id": "a9466e07-7ef6-478c-9db6-76ffb470ac47",
+        "source": "animations/A_Idle.gltf",
+        "definitions": [
+          {
+            "id": "23be3660-7389-4d29-ade7-f4d3278059f6",
+            "collection_id": "a9466e07-7ef6-478c-9db6-76ffb470ac47",
+            "name": "Armature|mixamo.com|Layer0",
+            "loops": true
+          }
+        ],
+        "loops": true
+      },
+      "07355af1-e7f8-4a05-b5a4-53f0ddddec9f": {
+        "id": "07355af1-e7f8-4a05-b5a4-53f0ddddec9f",
+        "source": "animations/A_FastRun.gltf",
+        "definitions": [
+          {
+            "id": "9509d05b-f885-4518-a863-9b1e7ff7d8db",
+            "collection_id": "07355af1-e7f8-4a05-b5a4-53f0ddddec9f",
+            "name": "Armature|mixamo.com|Layer0",
+            "loops": true
+          }
+        ],
+        "loops": true
+      },
+      "1d3f9dcd-4654-407d-889a-6ef7d25ff900": {
+        "id": "1d3f9dcd-4654-407d-889a-6ef7d25ff900",
+        "source": "animations/misty/a_idle/a_idle.gltf",
+        "definitions": [
+          {
+            "id": "5d10fa9e-6ae5-425e-8cd1-fc0c33c60afa",
+            "collection_id": "1d3f9dcd-4654-407d-889a-6ef7d25ff900",
+            "name": "Armature|mixamo.com|Layer0",
+            "loops": true
+          }
+        ],
+        "loops": true
+      },
+      "b068af1e-fb15-4a8f-82ec-07cd81b9d1dd": {
+        "id": "b068af1e-fb15-4a8f-82ec-07cd81b9d1dd",
+        "source": "models/misty/misty.gltf",
+        "definitions": [
+          {
+            "id": "37dfe64b-de80-4062-9401-c1b3a29bff26",
+            "collection_id": "b068af1e-fb15-4a8f-82ec-07cd81b9d1dd",
+            "name": "Armature|mixamo.com|Layer0",
+            "loops": true
+          }
+        ],
+        "loops": true
+      },
+      "09861bba-4026-4af9-a9d3-07b66e7636ac": {
+        "id": "09861bba-4026-4af9-a9d3-07b66e7636ac",
+        "source": "animations/misty/a_walking/a_walking.gltf",
+        "definitions": [
+          {
+            "id": "92e94781-3a9d-4c75-ae8d-627952fb5def",
+            "collection_id": "09861bba-4026-4af9-a9d3-07b66e7636ac",
+            "name": "Armature|mixamo.com|Layer0",
+            "loops": true
+          }
+        ],
+        "loops": true
+      },
+      "7188289a-4865-47e2-b32d-ab569aa932e6": {
+        "id": "7188289a-4865-47e2-b32d-ab569aa932e6",
+        "source": "models/generic-guy/generic-guy.gltf",
+        "definitions": [
+          {
+            "id": "5ead06be-260b-41c4-95f0-d4a15ed82fe0",
+            "collection_id": "7188289a-4865-47e2-b32d-ab569aa932e6",
+            "name": "Armature|mixamo.com|Layer0",
+            "loops": true
+          }
+        ],
+        "loops": true
+      },
+      "50fc8fb2-b4e2-424a-8a0b-f84274794886": {
+        "id": "50fc8fb2-b4e2-424a-8a0b-f84274794886",
+        "source": "animations/guy/guy-idle.gltf",
+        "definitions": [
+          {
+            "id": "8f1360a6-5709-47b6-b95d-9ea1e3b6f089",
+            "collection_id": "50fc8fb2-b4e2-424a-8a0b-f84274794886",
+            "name": "Armature|mixamo.com|Layer0",
+            "loops": true
+          }
+        ],
+        "loops": true
+      }
+    },
+    "terrains": {},
+    "dynamic_backgrounds": {
+      "123f9457-4476-48e4-adba-c2ba616fe2e2": {
+        "id": "123f9457-4476-48e4-adba-c2ba616fe2e2"
+      }
+    },
+    "hdrs": {},
+    "audio": {
+      "f5b94c32-5f29-4a7a-b008-a6649343eec8": {
+        "id": "f5b94c32-5f29-4a7a-b008-a6649343eec8",
+        "source": "audio/golden-fields.mp3"
+      }
+    },
+    "animation_state": {
+      "26684034-a35c-4e02-9fa1-1267ecac6c0a": {
+        "id": "26684034-a35c-4e02-9fa1-1267ecac6c0a",
+        "name": "Barry - Animation",
+        "rate": 1.5,
+        "starting_node": "a1d1b1c1-489a-404a-b1b2-0ab053bcdfc7",
+        "sockets": [],
+        "target_skeleton": null,
+        "nodes": [
+          {
+            "id": "a1d1b1c1-489a-404a-b1b2-0ab053bcdfc7",
+            "position": {
+              "x": -255,
+              "y": 0
+            },
+            "animation_id": [
+              "23be3660-7389-4d29-ade7-f4d3278059f6",
+              "a9466e07-7ef6-478c-9db6-76ffb470ac47"
+            ],
+            "transitions": [
+              "b25c07d0-69c9-4e08-aece-29040c95f1e4"
+            ]
+          },
+          {
+            "id": "eb0f2086-1bf5-4445-b3be-93435efecc6c",
+            "position": {
+              "x": -315,
+              "y": 285
+            },
+            "animation_id": [
+              "c6e69e5b-5b55-4d54-b6fc-62a2a366ba5c",
+              "259421cb-5a8c-4d4a-839b-56014603a46a"
+            ],
+            "transitions": [
+              "1685f4f3-43ac-442c-a011-b31b11d0be52",
+              "b56e28d9-d3e1-49b8-9f68-1115cf6c63d4"
+            ],
+            "loops": true
+          },
+          {
+            "id": "a7bc7096-b24d-4f7e-a736-debd3723413c",
+            "position": {
+              "x": 255,
+              "y": 285
+            },
+            "animation_id": [
+              "9509d05b-f885-4518-a863-9b1e7ff7d8db",
+              "07355af1-e7f8-4a05-b5a4-53f0ddddec9f"
+            ],
+            "transitions": [
+              "724abceb-5e07-4df1-9e79-977990efae14"
+            ],
+            "loops": true
+          }
+        ],
+        "edges": [
+          {
+            "id": "b25c07d0-69c9-4e08-aece-29040c95f1e4",
+            "to": "eb0f2086-1bf5-4445-b3be-93435efecc6c",
+            "from": "a1d1b1c1-489a-404a-b1b2-0ab053bcdfc7",
+            "transition": {
+              "AccelerationThreshold": {
+                "speed": {
+                  "kph": 2
+                }
+              }
+            },
+            "time": 0.2
+          },
+          {
+            "id": "1685f4f3-43ac-442c-a011-b31b11d0be52",
+            "to": "a1d1b1c1-489a-404a-b1b2-0ab053bcdfc7",
+            "from": "eb0f2086-1bf5-4445-b3be-93435efecc6c",
+            "transition": {
+              "DecelerationThreshold": {
+                "speed": {
+                  "kph": 2
+                }
+              }
+            },
+            "time": 0.2
+          },
+          {
+            "id": "b56e28d9-d3e1-49b8-9f68-1115cf6c63d4",
+            "to": "a7bc7096-b24d-4f7e-a736-debd3723413c",
+            "from": "eb0f2086-1bf5-4445-b3be-93435efecc6c",
+            "transition": {
+              "AccelerationThreshold": {
+                "speed": {
+                  "kph": 6
+                }
+              }
+            },
+            "time": 0.4
+          },
+          {
+            "id": "724abceb-5e07-4df1-9e79-977990efae14",
+            "to": "eb0f2086-1bf5-4445-b3be-93435efecc6c",
+            "from": "a7bc7096-b24d-4f7e-a736-debd3723413c",
+            "transition": {
+              "DecelerationThreshold": {
+                "speed": {
+                  "kph": 6
+                }
+              }
+            },
+            "time": 0.4
+          }
+        ]
+      },
+      "06ae850e-62d0-4707-b8bb-b419e0531e7a": {
+        "id": "06ae850e-62d0-4707-b8bb-b419e0531e7a",
+        "name": "Woman - Animation",
+        "rate": 1,
+        "starting_node": "c5134286-e0fc-4993-be6c-26ce00c0409d",
+        "sockets": [],
+        "target_skeleton": "8cec0d83-0d2c-42c7-b3e7-79cbb7d41a24",
+        "nodes": [
+          {
+            "id": "c5134286-e0fc-4993-be6c-26ce00c0409d",
+            "position": {
+              "x": -360,
+              "y": 0
+            },
+            "animation_id": [
+              "37dfe64b-de80-4062-9401-c1b3a29bff26",
+              "b068af1e-fb15-4a8f-82ec-07cd81b9d1dd"
+            ],
+            "transitions": [
+              "cffde1f6-0352-492c-8d2d-ccfe449ed771"
+            ]
+          },
+          {
+            "id": "f4da1955-7c67-485c-b11b-54d6561200d0",
+            "position": {
+              "x": 270,
+              "y": 0
+            },
+            "animation_id": [
+              "92e94781-3a9d-4c75-ae8d-627952fb5def",
+              "09861bba-4026-4af9-a9d3-07b66e7636ac"
+            ],
+            "transitions": [
+              "bf26be6b-2989-49e8-b421-12598001eda3"
+            ],
+            "loops": true
+          }
+        ],
+        "edges": [
+          {
+            "id": "cffde1f6-0352-492c-8d2d-ccfe449ed771",
+            "to": "f4da1955-7c67-485c-b11b-54d6561200d0",
+            "from": "c5134286-e0fc-4993-be6c-26ce00c0409d",
+            "transition": {
+              "AccelerationThreshold": {
+                "speed": {
+                  "kph": 3
+                }
+              }
+            },
+            "time": 0.8
+          },
+          {
+            "id": "bf26be6b-2989-49e8-b421-12598001eda3",
+            "to": "c5134286-e0fc-4993-be6c-26ce00c0409d",
+            "from": "f4da1955-7c67-485c-b11b-54d6561200d0",
+            "transition": {
+              "DecelerationThreshold": {
+                "speed": {
+                  "kph": 3
+                }
+              }
+            },
+            "time": 0.8
+          }
+        ]
+      },
+      "ccf3c69c-8af3-4552-9c40-62d5c32220d7": {
+        "id": "ccf3c69c-8af3-4552-9c40-62d5c32220d7",
+        "name": "Man - Animation",
+        "rate": 1,
+        "starting_node": "c5134286-e0fc-4993-be6c-26ce00c0409d",
+        "sockets": [],
+        "target_skeleton": "9131d4bf-0cee-4a56-825e-9efffd847840",
+        "nodes": [
+          {
+            "id": "c5134286-e0fc-4993-be6c-26ce00c0409d",
+            "position": {
+              "x": -360,
+              "y": 0
+            },
+            "animation_id": [
+              "8f1360a6-5709-47b6-b95d-9ea1e3b6f089",
+              "50fc8fb2-b4e2-424a-8a0b-f84274794886"
+            ],
+            "transitions": [
+              "cffde1f6-0352-492c-8d2d-ccfe449ed771"
+            ]
+          },
+          {
+            "id": "f4da1955-7c67-485c-b11b-54d6561200d0",
+            "position": {
+              "x": 270,
+              "y": 0
+            },
+            "animation_id": [
+              "5ead06be-260b-41c4-95f0-d4a15ed82fe0",
+              "7188289a-4865-47e2-b32d-ab569aa932e6"
+            ],
+            "transitions": [
+              "bf26be6b-2989-49e8-b421-12598001eda3"
+            ],
+            "loops": true
+          }
+        ],
+        "edges": [
+          {
+            "id": "cffde1f6-0352-492c-8d2d-ccfe449ed771",
+            "to": "f4da1955-7c67-485c-b11b-54d6561200d0",
+            "from": "c5134286-e0fc-4993-be6c-26ce00c0409d",
+            "transition": {
+              "AccelerationThreshold": {
+                "speed": {
+                  "kph": 3
+                }
+              }
+            },
+            "time": 0.8
+          },
+          {
+            "id": "bf26be6b-2989-49e8-b421-12598001eda3",
+            "to": "c5134286-e0fc-4993-be6c-26ce00c0409d",
+            "from": "f4da1955-7c67-485c-b11b-54d6561200d0",
+            "transition": {
+              "DecelerationThreshold": {
+                "speed": {
+                  "kph": 3
+                }
+              }
+            },
+            "time": 0.8
+          }
+        ]
+      }
+    },
+    "heightfields": {},
+    "behavior_tree": {},
+    "planners": {
+      "0c1bd228-047f-429c-bc3f-d0265eaa45ae": {
+        "id": "0c1bd228-047f-429c-bc3f-d0265eaa45ae",
+        "name": "Misty Goals",
+        "goals": [
+          {
+            "Bored": {}
+          },
+          {
+            "Rest": {}
+          },
+          {
+            "Sleep": {}
+          }
+        ],
+        "actions": [
+          {
+            "Nothing": {}
+          },
+          {
+            "SitDown": {}
+          },
+          {
+            "GoToSleep": {}
+          }
+        ],
+        "sensors": [
+          {
+            "SenseSeats": {
+              "max_distance": {
+                "meters": 1000
+              }
+            }
+          },
+          {
+            "SenseSelf": {}
+          },
+          {
+            "SenseHome": {}
+          },
+          {
+            "SenseTimeOfDay": {}
+          }
+        ]
+      }
+    },
+    "sprites": {},
+    "fonts": {
+      "a0d8e5bd-892d-45fe-843a-b73fea988678": {
+        "id": "a0d8e5bd-892d-45fe-843a-b73fea988678",
+        "source": "fonts/Quicksand-Bold.ttf"
+      }
+    },
+    "navmeshes": {}
+  }
+}

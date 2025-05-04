@@ -1,6 +1,6 @@
 {
-  "version": "v0.0.8",
-  "filename": "99_empty.lvl",
+  "version": "v0.0.9",
+  "filename": "10_main.lvl",
   "config": {
     "id": "434f4365-314c-4b0a-b510-0dd832f63da2",
     "name": "Empty",
@@ -36,7 +36,8 @@
       "bias": [
         0.0005,
         0.00005
-      ]
+      ],
+      "terrain_shadow_bias": 20
     },
     "physics": {
       "color": [
@@ -50,7 +51,7 @@
       "shadow": false,
       "physics": true,
       "lighting": false,
-      "render_debug_mode": "None",
+      "render_debug_mode": "Albedo",
       "grid": false
     },
     "camera": {
@@ -133,13 +134,13 @@
         "transform": {
           "transform": {
             "translation": [
-              32.097195,
+              31.402912,
               2,
               11.350803
             ],
             "rotation": [
               0,
-              3.141592653589793,
+              3.1415927,
               0
             ],
             "scale": [
@@ -310,6 +311,12 @@
             "ParentComponent": {
               "parent_id": "b798a352-e300-4432-a6b6-b0a859baeca9"
             }
+          },
+          {
+            "AudioListenerComponent": {
+              "active": true,
+              "id": "41afa0f3-f716-4ef4-b02f-2d5b21a56511"
+            }
           }
         ]
       },
@@ -373,7 +380,7 @@
           {
             "ModelComponent": {
               "cast_shadows": true,
-              "id": "814dfca2-4e25-4b40-b507-3df1660ab750",
+              "id": "18b7fba2-b8ba-4a3b-a658-51ed94383f7c",
               "skip": false,
               "transform": {
                 "rotation": [
@@ -414,7 +421,7 @@
                   "ccd": false,
                   "collider_type": {
                     "Trimesh": {
-                      "id": "688a8b1e-d790-497d-98b4-c82a0896daeb"
+                      "id": "d5161e7c-74a0-4f3f-baf6-fec27cff3ad3"
                     }
                   },
                   "density": 1,
@@ -937,8 +944,8 @@
           "transform": {
             "translation": [
               33.342365,
-              0.19078302,
-              8.366515
+              0.72276354,
+              7.46447
             ],
             "rotation": [
               0,
@@ -1154,7 +1161,7 @@
         "transform": {
           "transform": {
             "translation": [
-              6.4171343,
+              2.5762758,
               2,
               7
             ],
@@ -1836,6 +1843,73 @@
             }
           }
         ]
+      },
+      "ceb31440-d76a-4aa3-aee3-239ca3817035": {
+        "id": "ceb31440-d76a-4aa3-aee3-239ca3817035",
+        "tag": {
+          "name": "Music"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              33.898216,
+              11.169759,
+              -3.9488564
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "AudioSourceComponent": {
+              "audio_id": "f5b94c32-5f29-4a7a-b008-a6649343eec8",
+              "id": "b5410e5a-1a9d-45e2-afde-0b06baa3fa6c",
+              "should_loop": false,
+              "spatial": null,
+              "state": "Playing",
+              "volume": 0.8
+            }
+          }
+        ]
+      },
+      "e53ad39e-b6db-4713-b7d2-b605c38f6e4f": {
+        "id": "e53ad39e-b6db-4713-b7d2-b605c38f6e4f",
+        "tag": {
+          "name": "Loading Point"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              33.29704,
+              4.179665,
+              -0.6976503
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "LevelDownloaderRoot": {}
+          }
+        ]
       }
     },
     "models": {
@@ -1913,6 +1987,96 @@
         "id": "3afb4b17-3273-4146-b839-bd0a1aedc427",
         "source": "models/SM_Tree/SM_Tree.gltf",
         "maxInstances": 10
+      },
+      "18b7fba2-b8ba-4a3b-a658-51ed94383f7c": {
+        "id": "18b7fba2-b8ba-4a3b-a658-51ed94383f7c",
+        "source": "models/large-grounds/static/CM_GroundAndFence.gltf",
+        "maxInstances": 10
+      },
+      "cccf9f86-0380-4967-9ebf-7e09f91879d6": {
+        "id": "cccf9f86-0380-4967-9ebf-7e09f91879d6",
+        "source": "models/Grass/Grass_01.gltf",
+        "maxInstances": 10
+      },
+      "5c4f8290-bca2-4f93-9d87-49ec107bcec5": {
+        "id": "5c4f8290-bca2-4f93-9d87-49ec107bcec5",
+        "source": "models/Grass/Grass_02.gltf",
+        "maxInstances": 10
+      },
+      "91147cf4-e67f-4109-af18-b28ad6f51183": {
+        "id": "91147cf4-e67f-4109-af18-b28ad6f51183",
+        "source": "models/Grass/Grass_03.gltf",
+        "maxInstances": 10
+      },
+      "583c581c-4ca0-4133-b562-e1c7a162442d": {
+        "id": "583c581c-4ca0-4133-b562-e1c7a162442d",
+        "source": "models/Grass/Grass_04.gltf",
+        "maxInstances": 10
+      },
+      "4fc572d0-b201-48e6-b209-3e2ea6a7f600": {
+        "id": "4fc572d0-b201-48e6-b209-3e2ea6a7f600",
+        "source": "models/HayBale/HayBale.gltf",
+        "maxInstances": 10
+      },
+      "b3268970-dd15-4f87-8b7e-797b43f2c6bc": {
+        "id": "b3268970-dd15-4f87-8b7e-797b43f2c6bc",
+        "source": "models/LargeFarmHouse/LargeFarmHouse.gltf",
+        "maxInstances": 10
+      },
+      "2eb036a2-8d8c-456c-a564-07b830a85cd0": {
+        "id": "2eb036a2-8d8c-456c-a564-07b830a85cd0",
+        "source": "models/MetalSilo/MetalSilo.gltf",
+        "maxInstances": 10
+      },
+      "ce8ad188-cc2b-4e07-ab85-29ca7f37c78e": {
+        "id": "ce8ad188-cc2b-4e07-ab85-29ca7f37c78e",
+        "source": "models/SM_Barrel/SM_Barrel.gltf",
+        "maxInstances": 10
+      },
+      "96e16346-a8ed-4958-a66c-e4e4260792a6": {
+        "id": "96e16346-a8ed-4958-a66c-e4e4260792a6",
+        "source": "models/SM_ChickenCoop/SM_ChickenCoop.gltf",
+        "maxInstances": 10
+      },
+      "ab4bb9a0-9364-4280-a0dc-ce6d39704e92": {
+        "id": "ab4bb9a0-9364-4280-a0dc-ce6d39704e92",
+        "source": "models/SM_Crate/SM_Crate.gltf",
+        "maxInstances": 10
+      },
+      "63b092c6-c1e0-41c2-9405-7b6bba86a25c": {
+        "id": "63b092c6-c1e0-41c2-9405-7b6bba86a25c",
+        "source": "models/SM_Farm/SM_Farm.gltf",
+        "maxInstances": 10
+      },
+      "0ea9fcd1-4dd5-4e1b-8b7b-6e62a457270a": {
+        "id": "0ea9fcd1-4dd5-4e1b-8b7b-6e62a457270a",
+        "source": "models/SM_Pumpkin/SM_Pumpkin.gltf",
+        "maxInstances": 10
+      },
+      "1a070937-0f2d-4bf2-8233-32e16649c53a": {
+        "id": "1a070937-0f2d-4bf2-8233-32e16649c53a",
+        "source": "models/SM_Silo/SM_Silo.gltf",
+        "maxInstances": 10
+      },
+      "10cc6b24-9a5c-4491-a47a-a640ff410236": {
+        "id": "10cc6b24-9a5c-4491-a47a-a640ff410236",
+        "source": "models/SM_Tractor/SM_Tractor.gltf",
+        "maxInstances": 10
+      },
+      "ad932d80-1003-4101-9494-224729de20d0": {
+        "id": "ad932d80-1003-4101-9494-224729de20d0",
+        "source": "models/SM_WindMill/SM_WindMill.gltf",
+        "maxInstances": 10
+      },
+      "33b56cd7-0aa3-4a7a-8c4e-a740e353d338": {
+        "id": "33b56cd7-0aa3-4a7a-8c4e-a740e353d338",
+        "source": "models/Well/Well.gltf",
+        "maxInstances": 10
+      },
+      "1ef36569-e42b-4e80-b611-1e990a755904": {
+        "id": "1ef36569-e42b-4e80-b611-1e990a755904",
+        "source": "models/windmill/windmill.gltf",
+        "maxInstances": 10
       }
     },
     "trimeshes": {
@@ -1923,6 +2087,10 @@
       "688a8b1e-d790-497d-98b4-c82a0896daeb": {
         "id": "688a8b1e-d790-497d-98b4-c82a0896daeb",
         "source": "models/CM_Fence/CM_Fence/CM_Fence.gltf"
+      },
+      "d5161e7c-74a0-4f3f-baf6-fec27cff3ad3": {
+        "id": "d5161e7c-74a0-4f3f-baf6-fec27cff3ad3",
+        "source": "models/large-grounds/collider/CM_GroundAndFence.gltf"
       }
     },
     "textures": {},
@@ -2052,7 +2220,12 @@
       }
     },
     "hdrs": {},
-    "audio": {},
+    "audio": {
+      "f5b94c32-5f29-4a7a-b008-a6649343eec8": {
+        "id": "f5b94c32-5f29-4a7a-b008-a6649343eec8",
+        "source": "audio/golden-fields.mp3"
+      }
+    },
     "animation_state": {
       "26684034-a35c-4e02-9fa1-1267ecac6c0a": {
         "id": "26684034-a35c-4e02-9fa1-1267ecac6c0a",
