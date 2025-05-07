@@ -251,7 +251,7 @@
       "tag": "Struct",
       "name": "Character",
       "label": "Character",
-      "default_values": "{ cash: 0, hunger: { total: 0.0, value: 0.0 }, rest: { total: 0.0, value: 0.0 }, social: { total: 0.0, value: 0.0 }, state: \"Normal\" }",
+      "default_values": "{ cash: 0, hunger: { current: 0.0, max: 0.0, min: 0.0 }, rest: { current: 0.0, max: 0.0, min: 0.0 }, social: { current: 0.0, max: 0.0, min: 0.0 }, state: \"Normal\" }",
       "duplicate_values": "null",
       "docs": null,
       "fields": [
@@ -276,13 +276,13 @@
             "tag": "Struct",
             "name": "Level",
             "label": "Level",
-            "default_values": "{ total: 0.0, value: 0.0 }",
+            "default_values": "{ current: 0.0, max: 0.0, min: 0.0 }",
             "duplicate_values": "null",
             "docs": null,
             "fields": [
               {
-                "name": "value",
-                "label": "Value",
+                "name": "current",
+                "label": "Current",
                 "docs": null,
                 "ty": {
                   "tag": "Primitive",
@@ -294,8 +294,21 @@
                 }
               },
               {
-                "name": "total",
-                "label": "Total",
+                "name": "min",
+                "label": "Min",
+                "docs": null,
+                "ty": {
+                  "tag": "Primitive",
+                  "ty": {
+                    "tag": "F32"
+                  },
+                  "default_values": "0.0",
+                  "duplicate_values": "null"
+                }
+              },
+              {
+                "name": "max",
+                "label": "Max",
                 "docs": null,
                 "ty": {
                   "tag": "Primitive",
@@ -318,13 +331,13 @@
             "tag": "Struct",
             "name": "Level",
             "label": "Level",
-            "default_values": "{ total: 0.0, value: 0.0 }",
+            "default_values": "{ current: 0.0, max: 0.0, min: 0.0 }",
             "duplicate_values": "null",
             "docs": null,
             "fields": [
               {
-                "name": "value",
-                "label": "Value",
+                "name": "current",
+                "label": "Current",
                 "docs": null,
                 "ty": {
                   "tag": "Primitive",
@@ -336,8 +349,21 @@
                 }
               },
               {
-                "name": "total",
-                "label": "Total",
+                "name": "min",
+                "label": "Min",
+                "docs": null,
+                "ty": {
+                  "tag": "Primitive",
+                  "ty": {
+                    "tag": "F32"
+                  },
+                  "default_values": "0.0",
+                  "duplicate_values": "null"
+                }
+              },
+              {
+                "name": "max",
+                "label": "Max",
                 "docs": null,
                 "ty": {
                   "tag": "Primitive",
@@ -360,13 +386,13 @@
             "tag": "Struct",
             "name": "Level",
             "label": "Level",
-            "default_values": "{ total: 0.0, value: 0.0 }",
+            "default_values": "{ current: 0.0, max: 0.0, min: 0.0 }",
             "duplicate_values": "null",
             "docs": null,
             "fields": [
               {
-                "name": "value",
-                "label": "Value",
+                "name": "current",
+                "label": "Current",
                 "docs": null,
                 "ty": {
                   "tag": "Primitive",
@@ -378,8 +404,21 @@
                 }
               },
               {
-                "name": "total",
-                "label": "Total",
+                "name": "min",
+                "label": "Min",
+                "docs": null,
+                "ty": {
+                  "tag": "Primitive",
+                  "ty": {
+                    "tag": "F32"
+                  },
+                  "default_values": "0.0",
+                  "duplicate_values": "null"
+                }
+              },
+              {
+                "name": "max",
+                "label": "Max",
                 "docs": null,
                 "ty": {
                   "tag": "Primitive",
@@ -426,6 +465,13 @@
                 "docs": null,
                 "default_values": "\"CollectingWater\"",
                 "duplicate_values": "null"
+              },
+              {
+                "tag": "Unit",
+                "name": "WorkingTile",
+                "docs": null,
+                "default_values": "\"WorkingTile\"",
+                "duplicate_values": "null"
               }
             ],
             "private": false
@@ -438,7 +484,7 @@
       "tag": "Struct",
       "name": "Crop",
       "label": "Crop",
-      "default_values": "{ growth_phases: 0, season_end: 0, season_start: 0, stage: { total: 0.0, value: 0.0 } }",
+      "default_values": "{ growth_phases: 0, season_end: 0, season_start: 0, stage: { current: 0.0, max: 0.0, min: 0.0 } }",
       "duplicate_values": "null",
       "docs": null,
       "fields": [
@@ -450,13 +496,13 @@
             "tag": "Struct",
             "name": "Level",
             "label": "Level",
-            "default_values": "{ total: 0.0, value: 0.0 }",
+            "default_values": "{ current: 0.0, max: 0.0, min: 0.0 }",
             "duplicate_values": "null",
             "docs": null,
             "fields": [
               {
-                "name": "value",
-                "label": "Value",
+                "name": "current",
+                "label": "Current",
                 "docs": null,
                 "ty": {
                   "tag": "Primitive",
@@ -468,8 +514,21 @@
                 }
               },
               {
-                "name": "total",
-                "label": "Total",
+                "name": "min",
+                "label": "Min",
+                "docs": null,
+                "ty": {
+                  "tag": "Primitive",
+                  "ty": {
+                    "tag": "F32"
+                  },
+                  "default_values": "0.0",
+                  "duplicate_values": "null"
+                }
+              },
+              {
+                "name": "max",
+                "label": "Max",
                 "docs": null,
                 "ty": {
                   "tag": "Primitive",
@@ -2205,7 +2264,7 @@
       "tag": "Struct",
       "name": "Rock",
       "label": "Rock",
-      "default_values": "{ health: { total: 0.0, value: 0.0 } }",
+      "default_values": "{ health: { current: 0.0, max: 0.0, min: 0.0 } }",
       "duplicate_values": "null",
       "docs": null,
       "fields": [
@@ -2217,13 +2276,13 @@
             "tag": "Struct",
             "name": "Level",
             "label": "Level",
-            "default_values": "{ total: 0.0, value: 0.0 }",
+            "default_values": "{ current: 0.0, max: 0.0, min: 0.0 }",
             "duplicate_values": "null",
             "docs": null,
             "fields": [
               {
-                "name": "value",
-                "label": "Value",
+                "name": "current",
+                "label": "Current",
                 "docs": null,
                 "ty": {
                   "tag": "Primitive",
@@ -2235,8 +2294,21 @@
                 }
               },
               {
-                "name": "total",
-                "label": "Total",
+                "name": "min",
+                "label": "Min",
+                "docs": null,
+                "ty": {
+                  "tag": "Primitive",
+                  "ty": {
+                    "tag": "F32"
+                  },
+                  "default_values": "0.0",
+                  "duplicate_values": "null"
+                }
+              },
+              {
+                "name": "max",
+                "label": "Max",
                 "docs": null,
                 "ty": {
                   "tag": "Primitive",
@@ -3418,7 +3490,7 @@
       "tag": "Struct",
       "name": "WaterCan",
       "label": "Water Can",
-      "default_values": "{ level: { total: 0.0, value: 0.0 } }",
+      "default_values": "{ level: { current: 0.0, max: 0.0, min: 0.0 } }",
       "duplicate_values": "null",
       "docs": null,
       "fields": [
@@ -3430,13 +3502,13 @@
             "tag": "Struct",
             "name": "Level",
             "label": "Level",
-            "default_values": "{ total: 0.0, value: 0.0 }",
+            "default_values": "{ current: 0.0, max: 0.0, min: 0.0 }",
             "duplicate_values": "null",
             "docs": null,
             "fields": [
               {
-                "name": "value",
-                "label": "Value",
+                "name": "current",
+                "label": "Current",
                 "docs": null,
                 "ty": {
                   "tag": "Primitive",
@@ -3448,8 +3520,21 @@
                 }
               },
               {
-                "name": "total",
-                "label": "Total",
+                "name": "min",
+                "label": "Min",
+                "docs": null,
+                "ty": {
+                  "tag": "Primitive",
+                  "ty": {
+                    "tag": "F32"
+                  },
+                  "default_values": "0.0",
+                  "duplicate_values": "null"
+                }
+              },
+              {
+                "name": "max",
+                "label": "Max",
                 "docs": null,
                 "ty": {
                   "tag": "Primitive",

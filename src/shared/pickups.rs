@@ -58,41 +58,70 @@ impl PickupsSystem {
       scene.add_component(entity, TransformComponent::default());
     }
 
-
-    /*
     for (_, (model, _, maybe_collision)) in scene.query_mut::<(&mut ModelComponent, &Tile, Option<&Collision<Action, Tile>>)>() {
       if let Some(_) = maybe_collision {
-        model.color = Vector3::new(1.0, 1.0, 1.0);
+        model.color = Vector3::new(1.0, 1.0, 0.0);
         model.color_intensity = 0.1;
       } else {
         model.color_intensity = 0.0;
       }
     }
-    */
   }
 
   pub fn handle_water_sources(&self, scene: &mut Scene, backpack: &mut Backpack) {
     let delta_time = backpack.get::<Seconds>().unwrap();
 
     for (_, (input, character, can, collision)) in scene.query_mut::<(&GameInput, &mut Character, &mut WaterCan, &Collision<Action, WaterSource>)>() {
-      if input.check(InputState::Action) && let CharacterState::Normal | CharacterState::Running = character.state {
+      if input.check(InputState::Action)
+        && let CharacterState::Normal | CharacterState::Running = character.state
+      {
         character.state = CharacterState::CollectingWater;
+        can.level.maximize_with_rate(0.125);
       }
     }
 
     for (_, (input, character, can)) in scene.query_mut::<(&GameInput, &mut Character, &mut WaterCan)>() {
       if let CharacterState::CollectingWater = character.state {
-        can.level.add(1.0 * **delta_time);
-      }
-
-      if can.level.percent() >= 1.0 {
-        character.state = CharacterState::Normal;
+        if let Some(_) = can.level.tick() {
+          character.state = CharacterState::Normal;
+        }
       }
     }
 
     for (_, (model, _, maybe_collision)) in scene.query_mut::<(&mut ModelComponent, &WaterSource, Option<&Collision<Action, WaterSource>>)>() {
       if let Some(_) = maybe_collision {
         model.color = Vector3::new(0.0, 0.0, 1.0);
+        model.color_intensity = 0.1;
+      } else {
+        model.color_intensity = 0.0;
+      }
+    }
+  }
+
+  pub fn handle_watering_tiles(&self, scene: &mut Scene, backpack: &mut Backpack) {
+    let delta_time = backpack.get::<Seconds>().unwrap();
+
+    for (_, (input, character, can, collision)) in scene.query_mut::<(&GameInput, &mut Character, &mut WaterCan, &Collision<Action, Tile>)>() {
+      if input.check(InputState::Action)
+        && can.level.current > 1.0
+        && let CharacterState::Normal | CharacterState::Running = character.state
+      {
+        character.state = CharacterState::WorkingTile;
+        can.level.change_by(-1.0, Seconds::new(4.0));
+      }
+    }
+
+    for (_, (input, character, can)) in scene.query_mut::<(&GameInput, &mut Character, &mut WaterCan)>() {
+      if let CharacterState::WorkingTile = character.state {
+        if let Some(_) = can.level.tick() {
+          character.state = CharacterState::Normal;
+        }
+      }
+    }
+
+    for (_, (model, _, maybe_collision)) in scene.query_mut::<(&mut ModelComponent, &Tile, Option<&Collision<Action, Tile>>)>() {
+      if let Some(_) = maybe_collision {
+        model.color = Vector3::new(1.0, 1.0, 0.0);
         model.color_intensity = 0.1;
       } else {
         model.color_intensity = 0.0;
@@ -127,6 +156,7 @@ impl System for PickupsSystem {
   fn run(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
     self.handle_pickup(scene);
     self.handle_water_sources(scene, backpack);
+    self.handle_watering_tiles(scene, backpack);
     self.handle_update_ui(scene);
   }
 }

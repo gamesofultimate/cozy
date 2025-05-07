@@ -2,7 +2,7 @@ use engine::{
   application::scene::{PrefabId, ProvideAssets},
   systems::Registry,
   utils::{
-    units::Kph,
+    units::{Kph, Seconds, Framerate},
   },
   nalgebra::{Unit, Vector3},
 };
@@ -59,18 +59,97 @@ impl ProvideAssets for CameraFollow {}
 pub struct Pickup {}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+enum ChangeDirection {
+  Add { want: f32, rate: f32 },
+  Remove { want: f32, rate: f32 },
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
 pub struct Level {
-  pub value: f32,
-  pub total: f32,
+  pub current: f32,
+  pub min: f32,
+  pub max: f32,
+
+  #[serde(skip)]
+  want: Option<ChangeDirection>,
 }
 
 impl Level {
   pub fn percent(&self) -> f32 {
-    self.value / self.total
+    self.current / self.max
+  }
+
+  pub fn set_want(&mut self, want: f32, duration: Seconds) {
+    let diff = want - self.current;
+    let frames = *duration / *Seconds::from(Framerate::new(16.0));
+    let rate = diff / frames;
+    self.want = match diff {
+      v if v > 0.0 => Some(ChangeDirection::Add { want, rate }),
+      v if v < 0.0 => Some(ChangeDirection::Remove { want, rate }),
+      _ => None,
+    };
+  }
+
+  pub fn change_by(&mut self, diff: f32, duration: Seconds) {
+    let frames = *duration / *Seconds::from(Framerate::new(16.0));
+    let rate = diff / frames;
+    self.want = match diff {
+      v if v > 0.0 => Some(ChangeDirection::Add { want: self.current + diff, rate }),
+      v if v < 0.0 => Some(ChangeDirection::Remove { want: self.current + diff, rate }),
+      _ => None,
+    };
+  }
+
+  pub fn maximize(&mut self, duration: Seconds) {
+    let diff = self.max - self.current;
+    let frames = *duration / *Seconds::from(Framerate::new(16.0));
+    let rate = diff / frames;
+    self.want = match diff {
+      v if v > 0.0 => Some(ChangeDirection::Add { want: self.max, rate }),
+      v if v < 0.0 => Some(ChangeDirection::Remove { want: self.max, rate }),
+      _ => None,
+    };
+  }
+
+  pub fn maximize_with_rate(&mut self, rate: f32) {
+    let diff = self.max - self.current;
+    self.want = match diff {
+      v if v > 0.0 => Some(ChangeDirection::Add { want: self.max, rate }),
+      v if v < 0.0 => Some(ChangeDirection::Remove { want: self.max, rate: -rate }),
+      _ => None,
+    };
+  }
+
+  pub fn minimize(&mut self, duration: Seconds) {
+    let diff = self.min - self.current;
+    let frames = *duration / *Seconds::from(Framerate::new(16.0));
+    let rate = diff / frames;
+    self.want = match diff {
+      v if v > 0.0 => Some(ChangeDirection::Add { want: self.min, rate }),
+      v if v < 0.0 => Some(ChangeDirection::Remove { want: self.min, rate }),
+      _ => None,
+    };
   }
 
   pub fn add(&mut self, value: f32) {
-    self.value = (self.value + value).min(self.total);
+    self.current = (self.current + value).min(self.max);
+  }
+
+  pub fn remove(&mut self, value: f32) {
+    self.current = (self.current - value).max(self.min);
+  }
+
+  pub fn tick(&mut self) -> Option<()> {
+    let (current, want) = match self.want {
+      Some(ChangeDirection::Add { want, rate }) => ((self.current + rate).min(want), want),
+      // We calculate rate automatically, and if it's a remove, the rate will be negative
+      Some(ChangeDirection::Remove { want, rate }) => ((self.current + rate).max(want), want),
+      None => return Some(()),
+    };
+    self.current = current;
+
+    if current == want { Some(()) }
+    else { None }
   }
 }
 
@@ -87,6 +166,7 @@ pub enum CharacterState {
   Normal,
   Running,
   CollectingWater,
+  WorkingTile,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]

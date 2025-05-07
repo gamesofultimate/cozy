@@ -16,7 +16,7 @@ use engine::{
     physics::PhysicsController,
     Backpack, Initializable, Inventory, System,
   },
-  utils::units::Seconds,
+  utils::units::{Seconds, Kph},
   nalgebra::{Vector3, Unit},
 };
 
@@ -87,15 +87,10 @@ impl InputsSystem {
         character.state = CharacterState::Normal;
       }
 
-      match character.state {
-        CharacterState::Normal | CharacterState::Running => { },
-        _ => continue,
-      }
-
       let speed = match character.state {
         CharacterState::Normal => movement.walking_speed,
         CharacterState::Running => movement.running_speed,
-        _ => continue,
+        _ => Kph::new(0.0),
       };
 
       let mut velocity = Vector3::new(0.0, -9.8, 0.0);

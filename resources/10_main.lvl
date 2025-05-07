@@ -257,16 +257,19 @@
             "Character": {
               "state": "Normal",
               "rest": {
-                "value": 10,
-                "total": 10
+                "current": 10,
+                "max": 10,
+                "min": 0
               },
               "social": {
-                "value": 10,
-                "total": 10
+                "current": 10,
+                "max": 10,
+                "min": 0
               },
               "hunger": {
-                "value": 10,
-                "total": 10
+                "current": 10,
+                "max": 10,
+                "min": 0
               },
               "cash": 1000
             }
@@ -300,8 +303,9 @@
           {
             "WaterCan": {
               "level": {
-                "total": 5,
-                "value": 0
+                "max": 5,
+                "min": 0,
+                "current": 0
               }
             }
           }
@@ -701,16 +705,19 @@
             "Character": {
               "state": "Normal",
               "rest": {
-                "value": 10,
-                "total": 10
+                "current": 10,
+                "max": 10,
+                "min": 0
               },
               "social": {
-                "value": 10,
-                "total": 10
+                "current": 10,
+                "max": 10,
+                "min": 0
               },
               "hunger": {
-                "value": 10,
-                "total": 10
+                "current": 10,
+                "max": 10,
+                "min": 0
               },
               "cash": 1000
             }
@@ -1389,16 +1396,19 @@
             "Character": {
               "state": "Normal",
               "rest": {
-                "value": 4.8,
-                "total": 5
+                "current": 4.8,
+                "max": 5,
+                "min": 0
               },
               "social": {
-                "value": 0.1,
-                "total": 5
+                "current": 0.1,
+                "max": 5,
+                "min": 0
               },
               "hunger": {
-                "value": 10,
-                "total": 10
+                "current": 10,
+                "max": 10,
+                "min": 0
               },
               "cash": 10000
             }
