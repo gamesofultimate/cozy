@@ -12,6 +12,7 @@ use crate::shared::components::{
   Tile,
   WaterCan,
   WaterSource,
+  CharacterState,
 };
 use engine::{
   application::{
@@ -72,17 +73,23 @@ impl PickupsSystem {
 
   pub fn handle_water_sources(&self, scene: &mut Scene, backpack: &mut Backpack) {
     let delta_time = backpack.get::<Seconds>().unwrap();
-    let mut characters_with_water_cans = HashMap::new();
-    for (_, (id, network, _)) in scene.query_mut::<(&IdComponent, &NetworkedPlayerComponent, &WaterCan)>() {
-      characters_with_water_cans.insert(*network.connection_id, *id);
-    }
 
-    for (_, (input, can, collision)) in scene.query_mut::<(&GameInput, &mut WaterCan, &Collision<Action, WaterSource>)>() {
-      log::info!("collision");
-      if input.check(InputState::Action) {
-        can.level.add(1.0 * **delta_time);
+    for (_, (input, character, can, collision)) in scene.query_mut::<(&GameInput, &mut Character, &mut WaterCan, &Collision<Action, WaterSource>)>() {
+      if input.check(InputState::Action) && let CharacterState::Normal | CharacterState::Running = character.state {
+        character.state = CharacterState::CollectingWater;
       }
     }
+
+    for (_, (input, character, can)) in scene.query_mut::<(&GameInput, &mut Character, &mut WaterCan)>() {
+      if let CharacterState::CollectingWater = character.state {
+        can.level.add(1.0 * **delta_time);
+      }
+
+      if can.level.percent() >= 1.0 {
+        character.state = CharacterState::Normal;
+      }
+    }
+
     for (_, (model, _, maybe_collision)) in scene.query_mut::<(&mut ModelComponent, &WaterSource, Option<&Collision<Action, WaterSource>>)>() {
       if let Some(_) = maybe_collision {
         model.color = Vector3::new(0.0, 0.0, 1.0);

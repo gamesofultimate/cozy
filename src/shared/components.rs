@@ -83,11 +83,19 @@ pub struct Player {
 impl ProvideAssets for Player {}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub enum CharacterState {
+  Normal,
+  Running,
+  CollectingWater,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
 pub struct Character {
   pub cash: u64,
   pub rest: Level,
   pub social: Level,
   pub hunger: Level,
+  pub state: CharacterState,
 }
 
 impl ProvideAssets for Character {}

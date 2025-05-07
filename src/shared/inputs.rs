@@ -1,6 +1,6 @@
 use crate::{
   shared::game_input::{GameInput, InputState},
-  shared::components::Movement,
+  shared::components::{Movement, Character, CharacterState},
 };
 use engine::application::scene::TransformComponent;
 use engine::{
@@ -70,18 +70,32 @@ impl InputsSystem {
   }
 
   fn handle_move(&mut self, scene: &mut Scene, delta_time: Seconds) {
-    for (_, (component, input, physics, movement, _, maybe_audio)) in scene.query_mut::<(
+    for (_, (component, input, physics, character, movement, _, maybe_audio)) in scene.query_mut::<(
       &mut InputComponent,
       &GameInput,
       &PhysicsComponent,
+      &mut Character,
       &mut Movement,
       &mut TransformComponent,
       Option<&mut AudioSourceComponent>,
     )>() {
-      let speed = if input.state.contains(InputState::IsRunning) {
-        movement.running_speed
-      } else {
-        movement.walking_speed
+
+      if input.state.contains(InputState::IsRunning) && let CharacterState::Normal = character.state {
+        character.state = CharacterState::Running;
+      }
+      if !input.state.contains(InputState::IsRunning) && let CharacterState::Running = character.state {
+        character.state = CharacterState::Normal;
+      }
+
+      match character.state {
+        CharacterState::Normal | CharacterState::Running => { },
+        _ => continue,
+      }
+
+      let speed = match character.state {
+        CharacterState::Normal => movement.walking_speed,
+        CharacterState::Running => movement.running_speed,
+        _ => continue,
       };
 
       let mut velocity = Vector3::new(0.0, -9.8, 0.0);

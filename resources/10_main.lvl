@@ -255,6 +255,7 @@
           },
           {
             "Character": {
+              "state": "Normal",
               "rest": {
                 "value": 10,
                 "total": 10
@@ -698,6 +699,7 @@
           },
           {
             "Character": {
+              "state": "Normal",
               "rest": {
                 "value": 10,
                 "total": 10
@@ -1385,6 +1387,7 @@
           },
           {
             "Character": {
+              "state": "Normal",
               "rest": {
                 "value": 4.8,
                 "total": 5

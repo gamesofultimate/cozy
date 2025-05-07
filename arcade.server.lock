@@ -251,7 +251,7 @@
       "tag": "Struct",
       "name": "Character",
       "label": "Character",
-      "default_values": "{ cash: 0, hunger: { total: 0.0, value: 0.0 }, rest: { total: 0.0, value: 0.0 }, social: { total: 0.0, value: 0.0 } }",
+      "default_values": "{ cash: 0, hunger: { total: 0.0, value: 0.0 }, rest: { total: 0.0, value: 0.0 }, social: { total: 0.0, value: 0.0 }, state: \"Normal\" }",
       "duplicate_values": "null",
       "docs": null,
       "fields": [
@@ -389,6 +389,43 @@
                   "default_values": "0.0",
                   "duplicate_values": "null"
                 }
+              }
+            ],
+            "private": false
+          }
+        },
+        {
+          "name": "state",
+          "label": "State",
+          "docs": null,
+          "ty": {
+            "tag": "Enum",
+            "name": "CharacterState",
+            "label": "Character State",
+            "default_values": "\"Normal\"",
+            "duplicate_values": "null",
+            "docs": null,
+            "variants": [
+              {
+                "tag": "Unit",
+                "name": "Normal",
+                "docs": null,
+                "default_values": "\"Normal\"",
+                "duplicate_values": "null"
+              },
+              {
+                "tag": "Unit",
+                "name": "Running",
+                "docs": null,
+                "default_values": "\"Running\"",
+                "duplicate_values": "null"
+              },
+              {
+                "tag": "Unit",
+                "name": "CollectingWater",
+                "docs": null,
+                "default_values": "\"CollectingWater\"",
+                "duplicate_values": "null"
               }
             ],
             "private": false
