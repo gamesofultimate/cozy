@@ -17,7 +17,7 @@ use engine::{
 
 use crate::shared::components::{
   Seat,
-  Npc,
+  Character,
   Movement,
   HouseEntrance,
   TimeOfDay,
@@ -151,10 +151,10 @@ impl Action for GoToSleep {
 
   fn execute(&mut self, entity: Entity, scene: &mut Scene, _: &mut Backpack, local: &mut Backpack) {
     if let Some(HomeLocation { .. }) = local.get::<HomeLocation>()
-      && let Some(npc) = scene.get_components_mut::<&mut Npc>(entity)
+      && let Some(character) = scene.get_components_mut::<&mut Character>(entity)
     {
-      //npc.rest_level = (npc.rest_level + resting_factor).min(npc.total_energy);
-      npc.rest_level = (npc.rest_level + 0.01).min(npc.total_energy);
+      //character.rest_level = (character.rest_level + resting_factor).min(character.total_energy);
+      character.rest_level = (character.rest_level + 0.01).min(character.total_energy);
     }
   }
 }
@@ -179,9 +179,9 @@ impl Sensor for SenseSocialNeed {
     blackboard: &mut Blackboard,
     _: Option<Arc<Navmesh>>,
   ) {
-    match scene.get_components_mut::<(&TransformComponent, &Npc)>(entity) {
-      Some((transform, npc)) => {
-        let social_need = npc.social_level / npc.total_social;
+    match scene.get_components_mut::<(&TransformComponent, &Character)>(entity) {
+      Some((transform, character)) => {
+        let social_need = character.social.percent();
         if social_need < 0.8 {
           blackboard.insert_bool("want-to-socialize", true);
         } else {

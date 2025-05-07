@@ -16,7 +16,7 @@ use engine::{
 
 use crate::shared::components::{
   Seat,
-  Npc,
+  Character,
   Movement,
   HouseEntrance,
   TimeOfDay,
@@ -129,10 +129,9 @@ impl Action for GoToSleep {
 
   fn execute(&mut self, entity: Entity, scene: &mut Scene, _: &mut Backpack, local: &mut Backpack) {
     if let Some(HomeLocation { .. }) = local.get::<HomeLocation>()
-      && let Some(npc) = scene.get_components_mut::<&mut Npc>(entity)
+      && let Some(character) = scene.get_components_mut::<&mut Character>(entity)
     {
-      //npc.rest_level = (npc.rest_level + resting_factor).min(npc.total_energy);
-      npc.rest_level = (npc.rest_level + 0.01).min(npc.total_energy);
+      character.rest.add(0.01);
     }
   }
 }
@@ -156,9 +155,9 @@ impl Sensor for SenseSelf {
     blackboard: &mut Blackboard,
     _: Option<Arc<Navmesh>>,
   ) {
-    match scene.get_components_mut::<(&TransformComponent, &Npc)>(entity) {
-      Some((transform, npc)) => {
-        let tiredness = npc.rest_level / npc.total_energy;
+    match scene.get_components_mut::<(&TransformComponent, &Character)>(entity) {
+      Some((transform, character)) => {
+        let tiredness = character.rest.percent();
         if tiredness < 0.3 {
           blackboard.insert_bool("tired", true);
         } else {

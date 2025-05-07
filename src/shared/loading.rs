@@ -35,9 +35,7 @@ impl System for LoadingSystem {
 
   fn run(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
     let manager = match backpack.get::<AssetManager>() {
-      Some(manager) => {
-        manager.clone()
-      }
+      Some(manager) => manager,
       None => return,
     };
 

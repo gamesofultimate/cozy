@@ -12,6 +12,7 @@ use engine::{
     scene::Scene,
   },
   systems::{
+    world::WorldConfig,
     physics::PhysicsController,
     Backpack, Initializable, Inventory, System,
   },
@@ -53,12 +54,18 @@ impl Initializable for InputsSystem {
 
 impl InputsSystem {
   #[cfg(target_arch = "wasm32")]
-  fn capture_mouse(&mut self) {
+  fn capture_mouse(&mut self, backpack: &mut Backpack) {
     let input = self.inputs.read_client();
     if input.state.contains(InputState::LeftClick) && !input.state.contains(InputState::IsMouseLocked) {
       self.canvas.capture_mouse(true);
     } else if input.state.contains(InputState::Escape | InputState::IsMouseLocked) {
       self.canvas.capture_mouse(false);
+    }
+
+    if let Some(world) = backpack.get_mut::<WorldConfig>() {
+      if input.state.contains(InputState::ToggleDebugPerformance) {
+        world.debug_performance = !world.debug_performance;
+      }
     }
   }
 
@@ -125,7 +132,7 @@ impl System for InputsSystem {
     let delta_time = backpack.get::<Seconds>().cloned().unwrap();
 
     #[cfg(target_arch = "wasm32")]
-    self.capture_mouse();
+    self.capture_mouse(backpack);
 
     self.handle_move(scene, delta_time);
   }

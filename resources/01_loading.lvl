@@ -1,5 +1,5 @@
 {
-  "version": "v0.0.8",
+  "version": "v0.0.9",
   "filename": "01_loading.lvl",
   "config": {
     "id": "434f4365-314c-4b0a-b510-0dd832f63da2",
@@ -36,7 +36,8 @@
       "bias": [
         0.005,
         0.00005
-      ]
+      ],
+      "terrain_shadow_bias": 20
     },
     "physics": {
       "color": [
@@ -326,7 +327,7 @@
           {
             "SkyLightComponent": {
               "Dynamic": {
-                "background_intensity": 0,
+                "background_intensity": 1,
                 "id": "123f9457-4476-48e4-adba-c2ba616fe2e2",
                 "lighting_intensity": 0.3,
                 "turbidity": 2

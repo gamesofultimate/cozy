@@ -16,7 +16,7 @@ use engine::{
 
 use crate::shared::components::{
   Seat,
-  Npc,
+  Character,
   Movement,
 };
 
@@ -179,9 +179,9 @@ impl Action for SitDown {
 
   fn execute(&mut self, entity: Entity, scene: &mut Scene, _: &mut Backpack, local: &mut Backpack) {
     if let Some(SeatLocation { resting_factor, .. }) = local.get::<SeatLocation>()
-      && let Some(npc) = scene.get_components_mut::<&mut Npc>(entity)
+      && let Some(character) = scene.get_components_mut::<&mut Character>(entity)
     {
-      npc.rest_level = (npc.rest_level + resting_factor).min(npc.total_energy);
+      character.rest.add(*resting_factor);
     }
   }
 }

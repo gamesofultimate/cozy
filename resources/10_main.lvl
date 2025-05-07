@@ -1,5 +1,5 @@
 {
-  "version": "v0.0.9",
+  "version": "v0.0.11",
   "filename": "10_main.lvl",
   "config": {
     "id": "434f4365-314c-4b0a-b510-0dd832f63da2",
@@ -34,7 +34,7 @@
       "max_distance": 100,
       "fade_out": 0.5,
       "bias": [
-        0.0005,
+        0,
         0.00005
       ],
       "terrain_shadow_bias": 20
@@ -49,10 +49,11 @@
     "debug": {
       "empty_shapes": false,
       "shadow": false,
-      "physics": false,
+      "physics": true,
       "lighting": false,
       "render_debug_mode": "None",
-      "grid": false
+      "grid": false,
+      "hide_ui": false
     },
     "camera": {
       "fovy": {
@@ -173,7 +174,13 @@
                   -0.65,
                   0
                 ]
-              }
+              },
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0
             }
           },
           {
@@ -226,7 +233,11 @@
                   "friction": 0.1,
                   "id": "6b1a87d2-a153-4e14-b84e-15a9e97f50cf",
                   "is_sensor": false,
-                  "restitution": 0.1
+                  "restitution": 0.1,
+                  "groups": {
+                    "memberships": "0b11111111111111111111111111111111",
+                    "filters": "0b11111111111111111111111111111111"
+                  }
                 },
                 "config": null,
                 "id": "89f42152-1b02-4e9c-829e-12f68c78a229",
@@ -241,6 +252,23 @@
           },
           {
             "Player": {}
+          },
+          {
+            "Character": {
+              "rest": {
+                "value": 10,
+                "total": 10
+              },
+              "social": {
+                "value": 10,
+                "total": 10
+              },
+              "hunger": {
+                "value": 10,
+                "total": 10
+              },
+              "cash": 1000
+            }
           },
           {
             "InputComponent": {
@@ -269,8 +297,11 @@
             }
           },
           {
-            "ParentComponent": {
-              "parent_id": "85b4a858-8432-4e75-b263-ce7b7c0aad38"
+            "WaterCan": {
+              "level": {
+                "total": 5,
+                "value": 0
+              }
             }
           }
         ]
@@ -404,7 +435,13 @@
                   0,
                   0
                 ]
-              }
+              },
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0
             }
           },
           {
@@ -434,7 +471,11 @@
                   "friction": 0.1,
                   "id": "ee7787d3-39db-4e0f-82ab-57d538755cf9",
                   "is_sensor": false,
-                  "restitution": 0.1
+                  "restitution": 0.1,
+                  "groups": {
+                    "memberships": "0b11111111111111111111111111111111",
+                    "filters": "0b11111111111111111111111111111111"
+                  }
                 },
                 "config": null,
                 "id": "9bbdaa51-6422-4d56-8fae-91a01c4632b5",
@@ -503,7 +544,11 @@
                   "friction": 0.1,
                   "id": "edb3d37f-d9a9-4b53-801f-7ec32ce73076",
                   "is_sensor": false,
-                  "restitution": 0.1
+                  "restitution": 0.1,
+                  "groups": {
+                    "memberships": "0b11111111111111111111111111111111",
+                    "filters": "0b11111111111111111111111111111111"
+                  }
                 },
                 "config": null,
                 "id": "933ca1fb-7a7c-49e1-883f-03502ecbc9c5",
@@ -565,7 +610,13 @@
                   -1.4,
                   0
                 ]
-              }
+              },
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0
             }
           },
           {
@@ -621,7 +672,11 @@
                   "friction": 0.1,
                   "id": "ed5c7f72-8063-46e2-bebb-8b275f5f71a5",
                   "is_sensor": false,
-                  "restitution": 0.1
+                  "restitution": 0.1,
+                  "groups": {
+                    "memberships": "0b11111111111111111111111111111111",
+                    "filters": "0b11111111111111111111111111111111"
+                  }
                 },
                 "config": null,
                 "id": "07623776-dd98-498d-bc46-13084537e7ec",
@@ -642,11 +697,20 @@
             }
           },
           {
-            "Npc": {
-              "rest_level": 0.1,
-              "total_energy": 5,
-              "social_level": 0.1,
-              "total_social": 5
+            "Character": {
+              "rest": {
+                "value": 10,
+                "total": 10
+              },
+              "social": {
+                "value": 10,
+                "total": 10
+              },
+              "hunger": {
+                "value": 10,
+                "total": 10
+              },
+              "cash": 1000
             }
           },
           {
@@ -708,7 +772,13 @@
                   0,
                   0
                 ]
-              }
+              },
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0
             }
           },
           {
@@ -740,7 +810,11 @@
                   "friction": 0.1,
                   "id": "d8b75235-f44b-4a25-932d-8d1f91e39237",
                   "is_sensor": false,
-                  "restitution": 0.1
+                  "restitution": 0.1,
+                  "groups": {
+                    "memberships": "0b11111111111111111111111111111111",
+                    "filters": "0b11111111111111111111111111111111"
+                  }
                 },
                 "config": null,
                 "id": "5a0366ab-406d-4577-b459-1cc52decf51c",
@@ -866,7 +940,13 @@
                   0,
                   0
                 ]
-              }
+              },
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0
             }
           },
           {
@@ -916,7 +996,11 @@
                   "friction": 0.1,
                   "id": "a47bfd50-8ad2-4360-87b6-c31ba1e986bc",
                   "is_sensor": false,
-                  "restitution": 0.1
+                  "restitution": 0.1,
+                  "groups": {
+                    "memberships": "0b11111111111111111111111111111111",
+                    "filters": "0b11111111111111111111111111111111"
+                  }
                 },
                 "config": null,
                 "id": "ad76a8bc-5f8f-4844-af58-04eb43862d7b",
@@ -949,7 +1033,7 @@
           "transform": {
             "translation": [
               33.342365,
-              0.72276354,
+              0.1571083,
               7.46447
             ],
             "rotation": [
@@ -982,7 +1066,7 @@
             "translation": [
               0,
               0,
-              0.95830584
+              1
             ],
             "rotation": [
               0,
@@ -991,7 +1075,7 @@
             ],
             "scale": [
               1,
-              1,
+              1.5,
               1
             ]
           }
@@ -1022,8 +1106,8 @@
                   "collider_type": {
                     "Cube": {
                       "height": 1.75,
-                      "length": 0.75,
-                      "width": 0.75
+                      "length": 0.5,
+                      "width": 0.5
                     }
                   },
                   "density": 1,
@@ -1031,7 +1115,11 @@
                   "friction": 0.1,
                   "id": "3fa98d58-bf4c-45bc-8743-19141db2c0f4",
                   "is_sensor": true,
-                  "restitution": 0.1
+                  "restitution": 0.1,
+                  "groups": {
+                    "memberships": "0b11111111111111111111111111111111",
+                    "filters": "0b11111111111111111111111111111111"
+                  }
                 },
                 "config": null,
                 "id": "76bf10dd-991a-4c54-bed0-e0c9ae6ac3ba",
@@ -1138,7 +1226,11 @@
                   "friction": 0.1,
                   "id": "0c2fe78c-0c80-418a-aea8-2f14bf23518e",
                   "is_sensor": true,
-                  "restitution": 0.1
+                  "restitution": 0.1,
+                  "groups": {
+                    "memberships": "0b11111111111111111111111111111111",
+                    "filters": "0b11111111111111111111111111111111"
+                  }
                 },
                 "config": null,
                 "id": "f59b04c9-bb4d-4b99-9cb9-9ee8a2123f73",
@@ -1205,7 +1297,13 @@
                   -1.4,
                   0
                 ]
-              }
+              },
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0
             }
           },
           {
@@ -1261,7 +1359,11 @@
                   "friction": 0.1,
                   "id": "6c4bca63-f37f-4d8b-8612-dbe89ac7b8cc",
                   "is_sensor": false,
-                  "restitution": 0.1
+                  "restitution": 0.1,
+                  "groups": {
+                    "memberships": "0b11111111111111111111111111111111",
+                    "filters": "0b11111111111111111111111111111111"
+                  }
                 },
                 "config": null,
                 "id": "26a38294-07a6-4097-8703-30ee6f942ff0",
@@ -1282,11 +1384,20 @@
             }
           },
           {
-            "Npc": {
-              "rest_level": 4.8,
-              "total_energy": 5,
-              "social_level": 0.1,
-              "total_social": 5
+            "Character": {
+              "rest": {
+                "value": 4.8,
+                "total": 5
+              },
+              "social": {
+                "value": 0.1,
+                "total": 5
+              },
+              "hunger": {
+                "value": 10,
+                "total": 10
+              },
+              "cash": 10000
             }
           },
           {
@@ -1355,7 +1466,11 @@
                   "friction": 0.1,
                   "id": "2e3478ba-1558-4384-907b-ce802b2dade4",
                   "is_sensor": true,
-                  "restitution": 0.1
+                  "restitution": 0.1,
+                  "groups": {
+                    "memberships": "0b11111111111111111111111111111111",
+                    "filters": "0b11111111111111111111111111111111"
+                  }
                 },
                 "config": null,
                 "id": "af61bc62-37ac-4d65-bf40-a8e5b93f4f48",
@@ -1422,7 +1537,13 @@
                   0,
                   0
                 ]
-              }
+              },
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0
             }
           },
           {
@@ -1454,7 +1575,11 @@
                   "friction": 0.1,
                   "id": "b77f069d-308d-48b5-9f81-09c59120e0c0",
                   "is_sensor": false,
-                  "restitution": 0.1
+                  "restitution": 0.1,
+                  "groups": {
+                    "memberships": "0b11111111111111111111111111111111",
+                    "filters": "0b11111111111111111111111111111111"
+                  }
                 },
                 "config": null,
                 "id": "06aed936-6e1a-4c80-967d-9a0c53318062",
@@ -1516,7 +1641,13 @@
                   0,
                   0
                 ]
-              }
+              },
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0
             }
           },
           {
@@ -1578,7 +1709,13 @@
                   0,
                   0
                 ]
-              }
+              },
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0
             }
           }
         ]
@@ -1628,13 +1765,64 @@
                 "translation": [
                   0,
                   0,
-                  0
+                  0.1
                 ]
-              }
+              },
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0
             }
           },
           {
             "PrefabProviderComponent": {}
+          },
+          {
+            "PhysicsComponent": {
+              "debug": false,
+              "id": "deb5d468-fc59-4d81-9ec7-1ceaf21873f3",
+              "joint": {
+                "body": {
+                  "allow_rotation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "allow_translation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "ccd": false,
+                  "collider_type": {
+                    "CapsuleY": {
+                      "half_height": 1,
+                      "radius": 0.5
+                    }
+                  },
+                  "density": 1,
+                  "dynamic_type": "Kinematic",
+                  "friction": 0.1,
+                  "id": "2f18797e-8328-4196-805c-2bdd58832338",
+                  "is_sensor": false,
+                  "restitution": 0.1,
+                  "groups": {
+                    "memberships": "0b11111111111111111111111111111111",
+                    "filters": "0b11111111111111111111111111111111"
+                  }
+                },
+                "config": null,
+                "id": "0a5ec556-45bf-41dd-9987-246f49374874",
+                "name": "Joint",
+                "offset": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
           }
         ]
       },
@@ -1710,7 +1898,7 @@
           "transform": {
             "translation": [
               0.46040344,
-              -1.784338,
+              -2.2,
               -1.9525433
             ],
             "rotation": [
@@ -1802,7 +1990,11 @@
                   "friction": 0.1,
                   "id": "f5a62797-0d7e-4ae2-b008-fd9070164993",
                   "is_sensor": true,
-                  "restitution": 0.1
+                  "restitution": 0.1,
+                  "groups": {
+                    "memberships": "0b11111111111111111111111111111111",
+                    "filters": "0b11111111111111111111111111111111"
+                  }
                 },
                 "config": null,
                 "id": "11057b80-b49f-4d64-af9b-22115d09d611",
@@ -1915,84 +2107,6 @@
             "LevelDownloaderRoot": {}
           }
         ]
-      },
-      "4aaa5e78-0977-4cc6-b274-c7d0abf40f45": {
-        "id": "4aaa5e78-0977-4cc6-b274-c7d0abf40f45",
-        "tag": {
-          "name": "Temp 1"
-        },
-        "transform": {
-          "transform": {
-            "translation": [
-              40.066296,
-              14.685239,
-              7.3412046
-            ],
-            "rotation": [
-              0,
-              0,
-              0
-            ],
-            "scale": [
-              1,
-              1,
-              1
-            ]
-          }
-        },
-        "components": [
-          {
-            "ModelComponent": {
-              "cast_shadows": true,
-              "id": "cb7b13ea-5344-44b6-909d-61dbd1c844d6",
-              "skip": false,
-              "transform": {
-                "rotation": [
-                  0,
-                  0,
-                  0,
-                  1
-                ],
-                "scale": [
-                  1,
-                  1,
-                  1
-                ],
-                "translation": [
-                  0,
-                  0,
-                  0
-                ]
-              }
-            }
-          }
-        ]
-      },
-      "b216877e-22da-4895-9f39-193a61cb5450": {
-        "id": "b216877e-22da-4895-9f39-193a61cb5450",
-        "tag": {
-          "name": "Temp 2"
-        },
-        "transform": {
-          "transform": {
-            "translation": [
-              40.066296,
-              14.685239,
-              7.3412046
-            ],
-            "rotation": [
-              0,
-              0,
-              0
-            ],
-            "scale": [
-              1,
-              1,
-              1
-            ]
-          }
-        },
-        "components": []
       },
       "b6af600c-5c66-44a8-bf94-5fcdd5ade09d": {
         "id": "b6af600c-5c66-44a8-bf94-5fcdd5ade09d",
@@ -2559,7 +2673,13 @@
                   0,
                   0
                 ]
-              }
+              },
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0
             }
           },
           {
@@ -2591,7 +2711,11 @@
                   "friction": 0.1,
                   "id": "5a2969a9-98ed-48d9-86ab-d9f98d3dc1ab",
                   "is_sensor": false,
-                  "restitution": 0.1
+                  "restitution": 0.1,
+                  "groups": {
+                    "memberships": "0b11111111111111111111111111111111",
+                    "filters": "0b11111111111111111111111111111111"
+                  }
                 },
                 "config": null,
                 "id": "873b6675-b0a7-415f-9e56-99f0b653ffb5",
@@ -2653,7 +2777,13 @@
                   0,
                   0
                 ]
-              }
+              },
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0
             }
           },
           {
@@ -2715,7 +2845,13 @@
                   0,
                   0
                 ]
-              }
+              },
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0
             }
           }
         ]
@@ -2784,7 +2920,11 @@
                   "friction": 0.1,
                   "id": "045fb0ed-1213-4e30-9040-f01b40e61579",
                   "is_sensor": true,
-                  "restitution": 0.1
+                  "restitution": 0.1,
+                  "groups": {
+                    "memberships": "0b11111111111111111111111111111111",
+                    "filters": "0b11111111111111111111111111111111"
+                  }
                 },
                 "config": null,
                 "id": "15c7dfc1-826c-46fc-b51b-a298b47aa6c8",
@@ -2846,7 +2986,13 @@
                   0,
                   0
                 ]
-              }
+              },
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0
             }
           },
           {
@@ -2878,7 +3024,11 @@
                   "friction": 0.1,
                   "id": "a00268df-7278-4833-ab4b-e090d94638cb",
                   "is_sensor": false,
-                  "restitution": 0.1
+                  "restitution": 0.1,
+                  "groups": {
+                    "memberships": "0b11111111111111111111111111111111",
+                    "filters": "0b11111111111111111111111111111111"
+                  }
                 },
                 "config": null,
                 "id": "24fca5ff-56bb-40e2-9ec5-967db52fd6b5",
@@ -2940,7 +3090,13 @@
                   0,
                   0
                 ]
-              }
+              },
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0
             }
           },
           {
@@ -3002,7 +3158,13 @@
                   0,
                   0
                 ]
-              }
+              },
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0
             }
           }
         ]
@@ -3071,7 +3233,11 @@
                   "friction": 0.1,
                   "id": "6095885d-8512-46fb-882a-7553a1d81ca7",
                   "is_sensor": true,
-                  "restitution": 0.1
+                  "restitution": 0.1,
+                  "groups": {
+                    "memberships": "0b11111111111111111111111111111111",
+                    "filters": "0b11111111111111111111111111111111"
+                  }
                 },
                 "config": null,
                 "id": "03397b08-8b8e-487d-bd80-968e546e6d30",
@@ -3133,7 +3299,13 @@
                   0,
                   0
                 ]
-              }
+              },
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0
             }
           },
           {
@@ -3165,7 +3337,11 @@
                   "friction": 0.1,
                   "id": "7f8d8e1d-621a-4bd9-9904-664c2f5e4d38",
                   "is_sensor": false,
-                  "restitution": 0.1
+                  "restitution": 0.1,
+                  "groups": {
+                    "memberships": "0b11111111111111111111111111111111",
+                    "filters": "0b11111111111111111111111111111111"
+                  }
                 },
                 "config": null,
                 "id": "b0c02c2f-2cc9-42f1-9985-311d46d6a9e7",
@@ -3227,7 +3403,13 @@
                   0,
                   0
                 ]
-              }
+              },
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0
             }
           },
           {
@@ -3289,7 +3471,13 @@
                   0,
                   0
                 ]
-              }
+              },
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0
             }
           }
         ]
@@ -3358,7 +3546,11 @@
                   "friction": 0.1,
                   "id": "aa9d7903-2a9c-4665-98f7-c3f5344446a9",
                   "is_sensor": true,
-                  "restitution": 0.1
+                  "restitution": 0.1,
+                  "groups": {
+                    "memberships": "0b11111111111111111111111111111111",
+                    "filters": "0b11111111111111111111111111111111"
+                  }
                 },
                 "config": null,
                 "id": "1455e7f0-ff0d-42a0-8780-bf344deb77a5",
@@ -10075,7 +10267,64 @@
                   0,
                   0
                 ]
+              },
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0
+            }
+          },
+          {
+            "PhysicsComponent": {
+              "debug": false,
+              "id": "1170267a-57fc-44bc-b836-c65d16b2fbe9",
+              "joint": {
+                "body": {
+                  "allow_rotation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "allow_translation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "ccd": false,
+                  "collider_type": {
+                    "CapsuleY": {
+                      "half_height": 1,
+                      "radius": 1
+                    }
+                  },
+                  "density": 1,
+                  "dynamic_type": "Kinematic",
+                  "friction": 0.1,
+                  "id": "f2a1ff9c-b67a-47ac-b92d-7313d1f9cbda",
+                  "is_sensor": false,
+                  "restitution": 0.1,
+                  "groups": {
+                    "memberships": "0b11111111111111111111111111111111",
+                    "filters": "0b11111111111111111111111111111111"
+                  }
+                },
+                "config": null,
+                "id": "fe252a33-7708-49f0-adbb-cded05532f9d",
+                "name": "Joint",
+                "offset": [
+                  0,
+                  0,
+                  0
+                ]
               }
+            }
+          },
+          {
+            "WaterSource": {
+              "fill_rate": 0.2,
+              "water_type": "Fresh"
             }
           }
         ]
@@ -10141,6 +10390,308 @@
             "PrefabComponent": {
               "id": "aaffa6e5-5aaf-4d50-a1dd-4f25d1edbf97"
             }
+          }
+        ]
+      },
+      "59996524-6a00-44fc-ab48-44315e78e291": {
+        "id": "59996524-6a00-44fc-ab48-44315e78e291",
+        "tag": {
+          "name": "Prefab::Tile"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              -51.55453,
+              0,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "ModelComponent": {
+              "cast_shadows": true,
+              "id": "a152f452-89a5-49d7-bc66-0ca3cadf90d4",
+              "skip": false,
+              "transform": {
+                "rotation": [
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ],
+                "translation": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0
+            }
+          },
+          {
+            "Tile": {}
+          },
+          {
+            "PrefabProviderComponent": {}
+          },
+          {
+            "PhysicsComponent": {
+              "debug": false,
+              "id": "7c48dfb6-6cac-4c68-b9a4-c27725188833",
+              "joint": {
+                "body": {
+                  "allow_rotation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "allow_translation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "ccd": false,
+                  "collider_type": {
+                    "Cube": {
+                      "height": 0.1,
+                      "length": 1,
+                      "width": 1
+                    }
+                  },
+                  "density": 1,
+                  "dynamic_type": "Static",
+                  "friction": 0.1,
+                  "id": "3e2f989b-a813-4bc3-816e-ed4451a58340",
+                  "is_sensor": true,
+                  "restitution": 0.1,
+                  "groups": {
+                    "memberships": "0b10000000000000000000000000000000",
+                    "filters": "0b01111111111111111111111111111111"
+                  }
+                },
+                "config": null,
+                "id": "b36a18d7-f399-4eb9-aacd-6c4bacc23369",
+                "name": "Joint",
+                "offset": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "3d110c4b-5d8c-43bd-aba8-1568a18151d7": {
+        "id": "3d110c4b-5d8c-43bd-aba8-1568a18151d7",
+        "tag": {
+          "name": "Farm 1"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              36,
+              -0.2,
+              25
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "TilesetComponent": {
+              "data": [],
+              "length": 32,
+              "prefab": "59996524-6a00-44fc-ab48-44315e78e291",
+              "width": 31
+            }
+          }
+        ]
+      },
+      "202df0f9-1b91-4090-9b2d-c069a49f36f3": {
+        "id": "202df0f9-1b91-4090-9b2d-c069a49f36f3",
+        "tag": {
+          "name": "Farm 2"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              -15,
+              -0.2,
+              25
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "TilesetComponent": {
+              "data": [],
+              "length": 32,
+              "prefab": "59996524-6a00-44fc-ab48-44315e78e291",
+              "width": 31
+            }
+          }
+        ]
+      },
+      "ac44f2d1-444a-45ba-9992-ce3d67efa57e": {
+        "id": "ac44f2d1-444a-45ba-9992-ce3d67efa57e",
+        "tag": {
+          "name": "Farm 3"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              -15,
+              -0.2,
+              -15
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "TilesetComponent": {
+              "data": [],
+              "length": 32,
+              "prefab": "59996524-6a00-44fc-ab48-44315e78e291",
+              "width": 31
+            }
+          }
+        ]
+      },
+      "c926c814-c765-4eec-9f9b-9a30662544fb": {
+        "id": "c926c814-c765-4eec-9f9b-9a30662544fb",
+        "tag": {
+          "name": "Farm 4"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              36,
+              -0.2,
+              -14
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "TilesetComponent": {
+              "data": [],
+              "length": 32,
+              "prefab": "59996524-6a00-44fc-ab48-44315e78e291",
+              "width": 31
+            }
+          }
+        ]
+      },
+      "c937e7ca-76f7-498b-ac30-89f454ac72d9": {
+        "id": "c937e7ca-76f7-498b-ac30-89f454ac72d9",
+        "tag": {
+          "name": "Inventory"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              -20,
+              20,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "TextComponent": {
+              "block_alignment": {
+                "horizontal": "Right",
+                "vertical": "Bottom"
+              },
+              "color": [
+                1,
+                1,
+                1,
+                1
+              ],
+              "font": "a0d8e5bd-892d-45fe-843a-b73fea988678",
+              "font_size": 22,
+              "kerning": 1.2,
+              "line_height": 1.5,
+              "max_width": 500,
+              "opacity": 1,
+              "text": "Inventory",
+              "text_alignment": "Right"
+            }
+          },
+          {
+            "InventoryDisplay": {}
           }
         ]
       }
@@ -10219,11 +10770,6 @@
       "3afb4b17-3273-4146-b839-bd0a1aedc427": {
         "id": "3afb4b17-3273-4146-b839-bd0a1aedc427",
         "source": "models/SM_Tree/SM_Tree.gltf",
-        "maxInstances": 10
-      },
-      "18b7fba2-b8ba-4a3b-a658-51ed94383f7c": {
-        "id": "18b7fba2-b8ba-4a3b-a658-51ed94383f7c",
-        "source": "models/large-grounds/static/CM_GroundAndFence.gltf",
         "maxInstances": 10
       },
       "cccf9f86-0380-4967-9ebf-7e09f91879d6": {

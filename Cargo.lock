@@ -707,7 +707,7 @@ checksum = "60b1af1c220855b6ceac025d3f6ecdd2b7c4894bfe9cd9bda4fbb4bc7c0d4cf0"
 
 [[package]]
 name = "engine"
-version = "0.4.251"
+version = "0.4.253"
 dependencies = [
  "async-channel",
  "async-recursion",
@@ -749,12 +749,10 @@ dependencies = [
  "rayon",
  "rectangle-pack",
  "regex",
- "ron",
  "rsl",
  "rstar",
  "rustc-hash",
  "serde",
- "serde-big-array",
  "serde-wasm-bindgen",
  "serde_json",
  "slotmap",
@@ -2482,6 +2480,7 @@ dependencies = [
  "rustc-hash",
  "serde",
  "simba 0.8.1",
+ "vec_map",
 ]
 
 [[package]]
@@ -2559,19 +2558,6 @@ name = "robust"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cbf4a6aa5f6d6888f39e980649f3ad6b666acdce1d78e95b8a2cb076e687ae30"
-
-[[package]]
-name = "ron"
-version = "0.10.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "beceb6f7bf81c73e73aeef6dd1356d9a1b2b4909e1f0fc3e59b034f9572d7b7f"
-dependencies = [
- "base64 0.22.1",
- "bitflags 2.9.0",
- "serde",
- "serde_derive",
- "unicode-ident",
-]
 
 [[package]]
 name = "rsl"
@@ -2661,15 +2647,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6513c1ad0b11a9376da888e3e0baa0077f1aed55c17f50e7b2397136129fb88f"
 dependencies = [
  "serde_derive",
-]
-
-[[package]]
-name = "serde-big-array"
-version = "0.5.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "11fc7cc2c76d73e0f27ee52abbd64eec84d46f370c88371120433196934e4b7f"
-dependencies = [
- "serde",
 ]
 
 [[package]]
@@ -3288,6 +3265,12 @@ dependencies = [
  "serde",
  "wasm-bindgen",
 ]
+
+[[package]]
+name = "vec_map"
+version = "0.8.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f1bddf1187be692e79c5ffeab891132dfb0f236ed36a43c7ed39f1165ee20191"
 
 [[package]]
 name = "version_check"

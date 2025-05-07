@@ -1,22 +1,28 @@
 use std::f32::consts::PI;
 use std::collections::HashMap;
 use crate::shared::game_input::{GameInput, InputState};
+use crate::shared::ui_components::InventoryDisplay;
 use crate::shared::components::{
   TimeOfDay,
   Pickup,
   Action,
   Log,
   PickupSpace,
+  Character,
+  Tile,
+  WaterCan,
+  WaterSource,
 };
 use engine::{
   application::{
-    components::{TextComponent, LightComponent, NetworkedPlayerComponent, ParentComponent},
+    components::{TextComponent, LightComponent, SelfComponent, NetworkedPlayerComponent, ParentComponent, ModelComponent},
     scene::{Scene, Collision, IdComponent, TransformComponent},
   },
   systems::{
     Backpack, Initializable, Inventory, System,
   },
   utils::units::{Seconds, Framerate, Radians},
+  nalgebra::Vector3,
 };
 
 pub struct PickupsSystem {
@@ -25,24 +31,13 @@ pub struct PickupsSystem {
 impl Initializable for PickupsSystem {
   fn initialize(_: &Inventory) -> Self {
 
-    Self { }
+    Self {
+    }
   }
 }
 
 impl PickupsSystem {
-}
-
-impl System for PickupsSystem {
-  fn get_name(&self) -> &'static str {
-    "PickupsSystem"
-  }
-
-  fn run(&mut self, scene: &mut Scene, _: &mut Backpack) {
-    let mut sun_inclination = Radians::new(0.0);
-
-    // TODO: Should be running 4 times the speed of normal time
-
-
+  pub fn handle_pickup(&self, scene: &mut Scene) {
     let mut spaces = HashMap::new();
     for (_, (id, network, _)) in scene.query_mut::<(&IdComponent, &NetworkedPlayerComponent, &PickupSpace)>() {
       spaces.insert(*network.connection_id, *id);
@@ -61,5 +56,70 @@ impl System for PickupsSystem {
       scene.add_component(entity, ParentComponent::new(*parent_id));
       scene.add_component(entity, TransformComponent::default());
     }
+
+
+    /*
+    for (_, (model, _, maybe_collision)) in scene.query_mut::<(&mut ModelComponent, &Tile, Option<&Collision<Action, Tile>>)>() {
+      if let Some(_) = maybe_collision {
+        model.color = Vector3::new(1.0, 1.0, 1.0);
+        model.color_intensity = 0.1;
+      } else {
+        model.color_intensity = 0.0;
+      }
+    }
+    */
+  }
+
+  pub fn handle_water_sources(&self, scene: &mut Scene, backpack: &mut Backpack) {
+    let delta_time = backpack.get::<Seconds>().unwrap();
+    let mut characters_with_water_cans = HashMap::new();
+    for (_, (id, network, _)) in scene.query_mut::<(&IdComponent, &NetworkedPlayerComponent, &WaterCan)>() {
+      characters_with_water_cans.insert(*network.connection_id, *id);
+    }
+
+    for (_, (input, can, collision)) in scene.query_mut::<(&GameInput, &mut WaterCan, &Collision<Action, WaterSource>)>() {
+      log::info!("collision");
+      if input.check(InputState::Action) {
+        can.level.add(1.0 * **delta_time);
+      }
+    }
+    for (_, (model, _, maybe_collision)) in scene.query_mut::<(&mut ModelComponent, &WaterSource, Option<&Collision<Action, WaterSource>>)>() {
+      if let Some(_) = maybe_collision {
+        model.color = Vector3::new(0.0, 0.0, 1.0);
+        model.color_intensity = 0.1;
+      } else {
+        model.color_intensity = 0.0;
+      }
+    }
+  }
+
+  pub fn handle_update_ui(&self, scene: &mut Scene) {
+    let (character, maybe_water) = match scene.query_one::<(&SelfComponent, &Character, Option<&WaterCan>)>() {
+      None => return,
+      Some((entity, (_, character, water))) => (character.clone(), water.cloned()),
+    };
+
+    if let Some((_, (text, _))) = scene.query_one::<(&mut TextComponent, &InventoryDisplay)>() {
+      let mut texts = vec![];
+
+      if let Some(water) = maybe_water {
+        texts.push(format!("Water: {:03.2}%", water.level.percent() * 100.0));
+      }
+
+      texts.push(format!("Cash: {:}", character.cash));
+      text.text = texts.join("\n");
+    }
+  }
+}
+
+impl System for PickupsSystem {
+  fn get_name(&self) -> &'static str {
+    "PickupsSystem"
+  }
+
+  fn run(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
+    self.handle_pickup(scene);
+    self.handle_water_sources(scene, backpack);
+    self.handle_update_ui(scene);
   }
 }

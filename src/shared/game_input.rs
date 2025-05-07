@@ -33,16 +33,17 @@ pub struct GameInput {
 bitflags! {
   #[derive(Debug, Clone, Copy, Serialize, Deserialize)]
   pub struct InputState: u32 {
-    const Empty          = 0b00000000000000000000000000000000;
-    const IsFocused      = 0b00000000000000000000000000000001;
-    const IsMouseLocked  = 0b00000000000000000000000000000010;
-    const IsFullscreen   = 0b00000000000000000000000000000100;
-    const HasMouse       = 0b00000000000000000000000000001000;
-    const HasJoystick    = 0b00000000000000000000000000010000;
-    const LeftClick      = 0b00000000000000000000000000100000;
-    const Escape         = 0b00000000000000000000000001000000;
-    const Action         = 0b00000000000000000000000010000000;
-    const IsRunning      = 0b00000000000000000000000100000000;
+    const Empty                  = 0b00000000000000000000000000000000;
+    const IsFocused              = 0b00000000000000000000000000000001;
+    const IsMouseLocked          = 0b00000000000000000000000000000010;
+    const IsFullscreen           = 0b00000000000000000000000000000100;
+    const HasMouse               = 0b00000000000000000000000000001000;
+    const HasJoystick            = 0b00000000000000000000000000010000;
+    const LeftClick              = 0b00000000000000000000000000100000;
+    const Escape                 = 0b00000000000000000000000001000000;
+    const Action                 = 0b00000000000000000000000010000000;
+    const IsRunning              = 0b00000000000000000000000100000000;
+    const ToggleDebugPerformance = 0b00000000000000000000001000000000;
   }
 }
 
@@ -143,6 +144,9 @@ impl GameInput {
       DeviceEvent::Keyboard(KeyboardEvent::Button(ButtonState::Down, KeyboardKey::Space)) => {
         self.state |= InputState::Action;
       }
+      DeviceEvent::Keyboard(KeyboardEvent::Button(ButtonState::Down, KeyboardKey::P)) => {
+        self.state |= InputState::ToggleDebugPerformance;
+      }
       // End: Keyboard down
 
       // Start: Keyboard up
@@ -178,6 +182,9 @@ impl GameInput {
       }
       DeviceEvent::Keyboard(KeyboardEvent::Button(ButtonState::Up, KeyboardKey::Space)) => {
         self.state -= InputState::Action;
+      }
+      DeviceEvent::Keyboard(KeyboardEvent::Button(ButtonState::Up, KeyboardKey::P)) => {
+        self.state -= InputState::ToggleDebugPerformance;
       }
 
       _ => {}

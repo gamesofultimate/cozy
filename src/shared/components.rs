@@ -19,7 +19,12 @@ impl Registry for GameComponents {
     Pickup::register();
     Player::register();
     CameraFollow::register();
-    Npc::register();
+    Character::register();
+    WaterCan::register();
+    WaterSource::register();
+    Rock::register();
+    Durability::register();
+    Crop::register();
     Flower::register();
     Seat::register();
     TimeOfDay::register();
@@ -27,6 +32,7 @@ impl Registry for GameComponents {
     Log::register();
     PickupSpace::register();
     HouseEntrance::register();
+    Tile::register();
   }
 }
 
@@ -52,6 +58,22 @@ impl ProvideAssets for CameraFollow {}
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
 pub struct Pickup {}
 
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct Level {
+  pub value: f32,
+  pub total: f32,
+}
+
+impl Level {
+  pub fn percent(&self) -> f32 {
+    self.value / self.total
+  }
+
+  pub fn add(&mut self, value: f32) {
+    self.value = (self.value + value).min(self.total);
+  }
+}
+
 impl ProvideAssets for Pickup {}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
@@ -61,14 +83,51 @@ pub struct Player {
 impl ProvideAssets for Player {}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
-pub struct Npc {
-  pub rest_level: f32,
-  pub total_energy: f32,
-  pub social_level: f32,
-  pub total_social: f32,
+pub struct Character {
+  pub cash: u64,
+  pub rest: Level,
+  pub social: Level,
+  pub hunger: Level,
 }
 
-impl ProvideAssets for Npc {}
+impl ProvideAssets for Character {}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub enum Stage {
+  Seed,
+  Sprout,
+  Mature,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct WaterCan {
+  pub level: Level,
+}
+
+impl ProvideAssets for WaterCan {}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct Crop {
+  pub stage: Level,
+  pub season_start: u32,
+  pub season_end: u32,
+  pub growth_phases: u32,
+}
+
+impl ProvideAssets for Crop {}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct Rock {
+  pub health: Level,
+}
+
+impl ProvideAssets for Rock {}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct Durability {
+}
+
+impl ProvideAssets for Durability {}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
 pub struct Flower {
@@ -128,11 +187,28 @@ impl ProvideAssets for PickupSpace {}
 pub struct HouseEntrance {
   pub owner: PrefabId,
 }
-
 impl ProvideAssets for HouseEntrance {}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
 pub struct Friend {
 }
-
 impl ProvideAssets for Friend {}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct Tile {
+}
+
+impl ProvideAssets for Tile {}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub enum WaterType {
+  Salty,
+  Fresh,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct WaterSource {
+  water_type: WaterType,
+  fill_rate: f32,
+}
+
+impl ProvideAssets for WaterSource {}

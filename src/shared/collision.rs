@@ -1,5 +1,7 @@
+use std::collections::VecDeque;
 use engine::{
   application::{
+    components::ParentComponent,
     physics3d::{ColliderHandle, CollisionEvent},
     scene::Scene,
   },
@@ -15,6 +17,8 @@ use engine::{
 use crate::shared::components::{
   Action,
   Pickup,
+  Tile,
+  WaterSource,
 };
 
 
@@ -51,10 +55,14 @@ impl System for CollisionSystem {
       match collision_event {
         CollisionEvent::Started(collider1, collider2, _) => {
           self.handle_collision_start::<Action, Pickup>(scene, collider1, collider2);
+          self.handle_collision_start::<Action, Tile>(scene, collider1, collider2);
+          self.handle_collision_start::<Action, WaterSource>(scene, collider1, collider2);
         }
 
         CollisionEvent::Stopped(collider1, collider2, _) => {
           self.handle_collision_stop::<Action, Pickup>(scene, collider1, collider2);
+          self.handle_collision_stop::<Action, Tile>(scene, collider1, collider2);
+          self.handle_collision_stop::<Action, WaterSource>(scene, collider1, collider2);
         }
       }
     }
@@ -100,22 +108,43 @@ impl CollisionSystem {
     A: std::fmt::Debug + Clone + Send + Sync + 'static,
     B: std::fmt::Debug + Clone + Send + Sync + 'static,
   {
-    let (entity1, (first1, second1)) =
-      match self.get_entity_and_components::<(Option<&A>, Option<&B>)>(scene, collider1) {
-        Some((entity, (first, second))) => (entity, (first.cloned(), second.cloned())),
+    let (entity1, (first1, second1, maybe_parent_1)) =
+      match self.get_entity_and_components::<(Option<&A>, Option<&B>, Option<&ParentComponent>)>(scene, collider1) {
+        Some((entity, (first, second, maybe_parent))) => (entity, (first.cloned(), second.cloned(), maybe_parent.cloned())),
         None => return None,
       };
 
-    let (entity2, (first2, second2)) =
-      match self.get_entity_and_components::<(Option<&A>, Option<&B>)>(scene, collider2) {
-        Some((entity, (first, second))) => (entity, (first.cloned(), second.cloned())),
+    let (entity2, (first2, second2, maybe_parent_2)) =
+      match self.get_entity_and_components::<(Option<&A>, Option<&B>, Option<&ParentComponent>)>(scene, collider2) {
+        Some((entity, (first, second, maybe_parent))) => (entity, (first.cloned(), second.cloned(), maybe_parent.cloned())),
         None => return None,
       };
 
     if let Some((entity1, _, entity2, _)) =
       Self::check_collision(entity1, &first1, &first2, entity2, &second1, &second2)
     {
+
       scene.add_collision::<A, B>(entity1, entity2);
+
+      let mut queue = VecDeque::new();
+      if let Some(parent) = maybe_parent_1 {
+        queue.push_back(parent.parent_id);
+      }
+
+      if let Some(parent) = maybe_parent_2 {
+        queue.push_back(parent.parent_id);
+      }
+
+      while let Some(parent_id) = queue.pop_front() {
+        let entity = match scene.get_entity(parent_id) {
+          Some(data) => data.clone(),
+          None => continue,
+        };
+        scene.add_collision_to::<A, B>(entity, entity1, entity2);
+        if let Some(Some(parent)) = scene.get_components_mut::<Option<&ParentComponent>>(entity) {
+          queue.push_back(parent.parent_id);
+        }
+      }
     }
 
     Some(())
@@ -131,20 +160,39 @@ impl CollisionSystem {
     A: std::fmt::Debug + Clone + Send + Sync + 'static,
     B: std::fmt::Debug + Clone + Send + Sync + 'static,
   {
-    let (entity1, (first1, second1)) =
-      match self.get_entity_and_components::<(Option<&A>, Option<&B>)>(scene, collider1) {
-        Some((entity, (first, second))) => (entity, (first.cloned(), second.cloned())),
+    let (entity1, (first1, second1, maybe_parent_1)) =
+      match self.get_entity_and_components::<(Option<&A>, Option<&B>, Option<&ParentComponent>)>(scene, collider1) {
+        Some((entity, (first, second, maybe_parent))) => (entity, (first.cloned(), second.cloned(), maybe_parent.cloned())),
         None => return None,
       };
 
-    let (entity2, (first2, second2)) =
-      match self.get_entity_and_components::<(Option<&A>, Option<&B>)>(scene, collider2) {
-        Some((entity, (first, second))) => (entity, (first.cloned(), second.cloned())),
+    let (entity2, (first2, second2, maybe_parent_2)) =
+      match self.get_entity_and_components::<(Option<&A>, Option<&B>, Option<&ParentComponent>)>(scene, collider2) {
+        Some((entity, (first, second, maybe_parent))) => (entity, (first.cloned(), second.cloned(), maybe_parent.cloned())),
         None => return None,
       };
 
     if let Some(_) = Self::check_collision(entity1, &first1, &first2, entity2, &second1, &second2) {
       scene.remove_collision::<A, B>(entity1, entity2);
+
+      let mut queue = VecDeque::new();
+      if let Some(parent) = maybe_parent_1 {
+        queue.push_back(parent.parent_id);
+      }
+      if let Some(parent) = maybe_parent_2 {
+        queue.push_back(parent.parent_id);
+      }
+
+      while let Some(parent_id) = queue.pop_front() {
+        let entity = match scene.get_entity(parent_id) {
+          Some(data) => data.clone(),
+          None => continue,
+        };
+        scene.remove_collision_to::<A, B>(entity);
+        if let Some(Some(parent)) = scene.get_components_mut::<Option<&ParentComponent>>(entity) {
+          queue.push_back(parent.parent_id);
+        }
+      }
     }
 
     Some(())

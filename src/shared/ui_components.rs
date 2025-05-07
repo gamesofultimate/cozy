@@ -14,6 +14,7 @@ impl Registry for UiComponents {
     use engine::application::scene::component_registry::Access;
     StartInstructions::register();
     LoadingIndicator::register();
+    InventoryDisplay::register();
   }
 }
 
@@ -26,3 +27,8 @@ impl ProvideAssets for StartInstructions {}
 pub struct LoadingIndicator {}
 
 impl ProvideAssets for LoadingIndicator {}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct InventoryDisplay {}
+
+impl ProvideAssets for InventoryDisplay {}

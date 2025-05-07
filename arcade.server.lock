@@ -249,6 +249,248 @@
     },
     {
       "tag": "Struct",
+      "name": "Character",
+      "label": "Character",
+      "default_values": "{ cash: 0, hunger: { total: 0.0, value: 0.0 }, rest: { total: 0.0, value: 0.0 }, social: { total: 0.0, value: 0.0 } }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [
+        {
+          "name": "cash",
+          "label": "Cash",
+          "docs": null,
+          "ty": {
+            "tag": "Primitive",
+            "ty": {
+              "tag": "U64"
+            },
+            "default_values": "0",
+            "duplicate_values": "null"
+          }
+        },
+        {
+          "name": "rest",
+          "label": "Rest",
+          "docs": null,
+          "ty": {
+            "tag": "Struct",
+            "name": "Level",
+            "label": "Level",
+            "default_values": "{ total: 0.0, value: 0.0 }",
+            "duplicate_values": "null",
+            "docs": null,
+            "fields": [
+              {
+                "name": "value",
+                "label": "Value",
+                "docs": null,
+                "ty": {
+                  "tag": "Primitive",
+                  "ty": {
+                    "tag": "F32"
+                  },
+                  "default_values": "0.0",
+                  "duplicate_values": "null"
+                }
+              },
+              {
+                "name": "total",
+                "label": "Total",
+                "docs": null,
+                "ty": {
+                  "tag": "Primitive",
+                  "ty": {
+                    "tag": "F32"
+                  },
+                  "default_values": "0.0",
+                  "duplicate_values": "null"
+                }
+              }
+            ],
+            "private": false
+          }
+        },
+        {
+          "name": "social",
+          "label": "Social",
+          "docs": null,
+          "ty": {
+            "tag": "Struct",
+            "name": "Level",
+            "label": "Level",
+            "default_values": "{ total: 0.0, value: 0.0 }",
+            "duplicate_values": "null",
+            "docs": null,
+            "fields": [
+              {
+                "name": "value",
+                "label": "Value",
+                "docs": null,
+                "ty": {
+                  "tag": "Primitive",
+                  "ty": {
+                    "tag": "F32"
+                  },
+                  "default_values": "0.0",
+                  "duplicate_values": "null"
+                }
+              },
+              {
+                "name": "total",
+                "label": "Total",
+                "docs": null,
+                "ty": {
+                  "tag": "Primitive",
+                  "ty": {
+                    "tag": "F32"
+                  },
+                  "default_values": "0.0",
+                  "duplicate_values": "null"
+                }
+              }
+            ],
+            "private": false
+          }
+        },
+        {
+          "name": "hunger",
+          "label": "Hunger",
+          "docs": null,
+          "ty": {
+            "tag": "Struct",
+            "name": "Level",
+            "label": "Level",
+            "default_values": "{ total: 0.0, value: 0.0 }",
+            "duplicate_values": "null",
+            "docs": null,
+            "fields": [
+              {
+                "name": "value",
+                "label": "Value",
+                "docs": null,
+                "ty": {
+                  "tag": "Primitive",
+                  "ty": {
+                    "tag": "F32"
+                  },
+                  "default_values": "0.0",
+                  "duplicate_values": "null"
+                }
+              },
+              {
+                "name": "total",
+                "label": "Total",
+                "docs": null,
+                "ty": {
+                  "tag": "Primitive",
+                  "ty": {
+                    "tag": "F32"
+                  },
+                  "default_values": "0.0",
+                  "duplicate_values": "null"
+                }
+              }
+            ],
+            "private": false
+          }
+        }
+      ],
+      "private": false
+    },
+    {
+      "tag": "Struct",
+      "name": "Crop",
+      "label": "Crop",
+      "default_values": "{ growth_phases: 0, season_end: 0, season_start: 0, stage: { total: 0.0, value: 0.0 } }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [
+        {
+          "name": "stage",
+          "label": "Stage",
+          "docs": null,
+          "ty": {
+            "tag": "Struct",
+            "name": "Level",
+            "label": "Level",
+            "default_values": "{ total: 0.0, value: 0.0 }",
+            "duplicate_values": "null",
+            "docs": null,
+            "fields": [
+              {
+                "name": "value",
+                "label": "Value",
+                "docs": null,
+                "ty": {
+                  "tag": "Primitive",
+                  "ty": {
+                    "tag": "F32"
+                  },
+                  "default_values": "0.0",
+                  "duplicate_values": "null"
+                }
+              },
+              {
+                "name": "total",
+                "label": "Total",
+                "docs": null,
+                "ty": {
+                  "tag": "Primitive",
+                  "ty": {
+                    "tag": "F32"
+                  },
+                  "default_values": "0.0",
+                  "duplicate_values": "null"
+                }
+              }
+            ],
+            "private": false
+          }
+        },
+        {
+          "name": "season_start",
+          "label": "Season Start",
+          "docs": null,
+          "ty": {
+            "tag": "Primitive",
+            "ty": {
+              "tag": "U32"
+            },
+            "default_values": "0",
+            "duplicate_values": "null"
+          }
+        },
+        {
+          "name": "season_end",
+          "label": "Season End",
+          "docs": null,
+          "ty": {
+            "tag": "Primitive",
+            "ty": {
+              "tag": "U32"
+            },
+            "default_values": "0",
+            "duplicate_values": "null"
+          }
+        },
+        {
+          "name": "growth_phases",
+          "label": "Growth Phases",
+          "docs": null,
+          "ty": {
+            "tag": "Primitive",
+            "ty": {
+              "tag": "U32"
+            },
+            "default_values": "0",
+            "duplicate_values": "null"
+          }
+        }
+      ],
+      "private": false
+    },
+    {
+      "tag": "Struct",
       "name": "DebugFrustumComponent",
       "label": "Debug Frustum Component",
       "default_values": "{  }",
@@ -271,6 +513,16 @@
       "tag": "Struct",
       "name": "DebugNavmeshStart",
       "label": "Debug Navmesh Start",
+      "default_values": "{  }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [],
+      "private": false
+    },
+    {
+      "tag": "Struct",
+      "name": "Durability",
+      "label": "Durability",
       "default_values": "{  }",
       "duplicate_values": "null",
       "docs": null,
@@ -445,6 +697,16 @@
     },
     {
       "tag": "Struct",
+      "name": "InventoryDisplay",
+      "label": "Inventory Display",
+      "default_values": "{  }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [],
+      "private": false
+    },
+    {
+      "tag": "Struct",
       "name": "LevelDownloaderRoot",
       "label": "Level Downloader Root",
       "default_values": "{  }",
@@ -558,7 +820,7 @@
       "tag": "Struct",
       "name": "ModelComponent",
       "label": "Model Component",
-      "default_values": "{ cast_shadows: true, id: (() => { \n            return Symbol.for(\"ModelId\");\n           })(), skip: false, transform: { rotation: [0, 0, 0, 1], scale: [1, 1, 1], translation: [0, 0, 0] } }",
+      "default_values": "{ cast_shadows: true, color: [0.0, 0.0, 0.0], color_intensity: 0.0, id: (() => { \n            return Symbol.for(\"ModelId\");\n           })(), skip: false, transform: { rotation: [0, 0, 0, 1], scale: [1, 1, 1], translation: [0, 0, 0] } }",
       "duplicate_values": "null",
       "docs": "Attach a Model to a given entity",
       "fields": [
@@ -573,6 +835,31 @@
             "default_values": "(() => { \n            return Symbol.for(\"ModelId\");\n           })()",
             "duplicate_values": "null",
             "ty": "ModelId"
+          }
+        },
+        {
+          "name": "color",
+          "label": "Color",
+          "docs": null,
+          "ty": {
+            "tag": "Custom",
+            "name": "Vector3",
+            "default_values": "[0.0, 0.0, 0.0]",
+            "duplicate_values": "null",
+            "ty": "Rgb"
+          }
+        },
+        {
+          "name": "color_intensity",
+          "label": "Color Intensity",
+          "docs": null,
+          "ty": {
+            "tag": "Primitive",
+            "ty": {
+              "tag": "F32"
+            },
+            "default_values": "0.0",
+            "duplicate_values": "null"
           }
         },
         {
@@ -725,69 +1012,6 @@
     },
     {
       "tag": "Struct",
-      "name": "Npc",
-      "label": "Npc",
-      "default_values": "{ rest_level: 0.0, social_level: 0.0, total_energy: 0.0, total_social: 0.0 }",
-      "duplicate_values": "null",
-      "docs": null,
-      "fields": [
-        {
-          "name": "rest_level",
-          "label": "Rest Level",
-          "docs": null,
-          "ty": {
-            "tag": "Primitive",
-            "ty": {
-              "tag": "F32"
-            },
-            "default_values": "0.0",
-            "duplicate_values": "null"
-          }
-        },
-        {
-          "name": "total_energy",
-          "label": "Total Energy",
-          "docs": null,
-          "ty": {
-            "tag": "Primitive",
-            "ty": {
-              "tag": "F32"
-            },
-            "default_values": "0.0",
-            "duplicate_values": "null"
-          }
-        },
-        {
-          "name": "social_level",
-          "label": "Social Level",
-          "docs": null,
-          "ty": {
-            "tag": "Primitive",
-            "ty": {
-              "tag": "F32"
-            },
-            "default_values": "0.0",
-            "duplicate_values": "null"
-          }
-        },
-        {
-          "name": "total_social",
-          "label": "Total Social",
-          "docs": null,
-          "ty": {
-            "tag": "Primitive",
-            "ty": {
-              "tag": "F32"
-            },
-            "default_values": "0.0",
-            "duplicate_values": "null"
-          }
-        }
-      ],
-      "private": false
-    },
-    {
-      "tag": "Struct",
       "name": "OccludeeComponent",
       "label": "Occludee Component",
       "default_values": "{  }",
@@ -872,7 +1096,7 @@
       "tag": "Struct",
       "name": "PhysicsComponent",
       "label": "Physics Component",
-      "default_values": "{ debug: false, id: (() => { \n      function uuidv4() {\n        return \"10000000-1000-4000-8000-100000000000\".replace(/[018]/g, c =>\n          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)\n        );\n      };\n      return uuidv4()\n     })(), joint: { body: { allow_rotation: [true, true, true], allow_translation: [true, true, true], ccd: false, collider_type: \"CapsuleY\", density: 1.0, dynamic_type: \"Dynamic\", friction: 0.1, id: (() => { \n      function uuidv4() {\n        return \"10000000-1000-4000-8000-100000000000\".replace(/[018]/g, c =>\n          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)\n        );\n      };\n      return uuidv4()\n     })(), is_sensor: false, restitution: 0.1 }, config: null, id: (() => { \n      function uuidv4() {\n        return \"10000000-1000-4000-8000-100000000000\".replace(/[018]/g, c =>\n          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)\n        );\n      };\n      return uuidv4()\n     })(), name: 'Joint', offset: [0.0, 0.0, 0.0] } }",
+      "default_values": "{ debug: false, id: (() => { \n      function uuidv4() {\n        return \"10000000-1000-4000-8000-100000000000\".replace(/[018]/g, c =>\n          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)\n        );\n      };\n      return uuidv4()\n     })(), joint: { body: { allow_rotation: [true, true, true], allow_translation: [true, true, true], ccd: false, collider_type: \"CapsuleY\", density: 1.0, dynamic_type: \"Dynamic\", friction: 0.1, groups: { filters: '0b11111111111111111111111111111111', memberships: '0b11111111111111111111111111111111' }, id: (() => { \n      function uuidv4() {\n        return \"10000000-1000-4000-8000-100000000000\".replace(/[018]/g, c =>\n          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)\n        );\n      };\n      return uuidv4()\n     })(), is_sensor: false, restitution: 0.1 }, config: null, id: (() => { \n      function uuidv4() {\n        return \"10000000-1000-4000-8000-100000000000\".replace(/[018]/g, c =>\n          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)\n        );\n      };\n      return uuidv4()\n     })(), name: 'Joint', offset: [0.0, 0.0, 0.0] } }",
       "duplicate_values": "null",
       "docs": "Add a physics body to the entity",
       "fields": [
@@ -911,7 +1135,7 @@
             "tag": "Struct",
             "name": "PhysicsJoint",
             "label": "Physics Joint",
-            "default_values": "{ body: { allow_rotation: [true, true, true], allow_translation: [true, true, true], ccd: false, collider_type: \"CapsuleY\", density: 1.0, dynamic_type: \"Dynamic\", friction: 0.1, id: (() => { \n      function uuidv4() {\n        return \"10000000-1000-4000-8000-100000000000\".replace(/[018]/g, c =>\n          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)\n        );\n      };\n      return uuidv4()\n     })(), is_sensor: false, restitution: 0.1 }, config: null, id: (() => { \n      function uuidv4() {\n        return \"10000000-1000-4000-8000-100000000000\".replace(/[018]/g, c =>\n          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)\n        );\n      };\n      return uuidv4()\n     })(), name: 'Joint', offset: [0.0, 0.0, 0.0] }",
+            "default_values": "{ body: { allow_rotation: [true, true, true], allow_translation: [true, true, true], ccd: false, collider_type: \"CapsuleY\", density: 1.0, dynamic_type: \"Dynamic\", friction: 0.1, groups: { filters: '0b11111111111111111111111111111111', memberships: '0b11111111111111111111111111111111' }, id: (() => { \n      function uuidv4() {\n        return \"10000000-1000-4000-8000-100000000000\".replace(/[018]/g, c =>\n          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)\n        );\n      };\n      return uuidv4()\n     })(), is_sensor: false, restitution: 0.1 }, config: null, id: (() => { \n      function uuidv4() {\n        return \"10000000-1000-4000-8000-100000000000\".replace(/[018]/g, c =>\n          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)\n        );\n      };\n      return uuidv4()\n     })(), name: 'Joint', offset: [0.0, 0.0, 0.0] }",
             "duplicate_values": "null",
             "docs": null,
             "fields": [
@@ -962,7 +1186,7 @@
                   "tag": "Struct",
                   "name": "PhysicsBody",
                   "label": "Physics Body",
-                  "default_values": "{ allow_rotation: [true, true, true], allow_translation: [true, true, true], ccd: false, collider_type: \"CapsuleY\", density: 1.0, dynamic_type: \"Dynamic\", friction: 0.1, id: (() => { \n      function uuidv4() {\n        return \"10000000-1000-4000-8000-100000000000\".replace(/[018]/g, c =>\n          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)\n        );\n      };\n      return uuidv4()\n     })(), is_sensor: false, restitution: 0.1 }",
+                  "default_values": "{ allow_rotation: [true, true, true], allow_translation: [true, true, true], ccd: false, collider_type: \"CapsuleY\", density: 1.0, dynamic_type: \"Dynamic\", friction: 0.1, groups: { filters: '0b11111111111111111111111111111111', memberships: '0b11111111111111111111111111111111' }, id: (() => { \n      function uuidv4() {\n        return \"10000000-1000-4000-8000-100000000000\".replace(/[018]/g, c =>\n          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)\n        );\n      };\n      return uuidv4()\n     })(), is_sensor: false, restitution: 0.1 }",
                   "duplicate_values": "null",
                   "docs": null,
                   "fields": [
@@ -978,6 +1202,46 @@
                         "ty": {
                           "tag": "Uuid"
                         }
+                      }
+                    },
+                    {
+                      "name": "groups",
+                      "label": "Groups",
+                      "docs": null,
+                      "ty": {
+                        "tag": "Struct",
+                        "name": "ContactGroups",
+                        "label": "Contact Groups",
+                        "default_values": "{ filters: '0b11111111111111111111111111111111', memberships: '0b11111111111111111111111111111111' }",
+                        "duplicate_values": "null",
+                        "docs": null,
+                        "fields": [
+                          {
+                            "name": "memberships",
+                            "label": "Memberships",
+                            "docs": null,
+                            "ty": {
+                              "tag": "Custom",
+                              "name": "u32",
+                              "default_values": "0",
+                              "duplicate_values": "null",
+                              "ty": "ContactGroups"
+                            }
+                          },
+                          {
+                            "name": "filters",
+                            "label": "Filters",
+                            "docs": null,
+                            "ty": {
+                              "tag": "Custom",
+                              "name": "u32",
+                              "default_values": "0",
+                              "duplicate_values": "null",
+                              "ty": "ContactGroups"
+                            }
+                          }
+                        ],
+                        "private": false
                       }
                     },
                     {
@@ -1898,6 +2162,59 @@
       "duplicate_values": "null",
       "docs": null,
       "fields": [],
+      "private": false
+    },
+    {
+      "tag": "Struct",
+      "name": "Rock",
+      "label": "Rock",
+      "default_values": "{ health: { total: 0.0, value: 0.0 } }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [
+        {
+          "name": "health",
+          "label": "Health",
+          "docs": null,
+          "ty": {
+            "tag": "Struct",
+            "name": "Level",
+            "label": "Level",
+            "default_values": "{ total: 0.0, value: 0.0 }",
+            "duplicate_values": "null",
+            "docs": null,
+            "fields": [
+              {
+                "name": "value",
+                "label": "Value",
+                "docs": null,
+                "ty": {
+                  "tag": "Primitive",
+                  "ty": {
+                    "tag": "F32"
+                  },
+                  "default_values": "0.0",
+                  "duplicate_values": "null"
+                }
+              },
+              {
+                "name": "total",
+                "label": "Total",
+                "docs": null,
+                "ty": {
+                  "tag": "Primitive",
+                  "ty": {
+                    "tag": "F32"
+                  },
+                  "default_values": "0.0",
+                  "duplicate_values": "null"
+                }
+              }
+            ],
+            "private": false
+          }
+        }
+      ],
       "private": false
     },
     {
@@ -2867,6 +3184,88 @@
     },
     {
       "tag": "Struct",
+      "name": "Tile",
+      "label": "Tile",
+      "default_values": "{  }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [],
+      "private": false
+    },
+    {
+      "tag": "Struct",
+      "name": "TilesetComponent",
+      "label": "Tileset Component",
+      "default_values": "{ data: [], length: 0, prefab: (() => { \n            return Symbol.for(\"PrefabId\");\n           })(), width: 0 }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [
+        {
+          "name": "width",
+          "label": "Width",
+          "docs": null,
+          "ty": {
+            "tag": "Primitive",
+            "ty": {
+              "tag": "U32"
+            },
+            "default_values": "0",
+            "duplicate_values": "null"
+          }
+        },
+        {
+          "name": "length",
+          "label": "Length",
+          "docs": null,
+          "ty": {
+            "tag": "Primitive",
+            "ty": {
+              "tag": "U32"
+            },
+            "default_values": "0",
+            "duplicate_values": "null"
+          }
+        },
+        {
+          "name": "prefab",
+          "label": "Prefab",
+          "docs": null,
+          "ty": {
+            "tag": "Reference",
+            "name": "Identifiable",
+            "reference": "Prefab",
+            "default_values": "(() => { \n            return Symbol.for(\"PrefabId\");\n           })()",
+            "duplicate_values": "null",
+            "ty": "PrefabId"
+          }
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "docs": null,
+          "ty": {
+            "tag": "Type",
+            "name": "Vec",
+            "default_values": "[]",
+            "duplicate_values": "null",
+            "ty": {
+              "tag": "Vector",
+              "data": {
+                "tag": "Primitive",
+                "ty": {
+                  "tag": "U32"
+                },
+                "default_values": "0",
+                "duplicate_values": "null"
+              }
+            }
+          }
+        }
+      ],
+      "private": false
+    },
+    {
+      "tag": "Struct",
       "name": "TimeOfDay",
       "label": "Time Of Day",
       "default_values": "{ current_time: 0.0, delta_time: 0.0, total_time: 0.0 }",
@@ -2977,6 +3376,113 @@
         }
       ],
       "private": true
+    },
+    {
+      "tag": "Struct",
+      "name": "WaterCan",
+      "label": "Water Can",
+      "default_values": "{ level: { total: 0.0, value: 0.0 } }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [
+        {
+          "name": "level",
+          "label": "Level",
+          "docs": null,
+          "ty": {
+            "tag": "Struct",
+            "name": "Level",
+            "label": "Level",
+            "default_values": "{ total: 0.0, value: 0.0 }",
+            "duplicate_values": "null",
+            "docs": null,
+            "fields": [
+              {
+                "name": "value",
+                "label": "Value",
+                "docs": null,
+                "ty": {
+                  "tag": "Primitive",
+                  "ty": {
+                    "tag": "F32"
+                  },
+                  "default_values": "0.0",
+                  "duplicate_values": "null"
+                }
+              },
+              {
+                "name": "total",
+                "label": "Total",
+                "docs": null,
+                "ty": {
+                  "tag": "Primitive",
+                  "ty": {
+                    "tag": "F32"
+                  },
+                  "default_values": "0.0",
+                  "duplicate_values": "null"
+                }
+              }
+            ],
+            "private": false
+          }
+        }
+      ],
+      "private": false
+    },
+    {
+      "tag": "Struct",
+      "name": "WaterSource",
+      "label": "Water Source",
+      "default_values": "{ fill_rate: 0.0, water_type: \"Salty\" }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [
+        {
+          "name": "water_type",
+          "label": "Water Type",
+          "docs": null,
+          "ty": {
+            "tag": "Enum",
+            "name": "WaterType",
+            "label": "Water Type",
+            "default_values": "\"Salty\"",
+            "duplicate_values": "null",
+            "docs": null,
+            "variants": [
+              {
+                "tag": "Unit",
+                "name": "Salty",
+                "docs": null,
+                "default_values": "\"Salty\"",
+                "duplicate_values": "null"
+              },
+              {
+                "tag": "Unit",
+                "name": "Fresh",
+                "docs": null,
+                "default_values": "\"Fresh\"",
+                "duplicate_values": "null"
+              }
+            ],
+            "private": false
+          }
+        },
+        {
+          "name": "fill_rate",
+          "label": "Fill Rate",
+          "docs": null,
+          "ty": {
+            "tag": "Primitive",
+            "ty": {
+              "tag": "F32"
+            },
+            "default_values": "0.0",
+            "duplicate_values": "null"
+          }
+        }
+      ],
+      "private": false
     },
     {
       "tag": "Enum",
