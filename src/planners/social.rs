@@ -1,28 +1,24 @@
-use std::collections::{HashMap, hash_map::Iter};
 use serde::{Deserialize, Serialize};
+use std::collections::{hash_map::Iter, HashMap};
 use std::sync::Arc;
 use tagged::{Duplicate, Registerable, Schema};
 
 use engine::{
   application::{
     goap::{Action, Blackboard, Goal, Sensor},
-    scene::{Scene, PrefabId, IdComponent, TransformComponent},
+    scene::{IdComponent, PrefabId, Scene, TransformComponent},
   },
-  utils::{physics, units::{Meters, Rps}},
-  nalgebra::{Vector3, Unit},
+  nalgebra::{Unit, Vector3},
   resources::navmesh::Navmesh,
   systems::{Backpack, Registry},
+  utils::{
+    physics,
+    units::{Meters, Rps},
+  },
   Entity,
 };
 
-use crate::shared::components::{
-  Seat,
-  Character,
-  Movement,
-  HouseEntrance,
-  TimeOfDay,
-  Friend,
-};
+use crate::shared::components::{Character, Friend, HouseEntrance, Movement, Seat, TimeOfDay};
 
 pub struct Friends {
   data: HashMap<PrefabId, FriendLocation>,
@@ -41,7 +37,10 @@ impl Friends {
   }
 
   pub fn insert(&mut self, id: PrefabId, location: Vector3<f32>) {
-    self.data.entry(id).or_insert(FriendLocation { location, interacting_with: None });
+    self.data.entry(id).or_insert(FriendLocation {
+      location,
+      interacting_with: None,
+    });
   }
 
   pub fn iter(&self) -> Iter<'_, PrefabId, FriendLocation> {
@@ -162,8 +161,7 @@ impl Action for GoToSleep {
 
 // NOTE: Should probably be two sensors: SenseSelf and SenseRest
 #[derive(Debug, Clone, Serialize, Deserialize, Schema, Registerable, Duplicate)]
-pub struct SenseSocialNeed {
-}
+pub struct SenseSocialNeed {}
 
 impl Sensor for SenseSocialNeed {
   fn name(&self) -> &'static str {
@@ -189,17 +187,16 @@ impl Sensor for SenseSocialNeed {
         }
 
         local.insert(transform.clone())
-      },
+      }
       None => {
         blackboard.insert_bool("want-to-socialize", false);
-      },
+      }
     };
   }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Schema, Registerable, Duplicate)]
-pub struct SenseFriends {
-}
+pub struct SenseFriends {}
 
 impl Sensor for SenseFriends {
   fn name(&self) -> &'static str {

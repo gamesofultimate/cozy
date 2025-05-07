@@ -1,31 +1,22 @@
 use crate::{
+  shared::components::{Character, CharacterState, Movement},
   shared::game_input::{GameInput, InputState},
-  shared::components::{Movement, Character, CharacterState},
 };
 use engine::application::scene::TransformComponent;
 use engine::{
   application::{
-    components::{
-      AudioSourceComponent, InputComponent, PhysicsComponent,
-      SourceState,
-    },
+    components::{AudioSourceComponent, InputComponent, PhysicsComponent, SourceState},
     scene::Scene,
   },
+  nalgebra::{Unit, Vector3},
   systems::{
-    world::WorldConfig,
-    physics::PhysicsController,
-    Backpack, Initializable, Inventory, System,
+    physics::PhysicsController, world::WorldConfig, Backpack, Initializable, Inventory, System,
   },
-  utils::units::{Seconds, Kph},
-  nalgebra::{Vector3, Unit},
+  utils::units::{Kph, Seconds},
 };
 
 #[cfg(target_arch = "wasm32")]
-use engine::{
-  application::input::InputsReader,
-  systems::input::CanvasController,
-};
-
+use engine::{application::input::InputsReader, systems::input::CanvasController};
 
 pub struct InputsSystem {
   physics: PhysicsController,
@@ -56,9 +47,14 @@ impl InputsSystem {
   #[cfg(target_arch = "wasm32")]
   fn capture_mouse(&mut self, backpack: &mut Backpack) {
     let input = self.inputs.read_client();
-    if input.state.contains(InputState::LeftClick) && !input.state.contains(InputState::IsMouseLocked) {
+    if input.state.contains(InputState::LeftClick)
+      && !input.state.contains(InputState::IsMouseLocked)
+    {
       self.canvas.capture_mouse(true);
-    } else if input.state.contains(InputState::Escape | InputState::IsMouseLocked) {
+    } else if input
+      .state
+      .contains(InputState::Escape | InputState::IsMouseLocked)
+    {
       self.canvas.capture_mouse(false);
     }
 
@@ -79,11 +75,14 @@ impl InputsSystem {
       &mut TransformComponent,
       Option<&mut AudioSourceComponent>,
     )>() {
-
-      if input.state.contains(InputState::IsRunning) && let CharacterState::Normal = character {
+      if input.state.contains(InputState::IsRunning)
+        && let CharacterState::Normal = character
+      {
         *character = CharacterState::Running;
       }
-      if !input.state.contains(InputState::IsRunning) && let CharacterState::Running = character {
+      if !input.state.contains(InputState::IsRunning)
+        && let CharacterState::Running = character
+      {
         *character = CharacterState::Normal;
       }
 
@@ -105,7 +104,9 @@ impl InputsSystem {
         }
       }
 
-      if let Some(audio) = maybe_audio && audio.state == SourceState::Stopped {
+      if let Some(audio) = maybe_audio
+        && audio.state == SourceState::Stopped
+      {
         let velocity = Vector3::new(velocity.x, 0.0, velocity.z);
         if velocity.magnitude() > 0.1 {
           audio.state = SourceState::Playing;
@@ -122,9 +123,7 @@ impl InputsSystem {
         movement.direction = direction;
       }
 
-      self
-        .physics
-        .set_direction(&physics, movement.direction);
+      self.physics.set_direction(&physics, movement.direction);
       self
         .physics
         .move_controller_velocity(&physics, velocity, delta_time);

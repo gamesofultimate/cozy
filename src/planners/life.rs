@@ -5,22 +5,19 @@ use tagged::{Duplicate, Registerable, Schema};
 use engine::{
   application::{
     goap::{Action, Blackboard, Goal, Sensor},
-    scene::{Scene, IdComponent, TransformComponent},
+    scene::{IdComponent, Scene, TransformComponent},
   },
-  utils::{physics, units::{Meters, Rps}},
-  nalgebra::{Vector3, Unit},
+  nalgebra::{Unit, Vector3},
   resources::navmesh::Navmesh,
   systems::{Backpack, Registry},
+  utils::{
+    physics,
+    units::{Meters, Rps},
+  },
   Entity,
 };
 
-use crate::shared::components::{
-  Seat,
-  Character,
-  Movement,
-  HouseEntrance,
-  TimeOfDay,
-};
+use crate::shared::components::{Character, HouseEntrance, Movement, Seat, TimeOfDay};
 
 pub struct HomeLocation {
   translation: Vector3<f32>,
@@ -107,7 +104,8 @@ impl Action for GoToSleep {
     _navmesh: Option<Arc<Navmesh>>,
   ) -> Option<(Vector3<f32>, Vector3<f32>)> {
     let HomeLocation { translation, .. } = local.get::<HomeLocation>()?;
-    let (transform, movement) = scene.get_components_mut::<(&TransformComponent, &Movement)>(entity)?;
+    let (transform, movement) =
+      scene.get_components_mut::<(&TransformComponent, &Movement)>(entity)?;
 
     let mut start_direction = transform.get_forward_direction().into_inner();
     start_direction.y = 0.0;
@@ -120,7 +118,7 @@ impl Action for GoToSleep {
     let mut linear_velocity = Vector3::y() * -9.8;
     linear_velocity += *start_direction * *movement.walking_speed;
     let mut angular_velocity =
-        physics::directions_to_angular_velocity(start_direction, end_direction, Rps::new(6.0));
+      physics::directions_to_angular_velocity(start_direction, end_direction, Rps::new(6.0));
     angular_velocity.x = 0.0;
     angular_velocity.z = 0.0;
 
@@ -138,8 +136,7 @@ impl Action for GoToSleep {
 
 // NOTE: Should probably be two sensors: SenseSelf and SenseRest
 #[derive(Debug, Clone, Serialize, Deserialize, Schema, Registerable, Duplicate)]
-pub struct SenseSelf {
-}
+pub struct SenseSelf {}
 
 impl Sensor for SenseSelf {
   fn name(&self) -> &'static str {
@@ -165,17 +162,16 @@ impl Sensor for SenseSelf {
         }
 
         local.insert(transform.clone())
-      },
+      }
       None => {
         blackboard.insert_bool("tired", false);
-      },
+      }
     };
   }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Schema, Registerable, Duplicate)]
-pub struct SenseTimeOfDay {
-}
+pub struct SenseTimeOfDay {}
 
 impl Sensor for SenseTimeOfDay {
   fn name(&self) -> &'static str {
@@ -194,7 +190,7 @@ impl Sensor for SenseTimeOfDay {
     if let Some((_, time_of_day)) = scene.query_one::<&mut TimeOfDay>() {
       let hour = time_of_day.get_hours();
 
-      if hour > 22 || hour < 6 { 
+      if hour > 22 || hour < 6 {
         blackboard.insert_bool("sleepy", true);
       } else if hour > 6 || hour < 8 {
         blackboard.insert_bool("get-ready", true);
@@ -213,8 +209,7 @@ impl Sensor for SenseTimeOfDay {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Schema, Registerable, Duplicate)]
-pub struct SenseHome {
-}
+pub struct SenseHome {}
 
 impl Sensor for SenseHome {
   fn name(&self) -> &'static str {
@@ -230,19 +225,21 @@ impl Sensor for SenseHome {
     blackboard: &mut Blackboard,
     _: Option<Arc<Navmesh>>,
   ) {
-    let (id, entity_transform) = match scene.get_components_mut::<(&IdComponent, &TransformComponent)>(entity) {
-      Some((id, transform)) => (*id, transform.clone()),
-      None => return,
-    };
+    let (id, entity_transform) =
+      match scene.get_components_mut::<(&IdComponent, &TransformComponent)>(entity) {
+        Some((id, transform)) => (*id, transform.clone()),
+        None => return,
+      };
 
     for (_, (transform, home)) in scene.query_mut::<(&TransformComponent, &HouseEntrance)>() {
       if *id == home.owner {
-        let distance = Vector3::metric_distance(
-          &entity_transform.translation,
-          &transform.translation,
-        );
+        let distance =
+          Vector3::metric_distance(&entity_transform.translation, &transform.translation);
 
-        local.insert(HomeLocation { translation: transform.translation, distance: Meters::new(distance) });
+        local.insert(HomeLocation {
+          translation: transform.translation,
+          distance: Meters::new(distance),
+        });
         break;
       }
     }

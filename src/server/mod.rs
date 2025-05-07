@@ -3,15 +3,15 @@ mod network_controller;
 use crate::planners::idling;
 use crate::planners::life;
 use crate::planners::social;
-use crate::shared::inputs;
 use crate::shared::collision;
-use crate::shared::timeofday;
-use crate::shared::pickups;
 use crate::shared::components;
+use crate::shared::inputs;
+use crate::shared::pickups;
+use crate::shared::timeofday;
 use crate::shared::ui_components;
 //use crate::shared::tileset;
-use crate::shared::game_input::GameInput;
 use crate::server::network_controller::NetworkController;
+use crate::shared::game_input::GameInput;
 use engine::systems::hdr::HdrPipeline;
 use engine::systems::Scheduler;
 
@@ -37,7 +37,8 @@ pub async fn main() {
     format!("{}:{}", address, port).parse().unwrap()
   };
 
-  let (hdr, _) = HdrPipeline::<NetworkController, GameInput>::new("resources", rpc_address, session_address);
+  let (hdr, _) =
+    HdrPipeline::<NetworkController, GameInput>::new("resources", rpc_address, session_address);
   let mut scheduler = Scheduler::new(FRAMES_PER_SECOND);
   scheduler.attach_plugin(hdr);
   scheduler.attach_registry::<components::GameComponents>();

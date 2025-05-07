@@ -1,30 +1,20 @@
-use crate::shared::components::{
-  Friend,
-};
-use crate::planners::social::{
-  Friends,
-  FriendLocation,
-};
+use crate::planners::social::{FriendLocation, Friends};
+use crate::shared::components::Friend;
 use engine::{
   application::{
-    components::{TextComponent, LightComponent},
-    scene::{Scene, IdComponent, TransformComponent},
+    components::{LightComponent, TextComponent},
+    scene::{IdComponent, Scene, TransformComponent},
   },
-  systems::{
-    trusty::AssetManager,
-    Backpack, Initializable, Inventory, System,
-  },
-  utils::units::{Seconds, Framerate, Radians},
+  systems::{trusty::AssetManager, Backpack, Initializable, Inventory, System},
+  utils::units::{Framerate, Radians, Seconds},
 };
 use std::f32::consts::PI;
 
-pub struct LoadingSystem {
-}
+pub struct LoadingSystem {}
 
 impl Initializable for LoadingSystem {
   fn initialize(_: &Inventory) -> Self {
-
-    Self { }
+    Self {}
   }
 }
 

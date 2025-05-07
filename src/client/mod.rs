@@ -1,19 +1,8 @@
 mod camera;
 
-use crate::planners::{
-  idling,
-  life,
-  social,
-};
+use crate::planners::{idling, life, social};
 use crate::shared::{
-  inputs,
-  loading,
-  components,
-  ui_components,
-  collision,
-  timeofday,
-  pickups,
-  game_input::GameInput,
+  collision, components, game_input::GameInput, inputs, loading, pickups, timeofday, ui_components,
 };
 use engine::application::bus::BrowserBus;
 //use engine::systems::browser::BrowserActor;

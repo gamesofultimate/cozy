@@ -7,20 +7,23 @@ use engine::{
     goap::{Action, Blackboard, Goal, Sensor},
     scene::{Scene, TransformComponent},
   },
-  utils::{physics, units::{Meters, Rps}},
-  nalgebra::{Vector3, Unit},
+  nalgebra::{Unit, Vector3},
   resources::navmesh::Navmesh,
   systems::{Backpack, Registry},
+  utils::{
+    physics,
+    units::{Meters, Rps},
+  },
   Entity,
 };
 
-use crate::shared::components::{
-  Seat,
-  Character,
-  Movement,
-};
+use crate::shared::components::{Character, Movement, Seat};
 
-pub struct SeatLocation { translation: Vector3<f32>, distance: Meters, resting_factor: f32 }
+pub struct SeatLocation {
+  translation: Vector3<f32>,
+  distance: Meters,
+  resting_factor: f32,
+}
 
 pub struct IdleRegistry {}
 
@@ -95,8 +98,7 @@ impl Action for Nothing {
     return Some((linear_velocity, angular_velocity));
   }
 
-  fn execute(&mut self, _: Entity, _: &mut Scene, _: &mut Backpack, _: &mut Backpack) {
-  }
+  fn execute(&mut self, _: Entity, _: &mut Scene, _: &mut Backpack, _: &mut Backpack) {}
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Schema, Registerable, Duplicate)]
@@ -157,7 +159,8 @@ impl Action for SitDown {
     _navmesh: Option<Arc<Navmesh>>,
   ) -> Option<(Vector3<f32>, Vector3<f32>)> {
     let SeatLocation { translation, .. } = local.get::<SeatLocation>()?;
-    let (transform, movement) = scene.get_components_mut::<(&TransformComponent, &Movement)>(entity)?;
+    let (transform, movement) =
+      scene.get_components_mut::<(&TransformComponent, &Movement)>(entity)?;
 
     let mut start_direction = transform.get_forward_direction().into_inner();
     start_direction.y = 0.0;
@@ -170,7 +173,7 @@ impl Action for SitDown {
     let mut linear_velocity = Vector3::y() * -9.8;
     linear_velocity += *start_direction * *movement.walking_speed;
     let mut angular_velocity =
-        physics::directions_to_angular_velocity(start_direction, end_direction, Rps::new(6.0));
+      physics::directions_to_angular_velocity(start_direction, end_direction, Rps::new(6.0));
     angular_velocity.x = 0.0;
     angular_velocity.z = 0.0;
 
@@ -212,12 +215,12 @@ impl Sensor for SenseSeats {
 
     let mut distance_to_seat = None;
     for (_, (transform, seat)) in scene.query_mut::<(&TransformComponent, &Seat)>() {
-      let distance = Vector3::metric_distance(
-        &entity_transform.translation,
-        &transform.translation,
-      );
+      let distance =
+        Vector3::metric_distance(&entity_transform.translation, &transform.translation);
 
-      if distance > *self.max_distance { continue }
+      if distance > *self.max_distance {
+        continue;
+      }
 
       match distance_to_seat {
         Some((_, current_distance, _)) if distance < current_distance => {
@@ -230,7 +233,11 @@ impl Sensor for SenseSeats {
 
     match distance_to_seat {
       Some((translation, distance, resting_factor)) => {
-        local.insert(SeatLocation { translation, distance: Meters::new(distance), resting_factor });
+        local.insert(SeatLocation {
+          translation,
+          distance: Meters::new(distance),
+          resting_factor,
+        });
         blackboard.insert_bool("found_resting_place", true);
       }
       None => {

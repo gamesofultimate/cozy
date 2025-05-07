@@ -1,9 +1,9 @@
 //pub mod animations;
 pub mod collision;
 pub mod components;
-pub mod ui_components;
 pub mod game_input;
-pub mod timeofday;
-pub mod pickups;
 pub mod inputs;
 pub mod loading;
+pub mod pickups;
+pub mod timeofday;
+pub mod ui_components;

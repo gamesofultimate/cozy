@@ -1,15 +1,13 @@
 use engine::{
   application::scene::{PrefabId, ProvideAssets},
-  systems::Registry,
-  utils::{
-    units::{Kph, Seconds, Framerate},
-  },
-  resources::model::ModelId,
   nalgebra::{Unit, Vector3},
+  resources::model::ModelId,
+  systems::Registry,
+  utils::units::{Framerate, Kph, Seconds},
   Entity,
 };
-use uuid::Uuid;
 use tagged::{Duplicate, Registerable, Schema};
+use uuid::Uuid;
 
 use serde::{Deserialize, Serialize};
 
@@ -40,7 +38,9 @@ impl Registry for GameComponents {
   }
 }
 
-fn default_direction() -> Unit<Vector3<f32>> { Unit::new_normalize(Vector3::new(0.0, 0.0, -1.0)) }
+fn default_direction() -> Unit<Vector3<f32>> {
+  Unit::new_normalize(Vector3::new(0.0, 0.0, -1.0))
+}
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
 pub struct Movement {
   pub walking_speed: Kph,
@@ -98,8 +98,14 @@ impl Level {
     let frames = *duration / *Seconds::from(Framerate::new(16.0));
     let rate = diff / frames;
     self.want = match diff {
-      v if v > 0.0 => Some(ChangeDirection::Add { want: self.current + diff, rate }),
-      v if v < 0.0 => Some(ChangeDirection::Remove { want: self.current + diff, rate }),
+      v if v > 0.0 => Some(ChangeDirection::Add {
+        want: self.current + diff,
+        rate,
+      }),
+      v if v < 0.0 => Some(ChangeDirection::Remove {
+        want: self.current + diff,
+        rate,
+      }),
       _ => None,
     };
   }
@@ -109,8 +115,14 @@ impl Level {
     let frames = *duration / *Seconds::from(Framerate::new(16.0));
     let rate = diff / frames;
     self.want = match diff {
-      v if v > 0.0 => Some(ChangeDirection::Add { want: self.max, rate }),
-      v if v < 0.0 => Some(ChangeDirection::Remove { want: self.max, rate }),
+      v if v > 0.0 => Some(ChangeDirection::Add {
+        want: self.max,
+        rate,
+      }),
+      v if v < 0.0 => Some(ChangeDirection::Remove {
+        want: self.max,
+        rate,
+      }),
       _ => None,
     };
   }
@@ -118,8 +130,14 @@ impl Level {
   pub fn maximize_with_rate(&mut self, rate: f32) {
     let diff = self.max - self.current;
     self.want = match diff {
-      v if v > 0.0 => Some(ChangeDirection::Add { want: self.max, rate }),
-      v if v < 0.0 => Some(ChangeDirection::Remove { want: self.max, rate: -rate }),
+      v if v > 0.0 => Some(ChangeDirection::Add {
+        want: self.max,
+        rate,
+      }),
+      v if v < 0.0 => Some(ChangeDirection::Remove {
+        want: self.max,
+        rate: -rate,
+      }),
       _ => None,
     };
   }
@@ -129,8 +147,14 @@ impl Level {
     let frames = *duration / *Seconds::from(Framerate::new(16.0));
     let rate = diff / frames;
     self.want = match diff {
-      v if v > 0.0 => Some(ChangeDirection::Add { want: self.min, rate }),
-      v if v < 0.0 => Some(ChangeDirection::Remove { want: self.min, rate }),
+      v if v > 0.0 => Some(ChangeDirection::Add {
+        want: self.min,
+        rate,
+      }),
+      v if v < 0.0 => Some(ChangeDirection::Remove {
+        want: self.min,
+        rate,
+      }),
       _ => None,
     };
   }
@@ -152,16 +176,18 @@ impl Level {
     };
     self.current = current;
 
-    if current == want { Some(()) }
-    else { None }
+    if current == want {
+      Some(())
+    } else {
+      None
+    }
   }
 }
 
 impl ProvideAssets for Pickup {}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
-pub struct Player {
-}
+pub struct Player {}
 
 impl ProvideAssets for Player {}
 
@@ -169,7 +195,7 @@ pub enum CharacterState {
   Normal,
   Running,
   CollectingWater,
-  WorkingTile (Entity),
+  WorkingTile(Entity),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
@@ -214,14 +240,12 @@ pub struct Rock {
 impl ProvideAssets for Rock {}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
-pub struct Durability {
-}
+pub struct Durability {}
 
 impl ProvideAssets for Durability {}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
-pub struct Flower {
-}
+pub struct Flower {}
 
 impl ProvideAssets for Flower {}
 
@@ -256,20 +280,17 @@ impl TimeOfDay {
 impl ProvideAssets for TimeOfDay {}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
-pub struct Action {
-}
+pub struct Action {}
 
 impl ProvideAssets for Action {}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
-pub struct Log {
-}
+pub struct Log {}
 
 impl ProvideAssets for Log {}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
-pub struct PickupSpace {
-}
+pub struct PickupSpace {}
 
 impl ProvideAssets for PickupSpace {}
 
@@ -280,13 +301,11 @@ pub struct HouseEntrance {
 impl ProvideAssets for HouseEntrance {}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
-pub struct Friend {
-}
+pub struct Friend {}
 impl ProvideAssets for Friend {}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
-pub struct Tile {
-}
+pub struct Tile {}
 
 impl ProvideAssets for Tile {}
 
@@ -304,14 +323,12 @@ pub struct WaterSource {
 impl ProvideAssets for WaterSource {}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
-pub struct WateredTile {
-}
+pub struct WateredTile {}
 
 impl ProvideAssets for WateredTile {}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
-pub struct CropTile {
-}
+pub struct CropTile {}
 
 impl ProvideAssets for CropTile {}
 

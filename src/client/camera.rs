@@ -1,16 +1,13 @@
-use crate::shared::components::{
-  CameraFollow,
-  Player,
-};
+use crate::shared::components::{CameraFollow, Player};
 
 use engine::{
   application::{
     components::{CameraComponent, SelfComponent},
+    input::InputsReader,
     scene::{Scene, TransformComponent},
-    input::InputsReader, 
   },
-  systems::{rendering::CameraConfig, Backpack, Initializable, Inventory, System},
   nalgebra::{Unit, Vector3},
+  systems::{rendering::CameraConfig, Backpack, Initializable, Inventory, System},
 };
 
 use crate::shared::game_input::GameInput;
@@ -23,20 +20,16 @@ impl Initializable for CameraSystem {
   fn initialize(inventory: &Inventory) -> Self {
     let inputs = inventory.get::<InputsReader<GameInput>>().clone();
 
-    Self {
-      inputs,
-    }
+    Self { inputs }
   }
 }
 
 impl CameraSystem {
   fn update_follow(&mut self, scene: &mut Scene, _: &mut Backpack) {
     let mut camera_transform = None;
-    for (_, (_, _, transform)) in scene.query_mut::<(
-      &SelfComponent,
-      &Player,
-      &mut TransformComponent,
-    )>() {
+    for (_, (_, _, transform)) in
+      scene.query_mut::<(&SelfComponent, &Player, &mut TransformComponent)>()
+    {
       camera_transform = Some(transform.clone());
     }
     for (_, (_, transform)) in scene.query_mut::<(&CameraFollow, &mut TransformComponent)>() {
@@ -47,10 +40,8 @@ impl CameraSystem {
   }
 
   fn update_camera_rotation(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
-    for (_, (transform, camera)) in scene.query_mut::<(
-      &mut TransformComponent,
-      &CameraComponent,
-    )>() {
+    for (_, (transform, camera)) in scene.query_mut::<(&mut TransformComponent, &CameraComponent)>()
+    {
       let direction = transform.world_transform().get_forward_direction();
       //let direction = transform.get_forward_direction();
       if let CameraComponent::Perspective { .. } = camera
@@ -63,10 +54,8 @@ impl CameraSystem {
   }
 
   fn update_camera_translation(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
-    for (_, (transform, camera)) in scene.query_mut::<(
-      &mut TransformComponent,
-      &CameraComponent,
-    )>() {
+    for (_, (transform, camera)) in scene.query_mut::<(&mut TransformComponent, &CameraComponent)>()
+    {
       let camera_position = transform.world_transform();
 
       if let CameraComponent::Perspective {

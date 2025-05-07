@@ -14,8 +14,8 @@ use wasm_bindgen::prelude::*;
 #[cfg(not(target_arch = "wasm32"))]
 mod server;
 
-mod shared;
 mod planners;
+mod shared;
 
 #[cfg(target_arch = "wasm32")]
 #[wasm_bindgen]

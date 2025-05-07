@@ -79,15 +79,19 @@ impl ChannelEvents for NetworkController {
 
     log::info!("PLAYER CONNECTED!!! {:?}", &connection_id);
 
-    scene.spawn_prefab_and_children_with("Player", |prefab| {
-      if let Some((_, username)) = &player {
-        prefab.tag.name = username.to_string();
-      };
+    scene.spawn_prefab_and_children_with(
+      "Player",
+      |prefab| {
+        if let Some((_, username)) = &player {
+          prefab.tag.name = username.to_string();
+        };
 
-      prefab.push(NetworkedPlayerComponent::new(connection_id));
-    }, |prefab| {
-      prefab.push(NetworkedPlayerComponent::new(connection_id));
-    });
+        prefab.push(NetworkedPlayerComponent::new(connection_id));
+      },
+      |prefab| {
+        prefab.push(NetworkedPlayerComponent::new(connection_id));
+      },
+    );
 
     self
       .server

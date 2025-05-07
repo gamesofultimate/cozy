@@ -1,17 +1,17 @@
 use engine::systems::Backpack;
 use engine::{
   application::devices::{
-    ButtonState, DeviceEvent, GamepadEvent, KeyboardEvent, KeyboardKey, MouseButton, MouseEvent,
-    WindowEvent, GamepadButton,
+    ButtonState, DeviceEvent, GamepadButton, GamepadEvent, KeyboardEvent, KeyboardKey, MouseButton,
+    MouseEvent, WindowEvent,
   },
   application::input::Input,
-  utils::units::Seconds,
   nalgebra::Vector2,
+  utils::units::Seconds,
 };
 
+use bitflags::bitflags;
 use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
-use bitflags::bitflags;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GameInput {
@@ -215,22 +215,22 @@ impl GameInput {
     match event {
       DeviceEvent::Window(WindowEvent::Focus) => {
         self.state |= InputState::IsFocused;
-      },
+      }
       DeviceEvent::Window(WindowEvent::Blur) => {
         self.state -= InputState::IsFocused;
-      },
+      }
       DeviceEvent::Window(WindowEvent::CaptureMouse) => {
         self.state |= InputState::IsMouseLocked;
-      },
+      }
       DeviceEvent::Window(WindowEvent::ReleaseMouse) => {
         self.state -= InputState::IsMouseLocked;
-      },
+      }
       DeviceEvent::Window(WindowEvent::RequestFullscreen) => {
         self.state |= InputState::IsFullscreen;
-      },
+      }
       DeviceEvent::Window(WindowEvent::ReleaseFullscreen) => {
         self.state -= InputState::IsFullscreen;
-      },
+      }
       _ => {}
     }
   }
@@ -255,7 +255,6 @@ impl Input for GameInput {
   }
 
   fn from_devices(&mut self, event: DeviceEvent, _: Seconds) {
-
     self.handle_keyboard(event);
     if self.horizontal.len() == 1 {
       if self.horizontal.contains(&KeyboardKey::Right) {
