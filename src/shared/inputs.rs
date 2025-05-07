@@ -74,20 +74,20 @@ impl InputsSystem {
       &mut InputComponent,
       &GameInput,
       &PhysicsComponent,
-      &mut Character,
+      &mut CharacterState,
       &mut Movement,
       &mut TransformComponent,
       Option<&mut AudioSourceComponent>,
     )>() {
 
-      if input.state.contains(InputState::IsRunning) && let CharacterState::Normal = character.state {
-        character.state = CharacterState::Running;
+      if input.state.contains(InputState::IsRunning) && let CharacterState::Normal = character {
+        *character = CharacterState::Running;
       }
-      if !input.state.contains(InputState::IsRunning) && let CharacterState::Running = character.state {
-        character.state = CharacterState::Normal;
+      if !input.state.contains(InputState::IsRunning) && let CharacterState::Running = character {
+        *character = CharacterState::Normal;
       }
 
-      let speed = match character.state {
+      let speed = match character {
         CharacterState::Normal => movement.walking_speed,
         CharacterState::Running => movement.running_speed,
         _ => Kph::new(0.0),

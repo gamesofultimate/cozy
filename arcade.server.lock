@@ -251,7 +251,7 @@
       "tag": "Struct",
       "name": "Character",
       "label": "Character",
-      "default_values": "{ cash: 0, hunger: { current: 0.0, max: 0.0, min: 0.0 }, rest: { current: 0.0, max: 0.0, min: 0.0 }, social: { current: 0.0, max: 0.0, min: 0.0 }, state: \"Normal\" }",
+      "default_values": "{ cash: 0, hunger: { current: 0.0, max: 0.0, min: 0.0 }, rest: { current: 0.0, max: 0.0, min: 0.0 }, social: { current: 0.0, max: 0.0, min: 0.0 } }",
       "duplicate_values": "null",
       "docs": null,
       "fields": [
@@ -428,50 +428,6 @@
                   "default_values": "0.0",
                   "duplicate_values": "null"
                 }
-              }
-            ],
-            "private": false
-          }
-        },
-        {
-          "name": "state",
-          "label": "State",
-          "docs": null,
-          "ty": {
-            "tag": "Enum",
-            "name": "CharacterState",
-            "label": "Character State",
-            "default_values": "\"Normal\"",
-            "duplicate_values": "null",
-            "docs": null,
-            "variants": [
-              {
-                "tag": "Unit",
-                "name": "Normal",
-                "docs": null,
-                "default_values": "\"Normal\"",
-                "duplicate_values": "null"
-              },
-              {
-                "tag": "Unit",
-                "name": "Running",
-                "docs": null,
-                "default_values": "\"Running\"",
-                "duplicate_values": "null"
-              },
-              {
-                "tag": "Unit",
-                "name": "CollectingWater",
-                "docs": null,
-                "default_values": "\"CollectingWater\"",
-                "duplicate_values": "null"
-              },
-              {
-                "tag": "Unit",
-                "name": "WorkingTile",
-                "docs": null,
-                "default_values": "\"WorkingTile\"",
-                "duplicate_values": "null"
               }
             ],
             "private": false
@@ -2248,6 +2204,39 @@
       "duplicate_values": "null",
       "docs": "Marks this component as one that can be used as a Prefab. Prefabs are not instantiated automatically\nand must be created manually during gameplay.",
       "fields": [],
+      "private": false
+    },
+    {
+      "tag": "Struct",
+      "name": "Preloader",
+      "label": "Preloader",
+      "default_values": "{ models: [] }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [
+        {
+          "name": "models",
+          "label": "Models",
+          "docs": null,
+          "ty": {
+            "tag": "Type",
+            "name": "Vec",
+            "default_values": "[]",
+            "duplicate_values": "null",
+            "ty": {
+              "tag": "Vector",
+              "data": {
+                "tag": "Reference",
+                "name": "Identifiable",
+                "reference": "Model",
+                "default_values": "(() => { \n            return Symbol.for(\"ModelId\");\n           })()",
+                "duplicate_values": "null",
+                "ty": "ModelId"
+              }
+            }
+          }
+        }
+      ],
       "private": false
     },
     {

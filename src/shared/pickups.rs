@@ -12,6 +12,7 @@ use crate::shared::components::{
   Tile,
   WaterCan,
   WaterSource,
+  WateredTile,
   CharacterState,
 };
 use engine::{
@@ -71,19 +72,19 @@ impl PickupsSystem {
   pub fn handle_water_sources(&self, scene: &mut Scene, backpack: &mut Backpack) {
     let delta_time = backpack.get::<Seconds>().unwrap();
 
-    for (_, (input, character, can, collision)) in scene.query_mut::<(&GameInput, &mut Character, &mut WaterCan, &Collision<Action, WaterSource>)>() {
+    for (_, (input, character, can, collision)) in scene.query_mut::<(&GameInput, &mut CharacterState, &mut WaterCan, &Collision<Action, WaterSource>)>() {
       if input.check(InputState::Action)
-        && let CharacterState::Normal | CharacterState::Running = character.state
+        && let CharacterState::Normal | CharacterState::Running = character
       {
-        character.state = CharacterState::CollectingWater;
+        *character = CharacterState::CollectingWater;
         can.level.maximize_with_rate(0.125);
       }
     }
 
-    for (_, (input, character, can)) in scene.query_mut::<(&GameInput, &mut Character, &mut WaterCan)>() {
-      if let CharacterState::CollectingWater = character.state {
+    for (_, (input, character, can)) in scene.query_mut::<(&GameInput, &mut CharacterState, &mut WaterCan)>() {
+      if let CharacterState::CollectingWater = character {
         if let Some(_) = can.level.tick() {
-          character.state = CharacterState::Normal;
+          *character = CharacterState::Normal;
         }
       }
     }
@@ -101,31 +102,62 @@ impl PickupsSystem {
   pub fn handle_watering_tiles(&self, scene: &mut Scene, backpack: &mut Backpack) {
     let delta_time = backpack.get::<Seconds>().unwrap();
 
-    for (_, (input, character, can, collision)) in scene.query_mut::<(&GameInput, &mut Character, &mut WaterCan, &Collision<Action, Tile>)>() {
+    for (_, (input, character, can, collision)) in scene
+      .query_mut::<(&GameInput, &mut CharacterState, &mut WaterCan, &Collision<Action, Tile>)>()
+      .without::<WateredTile>()
+    {
       if input.check(InputState::Action)
         && can.level.current > 1.0
-        && let CharacterState::Normal | CharacterState::Running = character.state
+        && let CharacterState::Normal | CharacterState::Running = character
       {
-        character.state = CharacterState::WorkingTile;
+        *character = CharacterState::WorkingTile(collision.other);
         can.level.change_by(-1.0, Seconds::new(4.0));
       }
     }
 
-    for (_, (input, character, can)) in scene.query_mut::<(&GameInput, &mut Character, &mut WaterCan)>() {
-      if let CharacterState::WorkingTile = character.state {
+    let mut working_tile = None;
+    for (_, (input, character, can)) in scene.query_mut::<(&GameInput, &mut CharacterState, &mut WaterCan)>() {
+      if let CharacterState::WorkingTile(entity) = character {
         if let Some(_) = can.level.tick() {
-          character.state = CharacterState::Normal;
+          working_tile = Some(*entity);
+          *character = CharacterState::Normal;
         }
       }
     }
 
-    for (_, (model, _, maybe_collision)) in scene.query_mut::<(&mut ModelComponent, &Tile, Option<&Collision<Action, Tile>>)>() {
+    {
+      
+      if let Some(tile_entity) = working_tile
+        && let Some(prefab) = scene.get_parent_prefab_owned("Prefab::Wet Dirt")
+        && let Some(model) = prefab.get::<ModelComponent>()
+      {
+        log::info!("model: {model:?}");
+        scene.add_local_component(tile_entity, WateredTile {});
+        scene.add_component(tile_entity, model.clone());
+      }
+    }
+
+    for (_, (model, _, maybe_collision)) in scene
+      .query_mut::<(&mut ModelComponent, &Tile, Option<&Collision<Action, Tile>>)>()
+      .without::<WateredTile>()
+    {
       if let Some(_) = maybe_collision {
         model.color = Vector3::new(1.0, 1.0, 0.0);
         model.color_intensity = 0.1;
       } else {
         model.color_intensity = 0.0;
       }
+    }
+  }
+
+  pub fn handle_add_state(&self, scene: &mut Scene) {
+    let mut entities = vec![];
+    for (entity, _) in scene.query_mut::<&Character>().without::<CharacterState>() {
+      entities.push(entity);
+    }
+
+    for entity in entities {
+      scene.add_local_component(entity, CharacterState::Normal);
     }
   }
 
@@ -154,6 +186,7 @@ impl System for PickupsSystem {
   }
 
   fn run(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
+    self.handle_add_state(scene);
     self.handle_pickup(scene);
     self.handle_water_sources(scene, backpack);
     self.handle_watering_tiles(scene, backpack);

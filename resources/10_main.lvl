@@ -124,6 +124,15 @@
                 "should_cast_shadows": false
               }
             }
+          },
+          {
+            "Preloader": {
+              "models": [
+                "9fb4859d-187f-4b3c-a7c8-4c6aea3452d8",
+                "a152f452-89a5-49d7-bc66-0ca3cadf90d4",
+                "049b3d93-911d-4919-a128-cc0c5d06fcb0"
+              ]
+            }
           }
         ]
       },
@@ -10409,7 +10418,7 @@
       "59996524-6a00-44fc-ab48-44315e78e291": {
         "id": "59996524-6a00-44fc-ab48-44315e78e291",
         "tag": {
-          "name": "Prefab::Tile"
+          "name": "Prefab::Tile Dirt"
         },
         "transform": {
           "transform": {
@@ -10707,6 +10716,116 @@
             "InventoryDisplay": {}
           }
         ]
+      },
+      "315a5d8b-661c-4927-b9b7-f5533ddad92a": {
+        "id": "315a5d8b-661c-4927-b9b7-f5533ddad92a",
+        "tag": {
+          "name": "Prefab::Wet Dirt"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              -52.596397,
+              0,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "ModelComponent": {
+              "cast_shadows": true,
+              "id": "049b3d93-911d-4919-a128-cc0c5d06fcb0",
+              "skip": false,
+              "transform": {
+                "rotation": [
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ],
+                "translation": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0
+            }
+          },
+          {
+            "Tile": {}
+          },
+          {
+            "PrefabProviderComponent": {}
+          },
+          {
+            "PhysicsComponent": {
+              "debug": false,
+              "id": "e9571a08-5a41-4e98-a95e-b44a92e02617",
+              "joint": {
+                "body": {
+                  "allow_rotation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "allow_translation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "ccd": false,
+                  "collider_type": {
+                    "Cube": {
+                      "height": 0.1,
+                      "length": 1,
+                      "width": 1
+                    }
+                  },
+                  "density": 1,
+                  "dynamic_type": "Static",
+                  "friction": 0.1,
+                  "id": "6df63714-d155-4ddd-becb-e2a6015b5bfb",
+                  "is_sensor": true,
+                  "restitution": 0.1,
+                  "groups": {
+                    "memberships": "0b10000000000000000000000000000000",
+                    "filters": "0b01111111111111111111111111111111"
+                  }
+                },
+                "config": null,
+                "id": "365fff76-d761-4273-888c-2887119e424b",
+                "name": "Joint",
+                "offset": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        ]
       }
     },
     "models": {
@@ -10878,6 +10997,11 @@
       "2535a0d4-0de9-4b3a-ba8c-3d6be1f9a2bc": {
         "id": "2535a0d4-0de9-4b3a-ba8c-3d6be1f9a2bc",
         "source": "models/large-grounds/static/SM_GroundAndFence.gltf",
+        "maxInstances": 10
+      },
+      "049b3d93-911d-4919-a128-cc0c5d06fcb0": {
+        "id": "049b3d93-911d-4919-a128-cc0c5d06fcb0",
+        "source": "models/tiles/WetDirt/SM_DirtWet.gltf",
         "maxInstances": 10
       }
     },

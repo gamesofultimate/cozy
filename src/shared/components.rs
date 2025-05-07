@@ -4,8 +4,11 @@ use engine::{
   utils::{
     units::{Kph, Seconds, Framerate},
   },
+  resources::model::ModelId,
   nalgebra::{Unit, Vector3},
+  Entity,
 };
+use uuid::Uuid;
 use tagged::{Duplicate, Registerable, Schema};
 
 use serde::{Deserialize, Serialize};
@@ -33,6 +36,7 @@ impl Registry for GameComponents {
     PickupSpace::register();
     HouseEntrance::register();
     Tile::register();
+    Preloader::register();
   }
 }
 
@@ -161,12 +165,11 @@ pub struct Player {
 
 impl ProvideAssets for Player {}
 
-#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
 pub enum CharacterState {
   Normal,
   Running,
   CollectingWater,
-  WorkingTile,
+  WorkingTile (Entity),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
@@ -175,7 +178,6 @@ pub struct Character {
   pub rest: Level,
   pub social: Level,
   pub hunger: Level,
-  pub state: CharacterState,
 }
 
 impl ProvideAssets for Character {}
@@ -300,3 +302,29 @@ pub struct WaterSource {
 }
 
 impl ProvideAssets for WaterSource {}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct WateredTile {
+}
+
+impl ProvideAssets for WateredTile {}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct CropTile {
+}
+
+impl ProvideAssets for CropTile {}
+
+// NOTE: Anti-pattern. We should revisit this.
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct Preloader {
+  models: Vec<ModelId>,
+}
+
+impl ProvideAssets for Preloader {
+  fn provide_assets(&self, ids: &mut Vec<Uuid>) {
+    for model in &self.models {
+      ids.push(**model);
+    }
+  }
+}
