@@ -26,7 +26,7 @@ impl Registry for GameComponents {
     Rock::register();
     Durability::register();
     Crop::register();
-    Flower::register();
+    Seeds::register();
     Seat::register();
     TimeOfDay::register();
     Action::register();
@@ -204,14 +204,17 @@ pub struct Character {
   pub rest: Level,
   pub social: Level,
   pub hunger: Level,
+  pub action: ActionTypes,
 }
 
 impl ProvideAssets for Character {}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
 pub enum Stage {
-  Seed,
-  Sprout,
+  Seeds,
+  Seedling,
+  Flowering,
+  //Sprout,
   Mature,
 }
 
@@ -224,7 +227,7 @@ impl ProvideAssets for WaterCan {}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
 pub struct Crop {
-  pub stage: Level,
+  pub stage: Stage,
   pub season_start: u32,
   pub season_end: u32,
   pub growth_phases: u32,
@@ -243,11 +246,6 @@ impl ProvideAssets for Rock {}
 pub struct Durability {}
 
 impl ProvideAssets for Durability {}
-
-#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
-pub struct Flower {}
-
-impl ProvideAssets for Flower {}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
 pub struct Seat {
@@ -280,7 +278,19 @@ impl TimeOfDay {
 impl ProvideAssets for TimeOfDay {}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
-pub struct Action {}
+pub enum SeedTypes {
+  Pumpkin,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub enum ActionTypes {
+  WaterTile,
+  PlantSeed,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct Action {
+}
 
 impl ProvideAssets for Action {}
 
@@ -331,6 +341,13 @@ impl ProvideAssets for WateredTile {}
 pub struct CropTile {}
 
 impl ProvideAssets for CropTile {}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct Seeds {
+  pub pumpkins: usize,
+}
+
+impl ProvideAssets for Seeds {}
 
 // NOTE: Anti-pattern. We should revisit this.
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]

@@ -40,12 +40,11 @@ engine = { path = "../../engine", features = [
 #engine = { version = "=0.4.253", features = [
   "new-input",
   "disjoint-timer",
-  #"enable-physics-debugging",
+  "enable-physics-debugging",
   "brotli",
   "fast-physics",
   #"debug-goap",
   #"physics-networking",
-  #"fake-tilesets",
 ], registry = "ultimate-shared" }
 
 #tagged = { path = "../../tagged" }

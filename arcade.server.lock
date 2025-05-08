@@ -251,7 +251,7 @@
       "tag": "Struct",
       "name": "Character",
       "label": "Character",
-      "default_values": "{ cash: 0, hunger: { current: 0.0, max: 0.0, min: 0.0 }, rest: { current: 0.0, max: 0.0, min: 0.0 }, social: { current: 0.0, max: 0.0, min: 0.0 } }",
+      "default_values": "{ action: \"WaterTile\", cash: 0, hunger: { current: 0.0, max: 0.0, min: 0.0 }, rest: { current: 0.0, max: 0.0, min: 0.0 }, social: { current: 0.0, max: 0.0, min: 0.0 } }",
       "duplicate_values": "null",
       "docs": null,
       "fields": [
@@ -432,6 +432,36 @@
             ],
             "private": false
           }
+        },
+        {
+          "name": "action",
+          "label": "Action",
+          "docs": null,
+          "ty": {
+            "tag": "Enum",
+            "name": "ActionTypes",
+            "label": "Action Types",
+            "default_values": "\"WaterTile\"",
+            "duplicate_values": "null",
+            "docs": null,
+            "variants": [
+              {
+                "tag": "Unit",
+                "name": "WaterTile",
+                "docs": null,
+                "default_values": "\"WaterTile\"",
+                "duplicate_values": "null"
+              },
+              {
+                "tag": "Unit",
+                "name": "PlantSeed",
+                "docs": null,
+                "default_values": "\"PlantSeed\"",
+                "duplicate_values": "null"
+              }
+            ],
+            "private": false
+          }
         }
       ],
       "private": false
@@ -440,7 +470,7 @@
       "tag": "Struct",
       "name": "Crop",
       "label": "Crop",
-      "default_values": "{ growth_phases: 0, season_end: 0, season_start: 0, stage: { current: 0.0, max: 0.0, min: 0.0 } }",
+      "default_values": "{ growth_phases: 0, season_end: 0, season_start: 0, stage: \"Seeds\" }",
       "duplicate_values": "null",
       "docs": null,
       "fields": [
@@ -449,51 +479,40 @@
           "label": "Stage",
           "docs": null,
           "ty": {
-            "tag": "Struct",
-            "name": "Level",
-            "label": "Level",
-            "default_values": "{ current: 0.0, max: 0.0, min: 0.0 }",
+            "tag": "Enum",
+            "name": "Stage",
+            "label": "Stage",
+            "default_values": "\"Seeds\"",
             "duplicate_values": "null",
             "docs": null,
-            "fields": [
+            "variants": [
               {
-                "name": "current",
-                "label": "Current",
+                "tag": "Unit",
+                "name": "Seeds",
                 "docs": null,
-                "ty": {
-                  "tag": "Primitive",
-                  "ty": {
-                    "tag": "F32"
-                  },
-                  "default_values": "0.0",
-                  "duplicate_values": "null"
-                }
+                "default_values": "\"Seeds\"",
+                "duplicate_values": "null"
               },
               {
-                "name": "min",
-                "label": "Min",
+                "tag": "Unit",
+                "name": "Seedling",
                 "docs": null,
-                "ty": {
-                  "tag": "Primitive",
-                  "ty": {
-                    "tag": "F32"
-                  },
-                  "default_values": "0.0",
-                  "duplicate_values": "null"
-                }
+                "default_values": "\"Seedling\"",
+                "duplicate_values": "null"
               },
               {
-                "name": "max",
-                "label": "Max",
+                "tag": "Unit",
+                "name": "Flowering",
                 "docs": null,
-                "ty": {
-                  "tag": "Primitive",
-                  "ty": {
-                    "tag": "F32"
-                  },
-                  "default_values": "0.0",
-                  "duplicate_values": "null"
-                }
+                "default_values": "\"Flowering\"",
+                "duplicate_values": "null"
+              },
+              {
+                "tag": "Unit",
+                "name": "Mature",
+                "docs": null,
+                "default_values": "\"Mature\"",
+                "duplicate_values": "null"
               }
             ],
             "private": false
@@ -575,16 +594,6 @@
       "tag": "Struct",
       "name": "Durability",
       "label": "Durability",
-      "default_values": "{  }",
-      "duplicate_values": "null",
-      "docs": null,
-      "fields": [],
-      "private": false
-    },
-    {
-      "tag": "Struct",
-      "name": "Flower",
-      "label": "Flower",
       "default_values": "{  }",
       "duplicate_values": "null",
       "docs": null,
@@ -2333,6 +2342,30 @@
               "tag": "F32"
             },
             "default_values": "0.0",
+            "duplicate_values": "null"
+          }
+        }
+      ],
+      "private": false
+    },
+    {
+      "tag": "Struct",
+      "name": "Seeds",
+      "label": "Seeds",
+      "default_values": "{ pumpkins: 0 }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [
+        {
+          "name": "pumpkins",
+          "label": "Pumpkins",
+          "docs": null,
+          "ty": {
+            "tag": "Primitive",
+            "ty": {
+              "tag": "USize"
+            },
+            "default_values": "0",
             "duplicate_values": "null"
           }
         }

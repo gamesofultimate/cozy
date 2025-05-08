@@ -41,9 +41,13 @@ bitflags! {
     const HasJoystick            = 0b00000000000000000000000000010000;
     const LeftClick              = 0b00000000000000000000000000100000;
     const Escape                 = 0b00000000000000000000000001000000;
-    const Action                 = 0b00000000000000000000000010000000;
-    const IsRunning              = 0b00000000000000000000000100000000;
-    const ToggleDebugPerformance = 0b00000000000000000000001000000000;
+    const IsRunning              = 0b00000000000000000000000010000000;
+    const ToggleDebugPerformance = 0b00000000000000000000000100000000;
+    const ToggleDebugPhysics     = 0b00000000000000000000001000000000;
+
+    const Action                 = 0b00000000000000000000010000000000;
+    const ChangeActionUp         = 0b00000000000000000000100000000000;
+    const ChangeActionDown       = 0b00000000000000000001000000000000;
   }
 }
 
@@ -86,6 +90,43 @@ impl GameInput {
         GamepadEvent::Button(ButtonState::Up, GamepadButton::RightShoulder),
       ) => {
         self.state -= InputState::IsRunning;
+      }
+
+      DeviceEvent::Gamepad(
+        _,
+        GamepadEvent::Button(ButtonState::Down, GamepadButton::X),
+      ) => {
+        self.state |= InputState::Action;
+      }
+      DeviceEvent::Gamepad(
+        _,
+        GamepadEvent::Button(ButtonState::Up, GamepadButton::X),
+      ) => {
+        self.state -= InputState::Action;
+      }
+      DeviceEvent::Gamepad(
+        _,
+        GamepadEvent::Button(ButtonState::Down, GamepadButton::LeftTrigger),
+      ) => {
+        self.state |= InputState::ChangeActionDown;
+      }
+      DeviceEvent::Gamepad(
+        _,
+        GamepadEvent::Button(ButtonState::Up, GamepadButton::LeftTrigger),
+      ) => {
+        self.state -= InputState::ChangeActionDown;
+      }
+      DeviceEvent::Gamepad(
+        _,
+        GamepadEvent::Button(ButtonState::Down, GamepadButton::RightTrigger),
+      ) => {
+        self.state |= InputState::ChangeActionUp;
+      }
+      DeviceEvent::Gamepad(
+        _,
+        GamepadEvent::Button(ButtonState::Up, GamepadButton::RightTrigger),
+      ) => {
+        self.state -= InputState::ChangeActionUp;
       }
       _ => {}
     }
@@ -147,6 +188,18 @@ impl GameInput {
       DeviceEvent::Keyboard(KeyboardEvent::Button(ButtonState::Down, KeyboardKey::P)) => {
         self.state |= InputState::ToggleDebugPerformance;
       }
+      DeviceEvent::Keyboard(KeyboardEvent::Button(ButtonState::Down, KeyboardKey::O)) => {
+        self.state |= InputState::ToggleDebugPhysics;
+      }
+
+      // <
+      DeviceEvent::Keyboard(KeyboardEvent::Button(ButtonState::Down, KeyboardKey::Comma)) => {
+        self.state |= InputState::ChangeActionDown;
+      }
+      // >
+      DeviceEvent::Keyboard(KeyboardEvent::Button(ButtonState::Down, KeyboardKey::Period)) => {
+        self.state |= InputState::ChangeActionUp;
+      }
       // End: Keyboard down
 
       // Start: Keyboard up
@@ -185,6 +238,18 @@ impl GameInput {
       }
       DeviceEvent::Keyboard(KeyboardEvent::Button(ButtonState::Up, KeyboardKey::P)) => {
         self.state -= InputState::ToggleDebugPerformance;
+      }
+      DeviceEvent::Keyboard(KeyboardEvent::Button(ButtonState::Up, KeyboardKey::O)) => {
+        self.state -= InputState::ToggleDebugPhysics;
+      }
+
+      // <
+      DeviceEvent::Keyboard(KeyboardEvent::Button(ButtonState::Up, KeyboardKey::Comma)) => {
+        self.state -= InputState::ChangeActionDown;
+      }
+      // >
+      DeviceEvent::Keyboard(KeyboardEvent::Button(ButtonState::Up, KeyboardKey::Period)) => {
+        self.state -= InputState::ChangeActionUp;
       }
 
       _ => {}
@@ -248,6 +313,10 @@ impl Input for GameInput {
   fn reset(&mut self) {
     self.delta.x = 0.0;
     self.delta.y = 0.0;
+    self.state -= InputState::ChangeActionDown;
+    self.state -= InputState::ChangeActionUp;
+    self.state -= InputState::ToggleDebugPhysics;
+    self.state -= InputState::ToggleDebugPerformance;
   }
 
   fn has_mouse_lock(&self) -> bool {

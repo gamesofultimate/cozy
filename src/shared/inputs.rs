@@ -62,6 +62,9 @@ impl InputsSystem {
       if input.state.contains(InputState::ToggleDebugPerformance) {
         world.debug_performance = !world.debug_performance;
       }
+      if input.state.contains(InputState::ToggleDebugPhysics) {
+        world.debug_physics = !world.debug_physics;
+      }
     }
   }
 

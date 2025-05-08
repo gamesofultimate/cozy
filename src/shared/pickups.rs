@@ -1,6 +1,7 @@
 use crate::shared::components::{
   Action, Character, CharacterState, Log, Pickup, PickupSpace, Tile, TimeOfDay, WaterCan,
   WaterSource, WateredTile,
+  Seeds, ActionTypes,
 };
 use crate::shared::game_input::{GameInput, InputState};
 use crate::shared::ui_components::InventoryDisplay;
@@ -28,6 +29,25 @@ impl Initializable for PickupsSystem {
 }
 
 impl PickupsSystem {
+  pub fn handle_select_action(&self, scene: &mut Scene) {
+    for (_, (input, character)) in
+      scene.query_mut::<(&GameInput, &mut Character)>()
+    {
+      if input.check(InputState::ChangeActionUp) {
+        character.action = match character.action {
+          ActionTypes::WaterTile => ActionTypes::PlantSeed,
+          ActionTypes::PlantSeed => ActionTypes::WaterTile,
+        };
+      }
+      if input.check(InputState::ChangeActionDown) {
+        character.action = match character.action {
+          ActionTypes::WaterTile => ActionTypes::PlantSeed,
+          ActionTypes::PlantSeed => ActionTypes::WaterTile,
+        };
+      }
+    }
+  }
+
   pub fn handle_pickup(&self, scene: &mut Scene) {
     let mut spaces = HashMap::new();
     for (_, (id, network, _)) in
@@ -113,9 +133,10 @@ impl PickupsSystem {
   pub fn handle_watering_tiles(&self, scene: &mut Scene, backpack: &mut Backpack) {
     let delta_time = backpack.get::<Seconds>().unwrap();
 
-    for (_, (input, character, can, collision)) in scene
+    for (_, (input, character, state, can, collision)) in scene
       .query_mut::<(
         &GameInput,
+        &mut Character,
         &mut CharacterState,
         &mut WaterCan,
         &Collision<Action, Tile>,
@@ -123,10 +144,11 @@ impl PickupsSystem {
       .without::<WateredTile>()
     {
       if input.check(InputState::Action)
-        && can.level.current > 1.0
-        && let CharacterState::Normal | CharacterState::Running = character
+        && let ActionTypes::WaterTile = character.action
+        && can.level.current >= 1.0
+        && let CharacterState::Normal | CharacterState::Running = state
       {
-        *character = CharacterState::WorkingTile(collision.other);
+        *state = CharacterState::WorkingTile(collision.other);
         can.level.change_by(-1.0, Seconds::new(4.0));
       }
     }
@@ -148,7 +170,7 @@ impl PickupsSystem {
         && let Some(prefab) = scene.get_parent_prefab_owned("Prefab::Wet Dirt")
         && let Some(model) = prefab.get::<ModelComponent>()
       {
-        scene.add_local_component(tile_entity, WateredTile {});
+        scene.add_component(tile_entity, WateredTile {});
         scene.add_component(tile_entity, model.clone());
       }
     }
@@ -178,10 +200,10 @@ impl PickupsSystem {
   }
 
   pub fn handle_update_ui(&self, scene: &mut Scene) {
-    let (character, maybe_water) =
-      match scene.query_one::<(&SelfComponent, &Character, Option<&WaterCan>)>() {
+    let (character, seeds, maybe_water) =
+      match scene.query_one::<(&SelfComponent, &Character, &Seeds, Option<&WaterCan>)>() {
+        Some((entity, (_, character, seeds, water))) => (character.clone(), seeds.clone(), water.cloned()),
         None => return,
-        Some((entity, (_, character, water))) => (character.clone(), water.cloned()),
       };
 
     if let Some((_, (text, _))) = scene.query_one::<(&mut TextComponent, &InventoryDisplay)>() {
@@ -190,6 +212,18 @@ impl PickupsSystem {
       if let Some(water) = maybe_water {
         texts.push(format!("Water: {:03.2}%", water.level.percent() * 100.0));
       }
+
+      texts.push(format!("---"));
+      texts.push(format!("Seeds"));
+      texts.push(format!("Pumpking: {:}", seeds.pumpkins));
+      texts.push(format!("---"));
+      texts.push(format!("Action"));
+      texts.push(match character.action {
+        ActionTypes::WaterTile => format!("Water tile"),
+        ActionTypes::PlantSeed => format!("Plant pumpkin"),
+      });
+
+      texts.push(format!("---"));
 
       texts.push(format!("Cash: {:}", character.cash));
       text.text = texts.join("\n");
@@ -203,6 +237,7 @@ impl System for PickupsSystem {
   }
 
   fn run(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
+    self.handle_select_action(scene);
     self.handle_add_state(scene);
     self.handle_pickup(scene);
     self.handle_water_sources(scene, backpack);
