@@ -58,7 +58,7 @@ pub fn main(
   scheduler.attach_system::<pickups::PickupsSystem>();
   //scheduler.attach_system::<tileset::TilesetSystem>();
   scheduler.attach_system::<collision::CollisionSystem>();
-  scheduler.attach_system::<camera::CameraSystem>();
+  scheduler.attach_middleware_with_subsystem::<camera::CameraMiddleware, camera::CameraSubsystem>();
 
   scheduler
 }

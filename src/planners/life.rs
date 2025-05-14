@@ -4,7 +4,7 @@ use tagged::{Duplicate, Registerable, Schema};
 
 use engine::{
   application::{
-    goap::{Action, Blackboard, Goal, Sensor},
+    goap::{Action, Blackboard, Goal, Sensor, Execution},
     scene::{IdComponent, Scene, TransformComponent},
   },
   nalgebra::{Unit, Vector3},
@@ -87,11 +87,12 @@ impl Action for GoToSleep {
     blackboard.insert_bool("laying-down", true);
   }
 
-  fn within_range(&mut self, local: &Backpack, _: Option<Arc<Navmesh>>) -> bool {
-    if let Some(seat) = local.get::<HomeLocation>() {
-      seat.distance < Meters::new(1.6)
+  fn within_range(&mut self, local: &Backpack, _: Option<Arc<Navmesh>>) -> Option<Execution> {
+    let seat = local.get::<HomeLocation>()?;
+    if seat.distance < Meters::new(1.6) {
+      Some(Execution::Execute)
     } else {
-      false
+      None
     }
   }
 

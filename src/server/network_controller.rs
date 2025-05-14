@@ -85,7 +85,7 @@ impl ChannelEvents for NetworkController {
         if let Some((_, username)) = &player {
           prefab.tag.name = username.to_string();
         };
-
+        log::info!("where am i? {:?}", &prefab.transform.translation);
         prefab.push(NetworkedPlayerComponent::new(connection_id));
       },
       |prefab| {

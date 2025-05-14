@@ -4,7 +4,7 @@ use tagged::{Duplicate, Registerable, Schema};
 
 use engine::{
   application::{
-    goap::{Action, Blackboard, Goal, Sensor},
+    goap::{Action, Blackboard, Goal, Sensor, Execution},
     scene::{Scene, TransformComponent},
   },
   nalgebra::{Unit, Vector3},
@@ -80,8 +80,8 @@ impl Action for Nothing {
     blackboard.insert_bool("bored", true);
   }
 
-  fn within_range(&mut self, _: &Backpack, _: Option<Arc<Navmesh>>) -> bool {
-    false
+  fn within_range(&mut self, _: &Backpack, _: Option<Arc<Navmesh>>) -> Option<Execution> {
+    None
   }
 
   fn move_towards(
@@ -142,11 +142,12 @@ impl Action for SitDown {
     blackboard.insert_bool("sitting", true);
   }
 
-  fn within_range(&mut self, local: &Backpack, _: Option<Arc<Navmesh>>) -> bool {
-    if let Some(seat) = local.get::<SeatLocation>() {
-      seat.distance < Meters::new(1.6)
+  fn within_range(&mut self, local: &Backpack, _: Option<Arc<Navmesh>>) -> Option<Execution> {
+    let seat = local.get::<SeatLocation>()?;
+    if seat.distance < Meters::new(1.6) {
+      Some(Execution::Execute)
     } else {
-      false
+      None
     }
   }
 

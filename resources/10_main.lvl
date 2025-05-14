@@ -130,7 +130,8 @@
               "models": [
                 "9fb4859d-187f-4b3c-a7c8-4c6aea3452d8",
                 "a152f452-89a5-49d7-bc66-0ca3cadf90d4",
-                "049b3d93-911d-4919-a128-cc0c5d06fcb0"
+                "049b3d93-911d-4919-a128-cc0c5d06fcb0",
+                "49081c9c-34df-4991-934c-3b229399031f"
               ]
             }
           }
@@ -379,7 +380,7 @@
       "b798a352-e300-4432-a6b6-b0a859baeca9": {
         "id": "b798a352-e300-4432-a6b6-b0a859baeca9",
         "tag": {
-          "name": "Camera Position"
+          "name": "Camera Follow"
         },
         "transform": {
           "transform": {
@@ -404,6 +405,530 @@
           {
             "CameraFollow": {
               "following": "a0f3a902-2575-484e-9af1-093f66a1d2d5"
+            }
+          }
+        ]
+      },
+      "ff9e08c9-0a8e-42f4-b4cc-980f5b5fb4a1": {
+        "id": "ff9e08c9-0a8e-42f4-b4cc-980f5b5fb4a1",
+        "tag": {
+          "name": "Prefab::Pumpkin"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              -57,
+              0.5,
+              -6
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "PrefabProviderComponent": {}
+          }
+        ]
+      },
+      "ad7cf5d0-0ab1-4167-a664-9f4c94982b0f": {
+        "id": "ad7cf5d0-0ab1-4167-a664-9f4c94982b0f",
+        "tag": {
+          "name": "Seeds"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              0,
+              0,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "ParentComponent": {
+              "parent_id": "ff9e08c9-0a8e-42f4-b4cc-980f5b5fb4a1"
+            }
+          },
+          {
+            "ModelComponent": {
+              "cast_shadows": true,
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0,
+              "id": "49081c9c-34df-4991-934c-3b229399031f",
+              "skip": false,
+              "transform": {
+                "rotation": [
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ],
+                "translation": [
+                  2.5,
+                  0,
+                  -0.65
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "1898b259-3947-4ee2-947b-fefd4365e2f8": {
+        "id": "1898b259-3947-4ee2-947b-fefd4365e2f8",
+        "tag": {
+          "name": "Full"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              0,
+              0,
+              -1
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "ModelComponent": {
+              "cast_shadows": true,
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0,
+              "id": "d6bb056b-3b18-4e71-84f1-ee8c94158f4d",
+              "skip": false,
+              "transform": {
+                "rotation": [
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ],
+                "translation": [
+                  2.5,
+                  0,
+                  -1.55
+                ]
+              }
+            }
+          },
+          {
+            "ParentComponent": {
+              "parent_id": "ff9e08c9-0a8e-42f4-b4cc-980f5b5fb4a1"
+            }
+          },
+          {
+            "PhysicsComponent": {
+              "debug": false,
+              "id": "e940b353-1d8a-4ff8-9c3c-76810d589073",
+              "joint": {
+                "body": {
+                  "allow_rotation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "allow_translation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "ccd": false,
+                  "collider_type": {
+                    "Sphere": {
+                      "radius": 0.25
+                    }
+                  },
+                  "density": 1,
+                  "dynamic_type": "Kinematic",
+                  "friction": 0.1,
+                  "groups": {
+                    "filters": "0b11111111111111111111111111111111",
+                    "memberships": "0b11111111111111111111111111111111"
+                  },
+                  "id": "d5dd9a5d-9070-42fd-bcb3-37d777be5f5e",
+                  "is_sensor": false,
+                  "restitution": 0.1
+                },
+                "config": null,
+                "id": "2e4928ff-93c1-4c8e-82ff-80fdd2a2047f",
+                "name": "Joint",
+                "offset": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "c426dcae-2a1f-4b5b-8099-e587efc41a5c": {
+        "id": "c426dcae-2a1f-4b5b-8099-e587efc41a5c",
+        "tag": {
+          "name": "Seedling"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              0,
+              0,
+              -2
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "ParentComponent": {
+              "parent_id": "ff9e08c9-0a8e-42f4-b4cc-980f5b5fb4a1"
+            }
+          },
+          {
+            "ModelComponent": {
+              "cast_shadows": true,
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0,
+              "id": "9f8f7ddc-c2d1-4a93-aaa1-2f174a4cfafe",
+              "skip": false,
+              "transform": {
+                "rotation": [
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ],
+                "translation": [
+                  2.5,
+                  0,
+                  0
+                ]
+              }
+            }
+          },
+          {
+            "PhysicsComponent": {
+              "debug": false,
+              "id": "06310450-4c8e-4045-8759-be2aaaccc249",
+              "joint": {
+                "body": {
+                  "allow_rotation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "allow_translation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "ccd": false,
+                  "collider_type": {
+                    "CapsuleY": {
+                      "half_height": 0.5,
+                      "radius": 0.15
+                    }
+                  },
+                  "density": 1,
+                  "dynamic_type": "Kinematic",
+                  "friction": 0.1,
+                  "groups": {
+                    "filters": "0b11111111111111111111111111111111",
+                    "memberships": "0b11111111111111111111111111111111"
+                  },
+                  "id": "aac74991-0518-4f96-9c89-76533090aca9",
+                  "is_sensor": false,
+                  "restitution": 0.1
+                },
+                "config": null,
+                "id": "1fdff152-4345-49fe-82aa-5b4df713e98c",
+                "name": "Joint",
+                "offset": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "84b8549f-0911-4248-8892-c24225388500": {
+        "id": "84b8549f-0911-4248-8892-c24225388500",
+        "tag": {
+          "name": "Mature"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              0,
+              0,
+              -5
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "ParentComponent": {
+              "parent_id": "ff9e08c9-0a8e-42f4-b4cc-980f5b5fb4a1"
+            }
+          },
+          {
+            "ModelComponent": {
+              "cast_shadows": true,
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0,
+              "id": "9be011a0-cd16-4b00-b5c6-585122403d17",
+              "skip": false,
+              "transform": {
+                "rotation": [
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ],
+                "translation": [
+                  2.5,
+                  0,
+                  5
+                ]
+              }
+            }
+          },
+          {
+            "PhysicsComponent": {
+              "debug": false,
+              "id": "41b3930c-ccd4-4225-9d89-9cf5bda87be4",
+              "joint": {
+                "body": {
+                  "allow_rotation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "allow_translation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "ccd": false,
+                  "collider_type": {
+                    "CapsuleY": {
+                      "half_height": 0.5,
+                      "radius": 0.3
+                    }
+                  },
+                  "density": 1,
+                  "dynamic_type": "Kinematic",
+                  "friction": 0.1,
+                  "groups": {
+                    "filters": "0b11111111111111111111111111111111",
+                    "memberships": "0b11111111111111111111111111111111"
+                  },
+                  "id": "12bdc56f-226e-4edd-9f29-88950db90d3f",
+                  "is_sensor": false,
+                  "restitution": 0.1
+                },
+                "config": null,
+                "id": "1b9432d4-4624-4784-bc72-dde2753c6114",
+                "name": "Joint",
+                "offset": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "0500751f-255d-4f7a-87c4-401a1c81ec2a": {
+        "id": "0500751f-255d-4f7a-87c4-401a1c81ec2a",
+        "tag": {
+          "name": "Flowering"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              0,
+              0,
+              -4
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "ParentComponent": {
+              "parent_id": "ff9e08c9-0a8e-42f4-b4cc-980f5b5fb4a1"
+            }
+          },
+          {
+            "ModelComponent": {
+              "cast_shadows": true,
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0,
+              "id": "98c56216-61f0-4926-b15b-62e8a54107a6",
+              "skip": false,
+              "transform": {
+                "rotation": [
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ],
+                "translation": [
+                  2.5,
+                  0,
+                  3
+                ]
+              }
+            }
+          },
+          {
+            "PhysicsComponent": {
+              "debug": false,
+              "id": "17b83770-ed3f-4cb3-b221-0207c11abdad",
+              "joint": {
+                "body": {
+                  "allow_rotation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "allow_translation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "ccd": false,
+                  "collider_type": {
+                    "CapsuleY": {
+                      "half_height": 0.5,
+                      "radius": 0.2
+                    }
+                  },
+                  "density": 1,
+                  "dynamic_type": "Kinematic",
+                  "friction": 0.1,
+                  "groups": {
+                    "filters": "0b11111111111111111111111111111111",
+                    "memberships": "0b11111111111111111111111111111111"
+                  },
+                  "id": "ffe44e71-bbfd-4e74-8428-4999a67fb770",
+                  "is_sensor": false,
+                  "restitution": 0.1
+                },
+                "config": null,
+                "id": "9053ebb5-340a-420f-8afc-5a8257dfea46",
+                "name": "Joint",
+                "offset": [
+                  0,
+                  0,
+                  0
+                ]
+              }
             }
           }
         ]
@@ -1158,8 +1683,7 @@
             }
           },
           {
-            "Action": {
-            }
+            "Action": {}
           }
         ]
       },
@@ -10885,526 +11409,6 @@
                   1
                 ],
                 "translation": [
-                  0,
-                  0,
-                  0
-                ]
-              }
-            }
-          }
-        ]
-      },
-      "ff9e08c9-0a8e-42f4-b4cc-980f5b5fb4a1": {
-        "id": "ff9e08c9-0a8e-42f4-b4cc-980f5b5fb4a1",
-        "tag": {
-          "name": "Prefab::Pumpkin"
-        },
-        "transform": {
-          "transform": {
-            "translation": [
-              -56.61064,
-              0.668293,
-              -6.3152986
-            ],
-            "rotation": [
-              0,
-              0,
-              0
-            ],
-            "scale": [
-              1,
-              1,
-              1
-            ]
-          }
-        },
-        "components": []
-      },
-      "ad7cf5d0-0ab1-4167-a664-9f4c94982b0f": {
-        "id": "ad7cf5d0-0ab1-4167-a664-9f4c94982b0f",
-        "tag": {
-          "name": "Seeds"
-        },
-        "transform": {
-          "transform": {
-            "translation": [
-              0,
-              0,
-              0
-            ],
-            "rotation": [
-              0,
-              0,
-              0
-            ],
-            "scale": [
-              1,
-              1,
-              1
-            ]
-          }
-        },
-        "components": [
-          {
-            "ParentComponent": {
-              "parent_id": "ff9e08c9-0a8e-42f4-b4cc-980f5b5fb4a1"
-            }
-          },
-          {
-            "ModelComponent": {
-              "cast_shadows": true,
-              "color": [
-                0,
-                0,
-                0
-              ],
-              "color_intensity": 0,
-              "id": "49081c9c-34df-4991-934c-3b229399031f",
-              "skip": false,
-              "transform": {
-                "rotation": [
-                  0,
-                  0,
-                  0,
-                  1
-                ],
-                "scale": [
-                  1,
-                  1,
-                  1
-                ],
-                "translation": [
-                  2.5,
-                  0,
-                  -0.65
-                ]
-              }
-            }
-          }
-        ]
-      },
-      "1898b259-3947-4ee2-947b-fefd4365e2f8": {
-        "id": "1898b259-3947-4ee2-947b-fefd4365e2f8",
-        "tag": {
-          "name": "Full"
-        },
-        "transform": {
-          "transform": {
-            "translation": [
-              0,
-              0,
-              -1
-            ],
-            "rotation": [
-              0,
-              0,
-              0
-            ],
-            "scale": [
-              1,
-              1,
-              1
-            ]
-          }
-        },
-        "components": [
-          {
-            "ModelComponent": {
-              "cast_shadows": true,
-              "color": [
-                0,
-                0,
-                0
-              ],
-              "color_intensity": 0,
-              "id": "d6bb056b-3b18-4e71-84f1-ee8c94158f4d",
-              "skip": false,
-              "transform": {
-                "rotation": [
-                  0,
-                  0,
-                  0,
-                  1
-                ],
-                "scale": [
-                  1,
-                  1,
-                  1
-                ],
-                "translation": [
-                  2.5,
-                  0,
-                  -1.55
-                ]
-              }
-            }
-          },
-          {
-            "ParentComponent": {
-              "parent_id": "ff9e08c9-0a8e-42f4-b4cc-980f5b5fb4a1"
-            }
-          },
-          {
-            "PhysicsComponent": {
-              "debug": false,
-              "id": "e940b353-1d8a-4ff8-9c3c-76810d589073",
-              "joint": {
-                "body": {
-                  "allow_rotation": [
-                    true,
-                    true,
-                    true
-                  ],
-                  "allow_translation": [
-                    true,
-                    true,
-                    true
-                  ],
-                  "ccd": false,
-                  "collider_type": {
-                    "Sphere": {
-                      "radius": 0.25
-                    }
-                  },
-                  "density": 1,
-                  "dynamic_type": "Kinematic",
-                  "friction": 0.1,
-                  "groups": {
-                    "filters": "0b11111111111111111111111111111111",
-                    "memberships": "0b11111111111111111111111111111111"
-                  },
-                  "id": "d5dd9a5d-9070-42fd-bcb3-37d777be5f5e",
-                  "is_sensor": false,
-                  "restitution": 0.1
-                },
-                "config": null,
-                "id": "2e4928ff-93c1-4c8e-82ff-80fdd2a2047f",
-                "name": "Joint",
-                "offset": [
-                  0,
-                  0,
-                  0
-                ]
-              }
-            }
-          }
-        ]
-      },
-      "c426dcae-2a1f-4b5b-8099-e587efc41a5c": {
-        "id": "c426dcae-2a1f-4b5b-8099-e587efc41a5c",
-        "tag": {
-          "name": "Seedling"
-        },
-        "transform": {
-          "transform": {
-            "translation": [
-              0,
-              0,
-              -2
-            ],
-            "rotation": [
-              0,
-              0,
-              0
-            ],
-            "scale": [
-              1,
-              1,
-              1
-            ]
-          }
-        },
-        "components": [
-          {
-            "ParentComponent": {
-              "parent_id": "ff9e08c9-0a8e-42f4-b4cc-980f5b5fb4a1"
-            }
-          },
-          {
-            "ModelComponent": {
-              "cast_shadows": true,
-              "color": [
-                0,
-                0,
-                0
-              ],
-              "color_intensity": 0,
-              "id": "9f8f7ddc-c2d1-4a93-aaa1-2f174a4cfafe",
-              "skip": false,
-              "transform": {
-                "rotation": [
-                  0,
-                  0,
-                  0,
-                  1
-                ],
-                "scale": [
-                  1,
-                  1,
-                  1
-                ],
-                "translation": [
-                  2.5,
-                  0,
-                  0
-                ]
-              }
-            }
-          },
-          {
-            "PhysicsComponent": {
-              "debug": false,
-              "id": "06310450-4c8e-4045-8759-be2aaaccc249",
-              "joint": {
-                "body": {
-                  "allow_rotation": [
-                    true,
-                    true,
-                    true
-                  ],
-                  "allow_translation": [
-                    true,
-                    true,
-                    true
-                  ],
-                  "ccd": false,
-                  "collider_type": {
-                    "CapsuleY": {
-                      "half_height": 0.5,
-                      "radius": 0.15
-                    }
-                  },
-                  "density": 1,
-                  "dynamic_type": "Kinematic",
-                  "friction": 0.1,
-                  "groups": {
-                    "filters": "0b11111111111111111111111111111111",
-                    "memberships": "0b11111111111111111111111111111111"
-                  },
-                  "id": "aac74991-0518-4f96-9c89-76533090aca9",
-                  "is_sensor": false,
-                  "restitution": 0.1
-                },
-                "config": null,
-                "id": "1fdff152-4345-49fe-82aa-5b4df713e98c",
-                "name": "Joint",
-                "offset": [
-                  0,
-                  0,
-                  0
-                ]
-              }
-            }
-          }
-        ]
-      },
-      "84b8549f-0911-4248-8892-c24225388500": {
-        "id": "84b8549f-0911-4248-8892-c24225388500",
-        "tag": {
-          "name": "Mature"
-        },
-        "transform": {
-          "transform": {
-            "translation": [
-              0,
-              0,
-              -5
-            ],
-            "rotation": [
-              0,
-              0,
-              0
-            ],
-            "scale": [
-              1,
-              1,
-              1
-            ]
-          }
-        },
-        "components": [
-          {
-            "ParentComponent": {
-              "parent_id": "ff9e08c9-0a8e-42f4-b4cc-980f5b5fb4a1"
-            }
-          },
-          {
-            "ModelComponent": {
-              "cast_shadows": true,
-              "color": [
-                0,
-                0,
-                0
-              ],
-              "color_intensity": 0,
-              "id": "9be011a0-cd16-4b00-b5c6-585122403d17",
-              "skip": false,
-              "transform": {
-                "rotation": [
-                  0,
-                  0,
-                  0,
-                  1
-                ],
-                "scale": [
-                  1,
-                  1,
-                  1
-                ],
-                "translation": [
-                  2.5,
-                  0,
-                  5
-                ]
-              }
-            }
-          },
-          {
-            "PhysicsComponent": {
-              "debug": false,
-              "id": "41b3930c-ccd4-4225-9d89-9cf5bda87be4",
-              "joint": {
-                "body": {
-                  "allow_rotation": [
-                    true,
-                    true,
-                    true
-                  ],
-                  "allow_translation": [
-                    true,
-                    true,
-                    true
-                  ],
-                  "ccd": false,
-                  "collider_type": {
-                    "CapsuleY": {
-                      "half_height": 0.5,
-                      "radius": 0.3
-                    }
-                  },
-                  "density": 1,
-                  "dynamic_type": "Kinematic",
-                  "friction": 0.1,
-                  "groups": {
-                    "filters": "0b11111111111111111111111111111111",
-                    "memberships": "0b11111111111111111111111111111111"
-                  },
-                  "id": "12bdc56f-226e-4edd-9f29-88950db90d3f",
-                  "is_sensor": false,
-                  "restitution": 0.1
-                },
-                "config": null,
-                "id": "1b9432d4-4624-4784-bc72-dde2753c6114",
-                "name": "Joint",
-                "offset": [
-                  0,
-                  0,
-                  0
-                ]
-              }
-            }
-          }
-        ]
-      },
-      "0500751f-255d-4f7a-87c4-401a1c81ec2a": {
-        "id": "0500751f-255d-4f7a-87c4-401a1c81ec2a",
-        "tag": {
-          "name": "Flowering"
-        },
-        "transform": {
-          "transform": {
-            "translation": [
-              0,
-              0,
-              -4
-            ],
-            "rotation": [
-              0,
-              0,
-              0
-            ],
-            "scale": [
-              1,
-              1,
-              1
-            ]
-          }
-        },
-        "components": [
-          {
-            "ParentComponent": {
-              "parent_id": "ff9e08c9-0a8e-42f4-b4cc-980f5b5fb4a1"
-            }
-          },
-          {
-            "ModelComponent": {
-              "cast_shadows": true,
-              "color": [
-                0,
-                0,
-                0
-              ],
-              "color_intensity": 0,
-              "id": "98c56216-61f0-4926-b15b-62e8a54107a6",
-              "skip": false,
-              "transform": {
-                "rotation": [
-                  0,
-                  0,
-                  0,
-                  1
-                ],
-                "scale": [
-                  1,
-                  1,
-                  1
-                ],
-                "translation": [
-                  2.5,
-                  0,
-                  3
-                ]
-              }
-            }
-          },
-          {
-            "PhysicsComponent": {
-              "debug": false,
-              "id": "17b83770-ed3f-4cb3-b221-0207c11abdad",
-              "joint": {
-                "body": {
-                  "allow_rotation": [
-                    true,
-                    true,
-                    true
-                  ],
-                  "allow_translation": [
-                    true,
-                    true,
-                    true
-                  ],
-                  "ccd": false,
-                  "collider_type": {
-                    "CapsuleY": {
-                      "half_height": 0.5,
-                      "radius": 0.2
-                    }
-                  },
-                  "density": 1,
-                  "dynamic_type": "Kinematic",
-                  "friction": 0.1,
-                  "groups": {
-                    "filters": "0b11111111111111111111111111111111",
-                    "memberships": "0b11111111111111111111111111111111"
-                  },
-                  "id": "ffe44e71-bbfd-4e74-8428-4999a67fb770",
-                  "is_sensor": false,
-                  "restitution": 0.1
-                },
-                "config": null,
-                "id": "9053ebb5-340a-420f-8afc-5a8257dfea46",
-                "name": "Joint",
-                "offset": [
                   0,
                   0,
                   0

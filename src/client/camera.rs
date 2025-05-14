@@ -7,24 +7,22 @@ use engine::{
     scene::{Scene, TransformComponent},
   },
   nalgebra::{Unit, Vector3},
-  systems::{rendering::CameraConfig, Backpack, Initializable, Inventory, System},
+  systems::{rendering::CameraConfig, Backpack, Initializable, Inventory, Middleware, Subsystem},
 };
 
 use crate::shared::game_input::GameInput;
 
-pub struct CameraSystem {
-  inputs: InputsReader<GameInput>,
+pub struct CameraMiddleware {
 }
 
-impl Initializable for CameraSystem {
+impl Initializable for CameraMiddleware {
   fn initialize(inventory: &Inventory) -> Self {
-    let inputs = inventory.get::<InputsReader<GameInput>>().clone();
 
-    Self { inputs }
+    Self { }
   }
 }
 
-impl CameraSystem {
+impl CameraMiddleware {
   fn update_follow(&mut self, scene: &mut Scene, _: &mut Backpack) {
     let mut camera_transform = None;
     for (_, (_, _, transform)) in
@@ -72,14 +70,22 @@ impl CameraSystem {
   }
 }
 
-impl System for CameraSystem {
+impl Middleware for CameraMiddleware {
   fn get_name(&self) -> &'static str {
-    "CameraSystem"
+    "CameraMiddleware"
   }
 
-  fn run(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
+  fn post(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
     self.update_follow(scene, backpack);
     self.update_camera_rotation(scene, backpack);
     self.update_camera_translation(scene, backpack);
+  }
+}
+
+pub struct CameraSubsystem;
+
+impl Subsystem for CameraSubsystem {
+  fn get_priority() -> isize {
+    0_100_000
   }
 }

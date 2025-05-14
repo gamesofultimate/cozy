@@ -79,6 +79,20 @@ pub struct Level {
 }
 
 impl Level {
+  pub fn to_max(max: f32, duration: Seconds) -> Self {
+    let diff = max;
+    let frames = *duration / *Seconds::from(Framerate::new(16.0));
+    let rate = diff / frames;
+    let want = Some(ChangeDirection::Add { want: max, rate });
+
+    Self {
+      current: 0.0,
+      min: 0.0,
+      max,
+      want,
+    }
+  }
+
   pub fn percent(&self) -> f32 {
     self.current / self.max
   }
@@ -196,6 +210,7 @@ pub enum CharacterState {
   Running,
   CollectingWater,
   WorkingTile(Entity),
+  ThrowingSeed(Entity, Level),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
@@ -285,7 +300,7 @@ pub enum SeedTypes {
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
 pub enum ActionTypes {
   WaterTile,
-  PlantSeed,
+  ThrowSeed,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]

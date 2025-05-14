@@ -2,6 +2,7 @@ use crate::shared::components::{
   Action, Character, CharacterState, Log, Pickup, PickupSpace, Tile, TimeOfDay, WaterCan,
   WaterSource, WateredTile,
   Seeds, ActionTypes,
+  CropTile, Level,
 };
 use crate::shared::game_input::{GameInput, InputState};
 use crate::shared::ui_components::InventoryDisplay;
@@ -35,14 +36,14 @@ impl PickupsSystem {
     {
       if input.check(InputState::ChangeActionUp) {
         character.action = match character.action {
-          ActionTypes::WaterTile => ActionTypes::PlantSeed,
-          ActionTypes::PlantSeed => ActionTypes::WaterTile,
+          ActionTypes::WaterTile => ActionTypes::ThrowSeed,
+          ActionTypes::ThrowSeed => ActionTypes::WaterTile,
         };
       }
       if input.check(InputState::ChangeActionDown) {
         character.action = match character.action {
-          ActionTypes::WaterTile => ActionTypes::PlantSeed,
-          ActionTypes::PlantSeed => ActionTypes::WaterTile,
+          ActionTypes::WaterTile => ActionTypes::ThrowSeed,
+          ActionTypes::ThrowSeed => ActionTypes::WaterTile,
         };
       }
     }
@@ -188,6 +189,67 @@ impl PickupsSystem {
     }
   }
 
+  pub fn handle_throw_seeds(&self, scene: &mut Scene, backpack: &mut Backpack) {
+    let delta_time = backpack.get::<Seconds>().unwrap();
+
+    for (_, (input, character, state, seeds, collision)) in scene
+      .query_mut::<(
+        &GameInput,
+        &mut Character,
+        &mut CharacterState,
+        &mut Seeds,
+        &Collision<Action, Tile>,
+      )>()
+      .without::<CropTile>()
+    {
+      if input.check(InputState::Action)
+        && let ActionTypes::ThrowSeed = character.action
+        && seeds.pumpkins >= 1
+        && let CharacterState::Normal | CharacterState::Running = state
+      {
+        *state = CharacterState::ThrowingSeed(collision.other, Level::to_max(1.0, Seconds::new(4.0)));
+        seeds.pumpkins -= 1;
+      }
+    }
+
+    let mut working_tile = None;
+    for (_, (input, character)) in
+      scene.query_mut::<(&GameInput, &mut CharacterState)>()
+    {
+      if let CharacterState::ThrowingSeed(entity, timing) = character {
+        if let Some(_) = timing.tick() {
+          working_tile = Some(*entity);
+          *character = CharacterState::Normal;
+        }
+      }
+    }
+
+    {
+      if let Some(tile_entity) = working_tile
+        && let Some(prefabs) = scene.get_prefab_owned("Prefab::Pumpkin")
+        && let Some((mut prefab, _)) = prefabs.iter().cloned().find(|(prefab, _)| prefab.tag.name == "Seeds")
+        && let Some(transform) = scene.get_components_mut::<&TransformComponent>(tile_entity).cloned()
+      {
+        scene.add_component(tile_entity, CropTile {});
+        let crop_entity = scene.create_raw_entity("Pumpkin Crop");
+        prefab.transform = transform;
+        scene.create_with_prefab(crop_entity, prefab);
+      }
+    }
+
+    for (_, (model, _, maybe_collision)) in scene
+      .query_mut::<(&mut ModelComponent, &Tile, Option<&Collision<Action, Tile>>)>()
+      .without::<CropTile>()
+    {
+      if let Some(_) = maybe_collision {
+        model.color = Vector3::new(0.0, 1.0, 1.0);
+        model.color_intensity = 0.1;
+      } else {
+        model.color_intensity = 0.0;
+      }
+    }
+  }
+
   pub fn handle_add_state(&self, scene: &mut Scene) {
     let mut entities = vec![];
     for (entity, _) in scene.query_mut::<&Character>().without::<CharacterState>() {
@@ -220,7 +282,7 @@ impl PickupsSystem {
       texts.push(format!("Action"));
       texts.push(match character.action {
         ActionTypes::WaterTile => format!("Water tile"),
-        ActionTypes::PlantSeed => format!("Plant pumpkin"),
+        ActionTypes::ThrowSeed => format!("Plant pumpkin"),
       });
 
       texts.push(format!("---"));
@@ -242,6 +304,7 @@ impl System for PickupsSystem {
     self.handle_pickup(scene);
     self.handle_water_sources(scene, backpack);
     self.handle_watering_tiles(scene, backpack);
+    self.handle_throw_seeds(scene, backpack);
     self.handle_update_ui(scene);
   }
 }

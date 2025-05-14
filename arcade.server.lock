@@ -454,9 +454,9 @@
               },
               {
                 "tag": "Unit",
-                "name": "PlantSeed",
+                "name": "ThrowSeed",
                 "docs": null,
-                "default_values": "\"PlantSeed\"",
+                "default_values": "\"ThrowSeed\"",
                 "duplicate_values": "null"
               }
             ],
