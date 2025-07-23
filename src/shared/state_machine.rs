@@ -256,6 +256,8 @@ impl StateMachineSystem {
 
   #[cfg(target_arch = "wasm32")]
   fn handle_camera_dof(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
+    use crate::shared::components::CameraFollower;
+
     let mut camera_position = Vector3::zeros();
     let mut focus_position = Vector3::zeros();
 
@@ -274,16 +276,20 @@ impl StateMachineSystem {
         config.dof.enabled = true;
       }
 
-      log::info!("state: {:?}", game.state);
-
       config.dof.focus_point = Vector3::metric_distance(&camera_position, &focus_position);
 
       match game.state {
-        GameState::RequestTransition | GameState::TransitionToGame { .. } | GameState::Playing => {
+        GameState::Playing => {
           config.dof.focus_scale = (config.dof.focus_scale - 0.04).clamp(0.0, 3.0);
+          for (_, follower) in scene.query_mut::<&mut CameraFollower>() {
+            follower.interpolation_speed = 0.08;
+          }
         }
         _ => {
           config.dof.focus_scale = (config.dof.focus_scale + 0.04).clamp(0.0, 3.0);
+          for (_, follower) in scene.query_mut::<&mut CameraFollower>() {
+            follower.interpolation_speed = 0.02;
+          }
         }
       }
     }
