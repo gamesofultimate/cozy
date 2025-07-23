@@ -870,7 +870,7 @@
         },
         "components": [
           {
-            "LevelDownloaderVolume": {
+            "LevelDownloaderPortal": {
               "level": "10_main.lvl",
               "radius": 100
             }

@@ -37,6 +37,7 @@ impl Game {
     access_token: Option<String>,
     udp_url: String,
     tcp_url: String,
+    gpu_tier: u32,
     recording_url: Option<String>,
   ) -> Self {
     let scheduler = client::main(
@@ -49,6 +50,7 @@ impl Game {
       access_token,
       udp_url,
       tcp_url,
+      gpu_tier,
       recording_url,
     );
 

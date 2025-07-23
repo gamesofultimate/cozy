@@ -26,11 +26,12 @@ pub fn main(
   access_token: Option<String>,
   udp_url: String,
   tcp_url: String,
+  gpu_tier: u32,
   recording_url: Option<String>,
 ) -> Scheduler {
   wasm_logger::init(wasm_logger::Config::default());
   grow_memory(GROW_MEMORY_IN_MB);
-  let mut scheduler = Scheduler::new(FRAMES_PER_SECOND, [0, 0, 0, 255], canvas_id);
+  let mut scheduler = Scheduler::new(FRAMES_PER_SECOND, [0, 0, 0, 255], canvas_id, gpu_tier);
 
   log::debug!("assets location: {:?}", &assets_location);
 

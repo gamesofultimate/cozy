@@ -52,7 +52,7 @@
       "tag": "Struct",
       "name": "AudioSourceComponent",
       "label": "Audio Source Component",
-      "default_values": "{ audio_id: (() => { \n            return Symbol.for(\"AudioId\");\n           })(), id: (() => { \n      function uuidv4() {\n        return \"10000000-1000-4000-8000-100000000000\".replace(/[018]/g, c =>\n          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)\n        );\n      };\n      return uuidv4()\n     })(), should_loop: false, spatial: null, state: \"Stopped\", volume: 0.0 }",
+      "default_values": "{ audio_id: (() => { \n            return Symbol.for(\"AudioId\");\n           })(), id: (() => { \n      function uuidv4() {\n        return \"10000000-1000-4000-8000-100000000000\".replace(/[018]/g, c =>\n          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)\n        );\n      };\n      return uuidv4()\n     })(), pitch: 0.0, should_loop: false, spatial: null, state: \"Stopped\", volume: 0.0 }",
       "duplicate_values": "null",
       "docs": "WIP",
       "fields": [
@@ -146,6 +146,19 @@
           }
         },
         {
+          "name": "pitch",
+          "label": "Pitch",
+          "docs": null,
+          "ty": {
+            "tag": "Primitive",
+            "ty": {
+              "tag": "F32"
+            },
+            "default_values": "0.0",
+            "duplicate_values": "null"
+          }
+        },
+        {
           "name": "spatial",
           "label": "Spatial",
           "docs": null,
@@ -160,20 +173,77 @@
                 "tag": "Struct",
                 "name": "SpatialAudioConfig",
                 "label": "Spatial Audio Config",
-                "default_values": "{ falloff_distance: { meters: 10.0 } }",
+                "default_values": "{ falloff: \"Linear\" }",
                 "duplicate_values": "null",
                 "docs": null,
                 "fields": [
                   {
-                    "name": "falloff_distance",
-                    "label": "Falloff Distance",
+                    "name": "falloff",
+                    "label": "Falloff",
                     "docs": null,
                     "ty": {
-                      "tag": "Custom",
-                      "name": "Meters",
-                      "default_values": "{ meters: 0.0 }",
+                      "tag": "Enum",
+                      "name": "FalloffBehavior",
+                      "label": "Falloff Behavior",
+                      "default_values": "\"Linear\"",
                       "duplicate_values": "null",
-                      "ty": "Meters"
+                      "docs": null,
+                      "variants": [
+                        {
+                          "tag": "Struct",
+                          "name": "Linear",
+                          "label": "Linear",
+                          "default_values": "{ falloff_distance: { meters: 0.0 } }",
+                          "duplicate_values": "null",
+                          "docs": null,
+                          "fields": [
+                            {
+                              "name": "falloff_distance",
+                              "label": "Falloff Distance",
+                              "docs": null,
+                              "ty": {
+                                "tag": "Custom",
+                                "name": "Meters",
+                                "default_values": "{ meters: 0.0 }",
+                                "duplicate_values": "null",
+                                "ty": "Meters"
+                              }
+                            }
+                          ],
+                          "private": false
+                        },
+                        {
+                          "tag": "Unit",
+                          "name": "InverseDistance",
+                          "docs": null,
+                          "default_values": "\"InverseDistance\"",
+                          "duplicate_values": "null"
+                        },
+                        {
+                          "tag": "Struct",
+                          "name": "Logarithmic",
+                          "label": "Logarithmic",
+                          "default_values": "{ falloff_distance: { meters: 0.0 } }",
+                          "duplicate_values": "null",
+                          "docs": null,
+                          "fields": [
+                            {
+                              "name": "falloff_distance",
+                              "label": "Falloff Distance",
+                              "docs": null,
+                              "ty": {
+                                "tag": "Custom",
+                                "name": "Meters",
+                                "default_values": "{ meters: 0.0 }",
+                                "duplicate_values": "null",
+                                "ty": "Meters"
+                              }
+                            }
+                          ],
+                          "private": false
+                        }
+                      ],
+                      "private": false
                     }
                   }
                 ],
@@ -562,6 +632,40 @@
     },
     {
       "tag": "Struct",
+      "name": "CullingBoundsScale",
+      "label": "Culling Bounds Scale",
+      "default_values": "{ scale: 1.25 }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [
+        {
+          "name": "scale",
+          "label": "Scale",
+          "docs": null,
+          "ty": {
+            "tag": "Primitive",
+            "ty": {
+              "tag": "F32"
+            },
+            "default_values": "0.0",
+            "duplicate_values": "null"
+          }
+        }
+      ],
+      "private": false
+    },
+    {
+      "tag": "Struct",
+      "name": "CullingDisabler",
+      "label": "Culling Disabler",
+      "default_values": "{  }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [],
+      "private": false
+    },
+    {
+      "tag": "Struct",
       "name": "DebugFrustumComponent",
       "label": "Debug Frustum Component",
       "default_values": "{  }",
@@ -698,7 +802,7 @@
       "tag": "Struct",
       "name": "InputComponent",
       "label": "Input Component",
-      "default_values": "{ deadzone: 0.0, joystick_sensitivity: 1.0, mouse_sensitivity: 0.5, speed: { kilometers: 2.0, hours: 1.0 } }",
+      "default_values": "{ deadzone: 0.0, joystick_sensitivity: 1.0, mouse_sensitivity: 0.5, speed: { kph: 2.0 } }",
       "duplicate_values": "null",
       "docs": "Allows the user to GhostCam around the world",
       "fields": [
@@ -768,19 +872,9 @@
     },
     {
       "tag": "Struct",
-      "name": "LevelDownloaderRoot",
-      "label": "Level Downloader Root",
-      "default_values": "{  }",
-      "duplicate_values": "null",
-      "docs": null,
-      "fields": [],
-      "private": false
-    },
-    {
-      "tag": "Struct",
-      "name": "LevelDownloaderVolume",
-      "label": "Level Downloader Volume",
-      "default_values": "{ level: '', radius: 0.0 }",
+      "name": "LevelDownloaderPortal",
+      "label": "Level Downloader Portal",
+      "default_values": "{ level: '' }",
       "duplicate_values": "null",
       "docs": null,
       "fields": [
@@ -796,21 +890,18 @@
             "default_values": "''",
             "duplicate_values": "null"
           }
-        },
-        {
-          "name": "radius",
-          "label": "Radius",
-          "docs": null,
-          "ty": {
-            "tag": "Primitive",
-            "ty": {
-              "tag": "F32"
-            },
-            "default_values": "0.0",
-            "duplicate_values": "null"
-          }
         }
       ],
+      "private": false
+    },
+    {
+      "tag": "Struct",
+      "name": "LevelDownloaderRoot",
+      "label": "Level Downloader Root",
+      "default_values": "{  }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [],
       "private": false
     },
     {
@@ -2381,6 +2472,54 @@
       "docs": "Allows you to parent your component against another one, so that positioning of this component\ngets created the local space of the parent component",
       "fields": [],
       "private": true
+    },
+    {
+      "tag": "Struct",
+      "name": "ShadowsRenderingTier",
+      "label": "Shadows Rendering Tier",
+      "default_values": "{ gpu_tier: \"Low\" }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [
+        {
+          "name": "gpu_tier",
+          "label": "Gpu Tier",
+          "docs": null,
+          "ty": {
+            "tag": "Enum",
+            "name": "GpuTier",
+            "label": "Gpu Tier",
+            "default_values": "\"Low\"",
+            "duplicate_values": "null",
+            "docs": null,
+            "variants": [
+              {
+                "tag": "Unit",
+                "name": "Low",
+                "docs": null,
+                "default_values": "\"Low\"",
+                "duplicate_values": "null"
+              },
+              {
+                "tag": "Unit",
+                "name": "Medium",
+                "docs": null,
+                "default_values": "\"Medium\"",
+                "duplicate_values": "null"
+              },
+              {
+                "tag": "Unit",
+                "name": "High",
+                "docs": null,
+                "default_values": "\"High\"",
+                "duplicate_values": "null"
+              }
+            ],
+            "private": false
+          }
+        }
+      ],
+      "private": false
     },
     {
       "tag": "Struct",
@@ -5830,7 +5969,7 @@
     "tag": "Struct",
     "name": "Particle",
     "label": "Particle",
-    "default_values": "{ actions: [], enabled: true, id: (() => { \n            return Symbol.for(\"ParticleId\");\n           })(), name: '', version: '' }",
+    "default_values": "{ actions: [], enabled: true, id: (() => { \n            return Symbol.for(\"ParticleId\");\n           })(), loop_config: \"Once\", name: '', version: '' }",
     "duplicate_values": "null",
     "docs": null,
     "fields": [
@@ -7556,6 +7695,60 @@
               "private": false
             }
           }
+        }
+      },
+      {
+        "name": "loop_config",
+        "label": "Loop Config",
+        "docs": null,
+        "ty": {
+          "tag": "Enum",
+          "name": "Loop",
+          "label": "Loop",
+          "default_values": "\"Once\"",
+          "duplicate_values": "null",
+          "docs": null,
+          "variants": [
+            {
+              "tag": "Unit",
+              "name": "Once",
+              "docs": null,
+              "default_values": "\"Once\"",
+              "duplicate_values": "null"
+            },
+            {
+              "tag": "Struct",
+              "name": "Multiple",
+              "label": "Multiple",
+              "default_values": "{ count: 0 }",
+              "duplicate_values": "null",
+              "docs": null,
+              "fields": [
+                {
+                  "name": "count",
+                  "label": "Count",
+                  "docs": null,
+                  "ty": {
+                    "tag": "Primitive",
+                    "ty": {
+                      "tag": "USize"
+                    },
+                    "default_values": "0",
+                    "duplicate_values": "null"
+                  }
+                }
+              ],
+              "private": false
+            },
+            {
+              "tag": "Unit",
+              "name": "Forever",
+              "docs": null,
+              "default_values": "\"Forever\"",
+              "duplicate_values": "null"
+            }
+          ],
+          "private": false
         }
       }
     ],

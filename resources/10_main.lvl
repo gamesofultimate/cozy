@@ -56,7 +56,7 @@
       "shadow": false,
       "physics": true,
       "lighting": false,
-      "render_debug_mode": "Ssgi",
+      "render_debug_mode": "None",
       "grid": false,
       "hide_ui": false
     },

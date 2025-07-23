@@ -41,9 +41,15 @@ impl System for CollisionSystem {
   fn provide(&mut self, _inventory: &Inventory) {}
 
   fn run(&mut self, scene: &mut Scene, _backpack: &mut Backpack) {
-    let collisions = self.collisions_reader.read().collect::<Vec<_>>();
+    let collisions = self
+      .collisions_reader
+      .read()
+      .into_iter()
+      .collect::<Vec<_>>();
+    let mut count = 0;
 
     for collision_event in collisions {
+      count += 1;
       match collision_event {
         CollisionEvent::Started(collider1, collider2, _) => {
           self.handle_collision_start::<Action, Pickup>(scene, collider1, collider2);
@@ -58,6 +64,7 @@ impl System for CollisionSystem {
         }
       }
     }
+    //log::info!("collisions: {count}");
   }
 }
 
