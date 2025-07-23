@@ -255,44 +255,60 @@ impl StateMachineSystem {
   }
 
   #[cfg(target_arch = "wasm32")]
-  fn handle_camera_dof(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
+  fn handle_camera_dof(&mut self, scene: &mut Scene, backpack: &mut Backpack) -> Option<()> {
     use crate::shared::components::CameraFollower;
 
-    let mut camera_position = Vector3::zeros();
     let mut focus_position = Vector3::zeros();
 
-    if let Some(camera_config) = backpack.get_mut::<CameraConfig>() {
-      camera_position = camera_config.translation;
-    }
+    let (delta_time, camera_config) = match backpack.fetch_mut::<(Seconds, CameraConfig)>() {
+      Some((delta_time, camera_config)) => Some((delta_time.clone(), camera_config.clone())),
+      None => None,
+    }?;
 
     for (_, (transform, _)) in scene.query_mut::<(&mut TransformComponent, &ActiveCamera)>() {
       focus_position = transform.translation;
     }
 
+    let camera_position = camera_config.translation;
+
     if let Some((config, game)) = backpack.fetch_mut::<(Config, StateMachine)>() {
-      if config.dof.focus_scale < 0.1 {
+      if config.dof.focus_scale < 0.01 {
         config.dof.enabled = false;
       } else {
         config.dof.enabled = true;
       }
 
-      config.dof.focus_point = Vector3::metric_distance(&camera_position, &focus_position);
+      let distance = Vector3::metric_distance(&camera_position, &focus_position);
+
+      log::info!(
+        "config: {:?} {:?}",
+        config.dof.focus_scale,
+        config.dof.focus_point
+      );
 
       match game.state {
         GameState::Playing => {
-          config.dof.focus_scale = (config.dof.focus_scale - 0.04).clamp(0.0, 3.0);
+          config.dof.focus_point = lerp(config.dof.focus_point, distance, 0.9);
+          config.dof.focus_scale = (config.dof.focus_scale - 0.001 * *delta_time).clamp(0.0, 3.0);
           for (_, follower) in scene.query_mut::<&mut CameraFollower>() {
             follower.interpolation_speed = 0.08;
           }
         }
+        GameState::Paused => {
+          config.dof.focus_point = lerp(config.dof.focus_point, 0.0, 0.9);
+          config.dof.focus_scale = (config.dof.focus_scale + 0.001 * *delta_time).clamp(0.0, 3.0);
+        }
         _ => {
-          config.dof.focus_scale = (config.dof.focus_scale + 0.04).clamp(0.0, 3.0);
+          config.dof.focus_point = lerp(config.dof.focus_point, distance, 0.9);
+          config.dof.focus_scale = (config.dof.focus_scale + 0.001 * *delta_time).clamp(0.0, 3.0);
           for (_, follower) in scene.query_mut::<&mut CameraFollower>() {
             follower.interpolation_speed = 0.02;
           }
         }
       }
     }
+
+    Some(())
   }
 
   fn set_camera(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
@@ -377,8 +393,11 @@ impl StateMachineSystem {
   fn handle_start(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
     let input = self.inputs.read_client();
     if let Some(machine) = backpack.get_mut::<StateMachine>() {
+      log::info!("state: {:?} -> {:?}", machine.state, input.state);
       match &machine.state {
         GameState::Loading if input.state.contains(InputState::LeftClick) => machine.start_game(),
+        GameState::Playing if input.state.contains(InputState::Escape) => machine.pause_game(),
+        GameState::Paused if input.state.contains(InputState::LeftClick) => machine.resume_game(),
         _ => {}
       }
     }
@@ -418,7 +437,7 @@ pub enum GameState {
   RequestTransition,
   TransitionToGame { timeout: Seconds },
   Playing,
-  Pause,
+  Paused,
 }
 
 #[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
@@ -496,6 +515,14 @@ impl StateMachine {
     self.state = GameState::RequestTransition;
   }
 
+  pub fn resume_game(&mut self) {
+    self.state = GameState::Playing;
+  }
+
+  pub fn pause_game(&mut self) {
+    self.state = GameState::Paused;
+  }
+
   pub fn bump_state(&mut self, current_time: Seconds) -> Option<()> {
     // if no one is online, go back to initializing
     if self.players.len() == 0 {
@@ -521,4 +548,8 @@ impl StateMachine {
       _ => None,
     }
   }
+}
+
+fn lerp(a: f32, b: f32, percent: f32) -> f32 {
+  a * percent + b * (1.0 - percent)
 }
