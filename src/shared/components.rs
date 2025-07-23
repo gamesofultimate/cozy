@@ -17,6 +17,7 @@ impl Registry for GameComponents {
   fn register() {
     use engine::application::scene::component_registry::Access;
     Movement::register();
+    ActiveCamera::register();
     Pickup::register();
     Player::register();
     CameraFollow::register();
@@ -304,8 +305,7 @@ pub enum ActionTypes {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
-pub struct Action {
-}
+pub struct Action {}
 
 impl ProvideAssets for Action {}
 
@@ -377,3 +377,8 @@ impl ProvideAssets for Preloader {
     }
   }
 }
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct ActiveCamera {}
+
+impl ProvideAssets for ActiveCamera {}

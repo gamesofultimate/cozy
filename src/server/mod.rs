@@ -5,6 +5,7 @@ use crate::planners::life;
 use crate::planners::social;
 use crate::shared::collision;
 use crate::shared::components;
+use crate::shared::state_machine;
 use crate::shared::inputs;
 use crate::shared::pickups;
 use crate::shared::timeofday;
@@ -49,6 +50,7 @@ pub async fn main() {
   scheduler.attach_system::<inputs::InputsSystem>();
   scheduler.attach_system::<timeofday::TimeOfDaySystem>();
   scheduler.attach_system::<pickups::PickupsSystem>();
+  scheduler.attach_system::<state_machine::StateMachineSystem>();
   //scheduler.attach_system::<tileset::TilesetSystem>();
   scheduler.attach_system::<collision::CollisionSystem>();
 

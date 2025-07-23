@@ -5,5 +5,6 @@ pub mod game_input;
 pub mod inputs;
 pub mod loading;
 pub mod pickups;
+pub mod state_machine;
 pub mod timeofday;
 pub mod ui_components;

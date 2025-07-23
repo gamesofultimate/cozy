@@ -58,6 +58,7 @@ serde = { version = "1.0.124", features = ["derive"] }
 rand = "0.8.5"
 bitflags = { version = "2.9.0", features = ["serde"] }
 kahuna = "0.3.0"
+chrono = { version = "0.4.20", features = ["serde"] }
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 tokio = { version = "1.18.2", default-features = false, features = [

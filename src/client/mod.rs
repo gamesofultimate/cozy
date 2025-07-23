@@ -2,7 +2,8 @@ mod camera;
 
 use crate::planners::{idling, life, social};
 use crate::shared::{
-  collision, components, game_input::GameInput, inputs, loading, pickups, timeofday, ui_components,
+  collision, components, game_input::GameInput, inputs, loading, pickups, state_machine, timeofday,
+  ui_components,
 };
 use engine::application::bus::BrowserBus;
 //use engine::systems::browser::BrowserActor;
@@ -57,6 +58,7 @@ pub fn main(
   scheduler.attach_system::<inputs::InputsSystem>();
   scheduler.attach_system::<timeofday::TimeOfDaySystem>();
   scheduler.attach_system::<pickups::PickupsSystem>();
+  scheduler.attach_system::<state_machine::StateMachineSystem>();
   //scheduler.attach_system::<tileset::TilesetSystem>();
   scheduler.attach_system::<collision::CollisionSystem>();
   scheduler.attach_middleware_with_subsystem::<camera::CameraMiddleware, camera::CameraSubsystem>();
