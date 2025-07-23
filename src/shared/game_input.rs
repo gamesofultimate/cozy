@@ -92,16 +92,10 @@ impl GameInput {
         self.state -= InputState::IsRunning;
       }
 
-      DeviceEvent::Gamepad(
-        _,
-        GamepadEvent::Button(ButtonState::Down, GamepadButton::X),
-      ) => {
+      DeviceEvent::Gamepad(_, GamepadEvent::Button(ButtonState::Down, GamepadButton::X)) => {
         self.state |= InputState::Action;
       }
-      DeviceEvent::Gamepad(
-        _,
-        GamepadEvent::Button(ButtonState::Up, GamepadButton::X),
-      ) => {
+      DeviceEvent::Gamepad(_, GamepadEvent::Button(ButtonState::Up, GamepadButton::X)) => {
         self.state -= InputState::Action;
       }
       DeviceEvent::Gamepad(
@@ -317,6 +311,7 @@ impl Input for GameInput {
     self.state -= InputState::ChangeActionUp;
     self.state -= InputState::ToggleDebugPhysics;
     self.state -= InputState::ToggleDebugPerformance;
+    self.state -= InputState::Escape;
   }
 
   fn has_mouse_lock(&self) -> bool {

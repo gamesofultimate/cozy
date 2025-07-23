@@ -280,12 +280,6 @@ impl StateMachineSystem {
 
       let distance = Vector3::metric_distance(&camera_position, &focus_position);
 
-      log::info!(
-        "config: {:?} {:?}",
-        config.dof.focus_scale,
-        config.dof.focus_point
-      );
-
       match game.state {
         GameState::Playing => {
           config.dof.focus_point = lerp(config.dof.focus_point, distance, 0.9);
@@ -393,7 +387,6 @@ impl StateMachineSystem {
   fn handle_start(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
     let input = self.inputs.read_client();
     if let Some(machine) = backpack.get_mut::<StateMachine>() {
-      log::info!("state: {:?} -> {:?}", machine.state, input.state);
       match &machine.state {
         GameState::Loading if input.state.contains(InputState::LeftClick) => machine.start_game(),
         GameState::Playing if input.state.contains(InputState::Escape) => machine.pause_game(),
