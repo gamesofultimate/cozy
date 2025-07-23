@@ -1,5 +1,5 @@
 {
-  "version": "v0.0.9",
+  "version": "v0.0.13",
   "filename": "01_loading.lvl",
   "config": {
     "id": "434f4365-314c-4b0a-b510-0dd832f63da2",
@@ -21,7 +21,12 @@
       "scale": 4,
       "radius": 2,
       "bias": 0.5,
-      "intensity": 1.5
+      "intensity": 1.5,
+      "bias_start": 0,
+      "bias_end": 0.995,
+      "sample_count": 4,
+      "slice_count": 4,
+      "hit_thickness": 2
     },
     "ambient": {
       "intensity": 0.55,
@@ -117,7 +122,13 @@
                   -0.65,
                   0
                 ]
-              }
+              },
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0
             }
           },
           {
@@ -170,7 +181,11 @@
                   "friction": 0.1,
                   "id": "6b1a87d2-a153-4e14-b84e-15a9e97f50cf",
                   "is_sensor": false,
-                  "restitution": 0.1
+                  "restitution": 0.1,
+                  "groups": {
+                    "memberships": "0b11111111111111111111111111111111",
+                    "filters": "0b11111111111111111111111111111111"
+                  }
                 },
                 "config": null,
                 "id": "89f42152-1b02-4e9c-829e-12f68c78a229",
@@ -360,7 +375,8 @@
               "should_loop": false,
               "spatial": null,
               "state": "Playing",
-              "volume": 0.8
+              "volume": 0.8,
+              "pitch": 0
             }
           }
         ]
@@ -419,7 +435,11 @@
                   "friction": 0.1,
                   "id": "31a6ad40-11bc-43eb-87ee-a0158ff7c693",
                   "is_sensor": false,
-                  "restitution": 0.1
+                  "restitution": 0.1,
+                  "groups": {
+                    "memberships": "0b11111111111111111111111111111111",
+                    "filters": "0b11111111111111111111111111111111"
+                  }
                 },
                 "config": null,
                 "id": "d34db39d-5d4e-491e-84f8-81cfb6c5619d",
@@ -488,7 +508,11 @@
                   "friction": 0.1,
                   "id": "8c5fdb5e-4407-40c1-9b01-d00d4893ad02",
                   "is_sensor": false,
-                  "restitution": 0.1
+                  "restitution": 0.1,
+                  "groups": {
+                    "memberships": "0b11111111111111111111111111111111",
+                    "filters": "0b11111111111111111111111111111111"
+                  }
                 },
                 "config": null,
                 "id": "6df4965f-0dd6-443f-bfa9-61bbb2f599f2",
@@ -557,7 +581,11 @@
                   "friction": 0.1,
                   "id": "a5dd597f-8c0f-48de-8848-ddad94c51c7f",
                   "is_sensor": false,
-                  "restitution": 0.1
+                  "restitution": 0.1,
+                  "groups": {
+                    "memberships": "0b11111111111111111111111111111111",
+                    "filters": "0b11111111111111111111111111111111"
+                  }
                 },
                 "config": null,
                 "id": "2627a535-9303-40eb-a42d-bdead6f04c74",
@@ -626,7 +654,11 @@
                   "friction": 0.1,
                   "id": "6d100215-a183-4fa0-a5f7-b7bb995dbf10",
                   "is_sensor": false,
-                  "restitution": 0.1
+                  "restitution": 0.1,
+                  "groups": {
+                    "memberships": "0b11111111111111111111111111111111",
+                    "filters": "0b11111111111111111111111111111111"
+                  }
                 },
                 "config": null,
                 "id": "4092c1ca-1bac-4efb-9103-ac88d506cf85",
@@ -695,7 +727,11 @@
                   "friction": 0.1,
                   "id": "fd9204fc-c02a-4081-bd01-471a54edc605",
                   "is_sensor": false,
-                  "restitution": 0.1
+                  "restitution": 0.1,
+                  "groups": {
+                    "memberships": "0b11111111111111111111111111111111",
+                    "filters": "0b11111111111111111111111111111111"
+                  }
                 },
                 "config": null,
                 "id": "3283c8d1-ede2-42fc-9fce-75c93e82b32c",

@@ -1,5 +1,5 @@
 {
-  "version": "v0.0.11",
+  "version": "v0.0.13",
   "filename": "10_main.lvl",
   "config": {
     "id": "434f4365-314c-4b0a-b510-0dd832f63da2",
@@ -21,7 +21,12 @@
       "scale": 4,
       "radius": 2,
       "bias": 0.5,
-      "intensity": 1.5
+      "intensity": 1,
+      "bias_start": 0,
+      "bias_end": 0.9995,
+      "sample_count": 2,
+      "slice_count": 2,
+      "hit_thickness": 2
     },
     "ambient": {
       "intensity": 0.55,
@@ -51,7 +56,7 @@
       "shadow": false,
       "physics": true,
       "lighting": false,
-      "render_debug_mode": "None",
+      "render_debug_mode": "Ssgi",
       "grid": false,
       "hide_ui": false
     },
@@ -1018,8 +1023,8 @@
                   "is_sensor": false,
                   "restitution": 0.1,
                   "groups": {
-                    "memberships": "0b11111111111111111111111111111111",
-                    "filters": "0b11111111111111111111111111111111"
+                    "memberships": "0b00000001000000000000000000000000",
+                    "filters": "0b01111111111111111111111111111111"
                   }
                 },
                 "config": null,
@@ -2365,7 +2370,7 @@
                   "restitution": 0.1,
                   "groups": {
                     "memberships": "0b11111111111111111111111111111111",
-                    "filters": "0b11111111111111111111111111111111"
+                    "filters": "0b01111110111111111111111111111111"
                   }
                 },
                 "config": null,
@@ -2628,7 +2633,8 @@
               "should_loop": false,
               "spatial": null,
               "state": "Playing",
-              "volume": 0.8
+              "volume": 0.8,
+              "pitch": 0
             }
           }
         ]
@@ -11030,8 +11036,8 @@
                   "collider_type": {
                     "Cube": {
                       "height": 0.1,
-                      "length": 1,
-                      "width": 1
+                      "length": 0.9,
+                      "width": 0.9
                     }
                   },
                   "density": 1,
