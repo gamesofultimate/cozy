@@ -15,6 +15,8 @@ use engine::{
   utils::units::{Kph, Seconds},
 };
 
+use crate::shared::state_machine::{GameState, StateMachine};
+
 #[cfg(target_arch = "wasm32")]
 use engine::{application::input::InputsReader, systems::input::CanvasController};
 
@@ -68,7 +70,7 @@ impl InputsSystem {
     }
   }
 
-  fn handle_move(&mut self, scene: &mut Scene, delta_time: Seconds) {
+  fn handle_move(&mut self, scene: &mut Scene, backpack: &mut Backpack, delta_time: Seconds) {
     for (_, (component, input, physics, character, movement, _, maybe_audio)) in scene.query_mut::<(
       &mut InputComponent,
       &GameInput,
@@ -97,15 +99,22 @@ impl InputsSystem {
 
       let mut velocity = Vector3::new(0.0, -9.8, 0.0);
 
-      if input.check(InputState::IsMouseLocked) || input.check(InputState::HasJoystick) {
-        if input.forward.abs() > component.deadzone {
-          velocity.z += input.forward * *speed;
-        }
+      if let Some(machine) = backpack.get_mut::<StateMachine>() {
+        match &machine.state {
+          GameState::Playing => {
+            if input.check(InputState::IsMouseLocked) || input.check(InputState::HasJoystick) {
+              if input.forward.abs() > component.deadzone {
+                velocity.z += input.forward * *speed;
+              }
 
-        if input.right.abs() > component.deadzone {
-          velocity.x += input.right * *speed;
+              if input.right.abs() > component.deadzone {
+                velocity.x += input.right * *speed;
+              }
+            }
+          }
+          _ => {}
         }
-      }
+      };
 
       if let Some(audio) = maybe_audio
         && audio.state == SourceState::Stopped
@@ -145,6 +154,6 @@ impl System for InputsSystem {
     #[cfg(target_arch = "wasm32")]
     self.capture_mouse(backpack);
 
-    self.handle_move(scene, delta_time);
+    self.handle_move(scene, backpack, delta_time);
   }
 }
