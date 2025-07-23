@@ -305,23 +305,36 @@
     },
     {
       "tag": "Struct",
-      "name": "CameraFollow",
-      "label": "Camera Follow",
-      "default_values": "{ following: (() => { \n            return Symbol.for(\"PrefabId\");\n           })() }",
+      "name": "CameraFollower",
+      "label": "Camera Follower",
+      "default_values": "{ interpolation_speed: 0.0, shake_multiplier: 0.0 }",
       "duplicate_values": "null",
       "docs": null,
       "fields": [
         {
-          "name": "following",
-          "label": "Following",
+          "name": "interpolation_speed",
+          "label": "Interpolation Speed",
           "docs": null,
           "ty": {
-            "tag": "Reference",
-            "name": "Identifiable",
-            "reference": "Prefab",
-            "default_values": "(() => { \n            return Symbol.for(\"PrefabId\");\n           })()",
-            "duplicate_values": "null",
-            "ty": "PrefabId"
+            "tag": "Primitive",
+            "ty": {
+              "tag": "F32"
+            },
+            "default_values": "0.0",
+            "duplicate_values": "null"
+          }
+        },
+        {
+          "name": "shake_multiplier",
+          "label": "Shake Multiplier",
+          "docs": null,
+          "ty": {
+            "tag": "Primitive",
+            "ty": {
+              "tag": "F32"
+            },
+            "default_values": "0.0",
+            "duplicate_values": "null"
           }
         }
       ],

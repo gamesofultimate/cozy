@@ -20,7 +20,7 @@ impl Registry for GameComponents {
     ActiveCamera::register();
     Pickup::register();
     Player::register();
-    CameraFollow::register();
+    CameraFollower::register();
     Character::register();
     WaterCan::register();
     WaterSource::register();
@@ -54,11 +54,12 @@ pub struct Movement {
 impl ProvideAssets for Movement {}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
-pub struct CameraFollow {
-  pub following: PrefabId,
+pub struct CameraFollower {
+  pub interpolation_speed: f32,
+  pub shake_multiplier: f32,
 }
 
-impl ProvideAssets for CameraFollow {}
+impl ProvideAssets for CameraFollower {}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
 pub struct Pickup {}

@@ -11,9 +11,9 @@
       "hdr": true
     },
     "dof": {
-      "focus_point": 8.7,
-      "focus_scale": 2.5,
-      "radius_scale": 5,
+      "focus_point": 3,
+      "focus_scale": 1.5,
+      "radius_scale": 2,
       "enabled": false
     },
     "ssao": {
@@ -329,6 +329,9 @@
             "Seeds": {
               "pumpkins": 5
             }
+          },
+          {
+            "ActiveCamera": {}
           }
         ]
       },
@@ -341,11 +344,11 @@
           "transform": {
             "translation": [
               0,
-              6,
-              -6
+              0,
+              0
             ],
             "rotation": [
-              0.7853981633974483,
+              0,
               0,
               0
             ],
@@ -408,8 +411,14 @@
         },
         "components": [
           {
-            "CameraFollow": {
-              "following": "a0f3a902-2575-484e-9af1-093f66a1d2d5"
+            "CameraFollower": {
+              "offset": [
+                0,
+                1,
+                -8
+              ],
+              "interpolation_speed": 0.08,
+              "shake_multiplier": 0.025
             }
           }
         ]

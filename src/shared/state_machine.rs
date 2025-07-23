@@ -1,32 +1,52 @@
 //use crate::shared::audio_components::{AudioGameStart, SoundtrackIntro};
 use crate::shared::components::{ActiveCamera, Player};
+use crate::shared::game_input::{GameInput, InputState};
 use chrono::{DateTime, TimeDelta, Utc};
 use engine::{
   application::{
     components::{
-      AudioSourceComponent, NetworkedPlayerComponent, PhysicsComponent, SelfComponent, SourceState,
+      AudioSourceComponent, CameraComponent, NetworkedPlayerComponent, PhysicsComponent,
+      SelfComponent, SourceState,
     },
-    scene::Scene,
+    config::Config,
+    input::InputsReader,
+    scene::{Scene, TransformComponent},
   },
   nalgebra::{Unit, Vector3},
-  systems::{physics::PhysicsController, Backpack, Initializable, Inventory, System},
-  utils::{easing::Easing, interpolation::Interpolator, units::Seconds},
+  systems::{
+    physics::PhysicsController, trusty::MultiplayerController, Backpack, Initializable, Inventory,
+    System,
+  },
+  utils::{
+    easing::Easing,
+    interpolation::Interpolator,
+    units::{Degrees, Radians, Seconds},
+  },
   ConnectionId,
 };
 use serde::{Deserialize, Serialize};
 use std::collections::{HashMap, HashSet};
 use tagged::registry::Prev;
 
+#[cfg(target_arch = "wasm32")]
+use engine::systems::rendering::CameraConfig;
+
 pub struct StateMachineSystem {
   current_time: Seconds,
   physics: PhysicsController,
+  inputs: InputsReader<GameInput>,
+  multiplayer: MultiplayerController,
 }
 
 impl Initializable for StateMachineSystem {
   fn initialize(inventory: &Inventory) -> Self {
     let physics = inventory.get::<PhysicsController>().clone();
+    let inputs = inventory.get::<InputsReader<GameInput>>().clone();
+    let multiplayer = inventory.get::<MultiplayerController>().clone();
     Self {
       physics,
+      inputs,
+      multiplayer,
       current_time: Seconds::new(0.0),
     }
   }
@@ -44,9 +64,18 @@ impl System for StateMachineSystem {
   }
 
   fn run(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
-    self.handle_turns(scene, backpack);
+    #[cfg(target_arch = "wasm32")]
+    {
+      self.handle_start(scene, backpack);
+      self.handle_receive_from_server(scene, backpack);
+      self.handle_camera_dof(scene, backpack);
+    }
     self.set_camera(scene, backpack);
-    self.handle_transitions(scene, backpack);
+    //self.handle_transitions(scene, backpack);
+
+    self.handle_state(scene, backpack);
+    #[cfg(not(target_arch = "wasm32"))]
+    self.handle_replicate(backpack);
     self.handle_prev(backpack);
   }
 }
@@ -225,9 +254,76 @@ impl StateMachineSystem {
     */
   }
 
+  #[cfg(target_arch = "wasm32")]
+  fn handle_camera_dof(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
+    let mut camera_position = Vector3::zeros();
+    let mut focus_position = Vector3::zeros();
+
+    if let Some(camera_config) = backpack.get_mut::<CameraConfig>() {
+      camera_position = camera_config.translation;
+    }
+
+    for (_, (transform, _)) in scene.query_mut::<(&mut TransformComponent, &ActiveCamera)>() {
+      focus_position = transform.translation;
+    }
+
+    if let Some((config, game)) = backpack.fetch_mut::<(Config, StateMachine)>() {
+      if config.dof.focus_scale < 0.1 {
+        config.dof.enabled = false;
+      } else {
+        config.dof.enabled = true;
+      }
+
+      log::info!("state: {:?}", game.state);
+
+      config.dof.focus_point = Vector3::metric_distance(&camera_position, &focus_position);
+
+      match game.state {
+        GameState::RequestTransition | GameState::TransitionToGame { .. } | GameState::Playing => {
+          config.dof.focus_scale = (config.dof.focus_scale - 0.04).clamp(0.0, 3.0);
+        }
+        _ => {
+          config.dof.focus_scale = (config.dof.focus_scale + 0.04).clamp(0.0, 3.0);
+        }
+      }
+    }
+  }
+
   fn set_camera(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
-    /*
-    if let Some((game,)) = backpack.fetch_mut::<(StateMachine,)>() {
+    if let Some((next, Prev(prev))) = backpack.fetch_mut::<(StateMachine, Prev<StateMachine>)>() {
+      match (&prev.state, &next.state) {
+        (GameState::Loading, GameState::RequestTransition)
+        | (GameState::Loading, GameState::TransitionToGame { .. }) => {
+          let mut player = None;
+          for (entity, (_, _, _)) in
+            scene.query_mut::<(&Player, &NetworkedPlayerComponent, &SelfComponent)>()
+          {
+            player = Some(entity);
+          }
+
+          if let Some(entity) = player {
+            scene.add_local_component(entity, ActiveCamera {});
+          }
+
+          for (entity, (transform, _)) in
+            scene.query_mut::<(&mut TransformComponent, &CameraComponent)>()
+          {
+            let degrees = Radians::from(Degrees::new(45.0));
+            transform.translation = Vector3::new(0.0, 6.0, -6.0);
+            transform.rotation = Vector3::new(*degrees, 0.0, 0.0);
+          }
+        }
+        (_, GameState::Initializing) => {
+          for (entity, (transform, _)) in
+            scene.query_mut::<(&mut TransformComponent, &CameraComponent)>()
+          {
+            transform.translation = Vector3::new(0.0, 0.0, -3.0);
+            transform.rotation = Vector3::new(0.0, 0.0, 0.0);
+          }
+        }
+        _ => {}
+      }
+      /*
       scene.clear_component::<ActiveCamera>();
       if let Some((current_player, _)) = game.get_current() {
         let mut next_camera = None;
@@ -267,16 +363,43 @@ impl StateMachineSystem {
           scene.add_local_component(entity, ActiveCamera {});
         }
       }
+      */
     }
-    */
   }
 
-  fn handle_turns(&mut self, _: &mut Scene, backpack: &mut Backpack) {
+  #[cfg(target_arch = "wasm32")]
+  fn handle_start(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
+    let input = self.inputs.read_client();
+    if let Some(machine) = backpack.get_mut::<StateMachine>() {
+      match &machine.state {
+        GameState::Loading if input.state.contains(InputState::LeftClick) => machine.start_game(),
+        _ => {}
+      }
+    }
+  }
+
+  #[cfg(target_arch = "wasm32")]
+  fn handle_receive_from_server(&mut self, _: &mut Scene, backpack: &mut Backpack) {
+    while let Ok(state) = self.multiplayer.try_recv_custom::<StateMachine>() {
+      backpack.insert(state);
+    }
+  }
+
+  fn handle_state(&mut self, _: &mut Scene, backpack: &mut Backpack) {
     if let Some((game, delta_time)) = backpack.fetch_mut::<(StateMachine, Seconds)>() {
       self.current_time += *delta_time;
 
       if let Some(_) = game.bump_state(self.current_time) {
         self.current_time = Seconds::new(0.0);
+      }
+    }
+  }
+
+  #[cfg(not(target_arch = "wasm32"))]
+  fn handle_replicate(&mut self, backpack: &mut Backpack) {
+    if let Some((game, Prev(prev))) = backpack.fetch_mut::<(StateMachine, Prev<StateMachine>)>() {
+      if game != prev {
+        self.multiplayer.broadcast_custom(game.clone());
       }
     }
   }
@@ -289,6 +412,7 @@ pub enum GameState {
   RequestTransition,
   TransitionToGame { timeout: Seconds },
   Playing,
+  Pause,
 }
 
 #[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
@@ -336,32 +460,6 @@ impl StateMachine {
     (self.ready.len(), self.players.len())
   }
 
-  pub fn can_current_move(&self) -> bool {
-    unimplemented!()
-    /*
-    if let GameState::Turn { current_player, .. } = self.state
-      && let Some((_current_player, _)) = self.players.get(current_player)
-    {
-      true
-    } else {
-      false
-    }
-    */
-  }
-
-  pub fn can_move(&self, id: ConnectionId) -> bool {
-    unimplemented!()
-    /*
-    if let GameState::Turn { current_player, .. } = self.state
-      && let Some((current_player, _)) = self.players.get(current_player)
-    {
-      *current_player == id
-    } else {
-      false
-    }
-    */
-  }
-
   #[cfg(not(target_arch = "wasm32"))]
   pub fn connect(&mut self, id: ConnectionId, username: &str) {
     self.players.push((id, String::from(username)));
@@ -388,10 +486,14 @@ impl StateMachine {
     }
   }
 
+  pub fn start_game(&mut self) {
+    self.state = GameState::RequestTransition;
+  }
+
   pub fn bump_state(&mut self, current_time: Seconds) -> Option<()> {
     // if no one is online, go back to initializing
     if self.players.len() == 0 {
-      let state = GameState::Initializing;
+      self.state = GameState::Initializing;
       return Some(());
     }
 

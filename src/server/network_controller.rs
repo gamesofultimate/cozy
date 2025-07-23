@@ -1,3 +1,4 @@
+use crate::shared::state_machine::StateMachine;
 use async_trait::async_trait;
 use engine::systems::network::InternalSender;
 use engine::systems::Backpack;
@@ -27,6 +28,7 @@ pub struct NetworkController {
   server: InternalSender<ServerControls>,
   client_sender: ClientSender<TrustedInput>,
   connections: PlayerConnections,
+  unique_names: HashSet<String>,
 }
 
 impl Initializable for NetworkController {
@@ -38,6 +40,7 @@ impl Initializable for NetworkController {
       client_sender,
       download_sender,
       server,
+      unique_names: HashSet::new(),
       connections: PlayerConnections {
         connections: HashSet::new(),
       },
@@ -77,7 +80,23 @@ impl ChannelEvents for NetworkController {
       return;
     }
 
-    log::info!("PLAYER CONNECTED!!! {:?}", &connection_id);
+    let username = match &player {
+      Some((_, username)) => username.clone(),
+      None => {
+        let mut result;
+        loop {
+          result = fakeit::internet::username();
+          log::info!("username: {result}");
+          if !self.unique_names.contains(&result) {
+            break;
+          }
+        }
+
+        result
+      }
+    };
+
+    self.unique_names.insert(username.clone());
 
     scene.spawn_prefab_and_children_with(
       "Player",
@@ -85,7 +104,6 @@ impl ChannelEvents for NetworkController {
         if let Some((_, username)) = &player {
           prefab.tag.name = username.to_string();
         };
-        log::info!("where am i? {:?}", &prefab.transform.translation);
         prefab.push(NetworkedPlayerComponent::new(connection_id));
       },
       |prefab| {
@@ -97,6 +115,9 @@ impl ChannelEvents for NetworkController {
       .server
       .send(ServerControls::SyncWorld { connection_id });
 
+    if let Some(machine) = backpack.get_mut::<StateMachine>() {
+      machine.connect(connection_id, &username);
+    }
     self.connections.connections = connections.clone();
     backpack.insert::<PlayerConnections>(self.connections.clone());
   }
@@ -112,6 +133,9 @@ impl ChannelEvents for NetworkController {
       .server
       .send(ServerControls::DisconnectPlayer { connection_id });
 
+    if let Some(machine) = backpack.get_mut::<StateMachine>() {
+      machine.disconnect(connection_id);
+    }
     self.connections.connections.remove(&connection_id);
     backpack.insert::<PlayerConnections>(self.connections.clone());
   }
