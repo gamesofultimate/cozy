@@ -1187,6 +1187,42 @@
     },
     {
       "tag": "Struct",
+      "name": "NextPhase",
+      "label": "Next Phase",
+      "default_values": "{ prefab_name: '', time: { seconds: 0.0 } }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [
+        {
+          "name": "prefab_name",
+          "label": "Prefab Name",
+          "docs": null,
+          "ty": {
+            "tag": "Primitive",
+            "ty": {
+              "tag": "String"
+            },
+            "default_values": "''",
+            "duplicate_values": "null"
+          }
+        },
+        {
+          "name": "time",
+          "label": "Time",
+          "docs": null,
+          "ty": {
+            "tag": "Custom",
+            "name": "Seconds",
+            "default_values": "{ seconds: 0.0 }",
+            "duplicate_values": "null",
+            "ty": "Seconds"
+          }
+        }
+      ],
+      "private": false
+    },
+    {
+      "tag": "Struct",
       "name": "OccludeeComponent",
       "label": "Occludee Component",
       "default_values": "{  }",

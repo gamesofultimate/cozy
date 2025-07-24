@@ -1,10 +1,9 @@
 use crate::shared::components::{
-  Action, Character, CharacterState, Log, Pickup, PickupSpace, Tile, TimeOfDay, WaterCan,
-  WaterSource, WateredTile,
-  Seeds, ActionTypes,
-  CropTile, Level,
+  Action, ActionTypes, Character, CharacterState, CropTile, Level, Log, Pickup, PickupSpace, Seeds,
+  Tile, TimeOfDay, WaterCan, WaterSource, WateredTile,
 };
 use crate::shared::game_input::{GameInput, InputState};
+use crate::shared::state_machine::{GameState, StateMachine};
 use crate::shared::ui_components::InventoryDisplay;
 use engine::{
   application::{
@@ -31,9 +30,7 @@ impl Initializable for PickupsSystem {
 
 impl PickupsSystem {
   pub fn handle_select_action(&self, scene: &mut Scene) {
-    for (_, (input, character)) in
-      scene.query_mut::<(&GameInput, &mut Character)>()
-    {
+    for (_, (input, character)) in scene.query_mut::<(&GameInput, &mut Character)>() {
       if input.check(InputState::ChangeActionUp) {
         character.action = match character.action {
           ActionTypes::WaterTile => ActionTypes::ThrowSeed,
@@ -207,15 +204,14 @@ impl PickupsSystem {
         && seeds.pumpkins >= 1
         && let CharacterState::Normal | CharacterState::Running = state
       {
-        *state = CharacterState::ThrowingSeed(collision.other, Level::to_max(1.0, Seconds::new(4.0)));
+        *state =
+          CharacterState::ThrowingSeed(collision.other, Level::to_max(1.0, Seconds::new(4.0)));
         seeds.pumpkins -= 1;
       }
     }
 
     let mut working_tile = None;
-    for (_, (input, character)) in
-      scene.query_mut::<(&GameInput, &mut CharacterState)>()
-    {
+    for (_, (input, character)) in scene.query_mut::<(&GameInput, &mut CharacterState)>() {
       if let CharacterState::ThrowingSeed(entity, timing) = character {
         if let Some(_) = timing.tick() {
           working_tile = Some(*entity);
@@ -227,8 +223,13 @@ impl PickupsSystem {
     {
       if let Some(tile_entity) = working_tile
         && let Some(prefabs) = scene.get_prefab_owned("Prefab::Pumpkin")
-        && let Some((mut prefab, _)) = prefabs.iter().cloned().find(|(prefab, _)| prefab.tag.name == "Seeds")
-        && let Some(transform) = scene.get_components_mut::<&TransformComponent>(tile_entity).cloned()
+        && let Some((mut prefab, _)) = prefabs
+          .iter()
+          .cloned()
+          .find(|(prefab, _)| prefab.tag.name == "Seeds")
+        && let Some(transform) = scene
+          .get_components_mut::<&TransformComponent>(tile_entity)
+          .cloned()
       {
         scene.add_component(tile_entity, CropTile {});
         let crop_entity = scene.create_raw_entity("Pumpkin Crop");
@@ -261,14 +262,23 @@ impl PickupsSystem {
     }
   }
 
-  pub fn handle_update_ui(&self, scene: &mut Scene) {
+  pub fn handle_update_ui(&self, scene: &mut Scene, backpack: &mut Backpack) {
     let (character, seeds, maybe_water) =
       match scene.query_one::<(&SelfComponent, &Character, &Seeds, Option<&WaterCan>)>() {
-        Some((entity, (_, character, seeds, water))) => (character.clone(), seeds.clone(), water.cloned()),
+        Some((entity, (_, character, seeds, water))) => {
+          (character.clone(), seeds.clone(), water.cloned())
+        }
         None => return,
       };
 
     if let Some((_, (text, _))) = scene.query_one::<(&mut TextComponent, &InventoryDisplay)>() {
+      if let Some(machine) = backpack.get_mut::<StateMachine>() {
+        if machine.is_active() {
+          text.opacity = lerp(text.opacity, 1.0, 0.9);
+        } else {
+          text.opacity = lerp(text.opacity, 0.0, 0.9);
+        }
+      }
       let mut texts = vec![];
 
       if let Some(water) = maybe_water {
@@ -291,6 +301,10 @@ impl PickupsSystem {
       text.text = texts.join("\n");
     }
   }
+
+  pub fn handle_plant_growth(&self, scene: &mut Scene, backpack: &mut Backpack) {
+    //panic!("Continue here");
+  }
 }
 
 impl System for PickupsSystem {
@@ -305,6 +319,11 @@ impl System for PickupsSystem {
     self.handle_water_sources(scene, backpack);
     self.handle_watering_tiles(scene, backpack);
     self.handle_throw_seeds(scene, backpack);
-    self.handle_update_ui(scene);
+    self.handle_plant_growth(scene, backpack);
+    self.handle_update_ui(scene, backpack);
   }
+}
+
+fn lerp(a: f32, b: f32, percent: f32) -> f32 {
+  a * percent + b * (1.0 - percent)
 }

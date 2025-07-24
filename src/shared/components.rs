@@ -31,6 +31,7 @@ impl Registry for GameComponents {
     Seat::register();
     TimeOfDay::register();
     Action::register();
+    NextPhase::register();
     Log::register();
     PickupSpace::register();
     HouseEntrance::register();
@@ -357,6 +358,14 @@ impl ProvideAssets for WateredTile {}
 pub struct CropTile {}
 
 impl ProvideAssets for CropTile {}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct NextPhase {
+  prefab_name: String,
+  time: Seconds,
+}
+
+impl ProvideAssets for NextPhase {}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
 pub struct Seeds {

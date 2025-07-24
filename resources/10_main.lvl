@@ -2642,7 +2642,7 @@
               "should_loop": false,
               "spatial": null,
               "state": "Playing",
-              "volume": 0.8,
+              "volume": 0,
               "pitch": 0
             }
           }
@@ -11255,7 +11255,7 @@
               "kerning": 1.2,
               "line_height": 1.5,
               "max_width": 500,
-              "opacity": 1,
+              "opacity": 0,
               "text": "Inventory",
               "text_alignment": "Right"
             }

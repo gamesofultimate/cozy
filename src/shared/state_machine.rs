@@ -464,6 +464,22 @@ impl StateMachine {
     self.ready.contains(&id)
   }
 
+  pub fn is_playing(&self) -> bool {
+    if let GameState::Playing = &self.state {
+      true
+    } else {
+      false
+    }
+  }
+
+  pub fn is_active(&self) -> bool {
+    if let GameState::Playing | GameState::Paused = &self.state {
+      true
+    } else {
+      false
+    }
+  }
+
   pub fn check_admin(&mut self, id: ConnectionId) -> bool {
     if let Some(admin) = self.admin
       && admin == id
