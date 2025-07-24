@@ -1,6 +1,6 @@
 use crate::shared::components::{
-  Action, ActionTypes, Character, CharacterState, CropTile, Level, Log, Pickup, PickupSpace, Seeds,
-  Tile, TimeOfDay, WaterCan, WaterSource, WateredTile,
+  Action, ActionTypes, Character, CharacterState, Crop, CropTile, CropType, Level, Log, Pickup,
+  PickupSpace, Seeds, Stage, Tile, TimeOfDay, WaterCan, WaterSource, WateredTile,
 };
 use crate::shared::game_input::{GameInput, InputState};
 use crate::shared::state_machine::{GameState, StateMachine};
@@ -222,7 +222,11 @@ impl PickupsSystem {
 
     {
       if let Some(tile_entity) = working_tile
-        && let Some(prefabs) = scene.get_prefab_owned("Prefab::Pumpkin")
+        && let Some(prefabs) = scene.get_prefab_owned(CropType::Pumpkin.get_prefab())
+        && let Some((mut parent, _)) = prefabs
+          .iter()
+          .cloned()
+          .find(|(prefab, _)| prefab.tag.name == CropType::Pumpkin.get_prefab())
         && let Some((mut prefab, _)) = prefabs
           .iter()
           .cloned()
@@ -234,6 +238,7 @@ impl PickupsSystem {
         scene.add_component(tile_entity, CropTile {});
         let crop_entity = scene.create_raw_entity("Pumpkin Crop");
         prefab.transform = transform;
+        scene.create_with_prefab(crop_entity, parent);
         scene.create_with_prefab(crop_entity, prefab);
       }
     }
@@ -303,7 +308,62 @@ impl PickupsSystem {
   }
 
   pub fn handle_plant_growth(&self, scene: &mut Scene, backpack: &mut Backpack) {
+    let delta_time = backpack.get::<Seconds>().unwrap().clone();
     //panic!("Continue here");
+    let mut growing_crops = vec![];
+    for (entity, (transform, crop)) in scene.query_mut::<(&TransformComponent, &mut Crop)>() {
+      crop.phase_timing += delta_time;
+      match crop.stage {
+        Stage::Seeds => {
+          if crop.phase_timing > crop.seed_timeout {
+            growing_crops.push((entity.clone(), transform.clone(), crop.crop, crop.stage));
+            crop.phase_timing = Seconds::new(0.0);
+          }
+        }
+        Stage::Seedling => {
+          if crop.phase_timing > crop.seedling_timeout {
+            growing_crops.push((entity.clone(), transform.clone(), crop.crop, crop.stage));
+            crop.phase_timing = Seconds::new(0.0);
+          }
+        }
+        Stage::Flowering => {
+          if crop.phase_timing > crop.flowering_timeout {
+            growing_crops.push((entity.clone(), transform.clone(), crop.crop, crop.stage));
+            crop.phase_timing = Seconds::new(0.0);
+          }
+        }
+        Stage::Mature => {
+          // NOTE: Implement rotten crop
+          /*
+          if crop.phase_timing > crop.mature_timeout {
+            growing_crops.push((entity.clone(), transform.clone(), crop.crop, crop.stage));
+          }
+          */
+        }
+      };
+    }
+
+    for (entity, transform, crop, stage) in growing_crops {
+      if let Some(prefabs) = scene.get_prefab_owned(crop.get_prefab())
+        && let Some((mut parent, _)) = prefabs
+          .iter()
+          .cloned()
+          .find(|(prefab, _)| prefab.tag.name == crop.get_prefab())
+        && let Some((mut prefab, _)) = prefabs
+          .iter()
+          .cloned()
+          .find(|(prefab, _)| prefab.tag.name == stage.get_next_stage().get_prefab())
+      {
+        let _ = scene.despawn(entity);
+        let crop_entity = scene.create_raw_entity("Pumpkin Crop");
+        prefab.transform = transform;
+        if let Some(crop) = parent.get_mut::<Crop>() {
+          crop.stage = stage.get_next_stage();
+        }
+        scene.create_with_prefab(crop_entity, parent);
+        scene.create_with_prefab(crop_entity, prefab);
+      }
+    }
   }
 }
 

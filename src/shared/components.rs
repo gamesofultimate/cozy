@@ -227,13 +227,48 @@ pub struct Character {
 
 impl ProvideAssets for Character {}
 
-#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub enum CropType {
+  Pumpkin,
+}
+
+impl CropType {
+  pub fn get_prefab(&self) -> &'static str {
+    match self {
+      Self::Pumpkin => "Prefab::Pumpkin",
+    }
+  }
+}
+
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, Registerable, Schema, Duplicate)]
 pub enum Stage {
   Seeds,
   Seedling,
   Flowering,
   //Sprout,
   Mature,
+}
+
+impl Stage {
+  pub fn get_next_stage(&self) -> Self {
+    match self {
+      Self::Seeds => Self::Seedling,
+      Self::Seedling => Self::Flowering,
+      Self::Flowering => Self::Mature,
+      //Self::Sprout => Sprout,
+      Self::Mature => Self::Mature,
+    }
+  }
+
+  pub fn get_prefab(&self) -> &'static str {
+    match self {
+      Self::Seeds => "Seeds",
+      Self::Seedling => "Seedling",
+      Self::Flowering => "Flowering",
+      //Self::Sprout => "Sprout",
+      Self::Mature => "Mature",
+    }
+  }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
@@ -245,10 +280,17 @@ impl ProvideAssets for WaterCan {}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
 pub struct Crop {
+  pub crop: CropType,
   pub stage: Stage,
   pub season_start: u32,
   pub season_end: u32,
-  pub growth_phases: u32,
+
+  pub seed_timeout: Seconds,
+  pub seedling_timeout: Seconds,
+  pub flowering_timeout: Seconds,
+  pub mature_timeout: Seconds,
+
+  pub phase_timing: Seconds,
 }
 
 impl ProvideAssets for Crop {}
