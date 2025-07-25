@@ -1,7 +1,7 @@
 use crate::shared::components::{
   Action, ActionTypes, Character, CharacterState, Crop, CropTile, CropType, Harvestable,
-  Inventory as GameInventory, Item, Level, Log, Pickup, PickupSpace, Seeds, Stage, Tile, TimeOfDay,
-  WaterCan, WaterSource, WateredTile,
+  Inventory as GameInventory, Item, Level, Log, Pickup, PickupSpace, Quantity, Seeds, Stage, Tile,
+  TimeOfDay, WaterCan, WaterSource, WateredTile,
 };
 use crate::shared::game_input::{GameInput, InputState};
 use crate::shared::state_machine::{GameState, StateMachine};
@@ -290,16 +290,19 @@ impl PickupsSystem {
     for (player_entity, (input, character)) in
       scene.query_mut::<(&GameInput, &mut CharacterState)>()
     {
-      if let CharacterState::Harvesting(entity, timing) = character
+      if let CharacterState::Harvesting(harvesting_entity, timing) = character
         && let Some(_) = timing.tick()
       {
-        harvesting_entities.push((player_entity, *entity));
+        harvesting_entities.push((player_entity, *harvesting_entity));
         *character = CharacterState::Normal;
       }
     }
 
     for (player_entity, harvesting_entity) in harvesting_entities {
-      let _ = scene.despawn(harvesting_entity);
+      {
+        use engine::application::scene::Prefab;
+        let prefab = Prefab::pack(scene, harvesting_entity);
+      }
 
       let crop = match scene.get_components_mut::<&Crop>(harvesting_entity) {
         Some(data) => data.clone(),
@@ -308,6 +311,7 @@ impl PickupsSystem {
       if let Some(inventory) = scene.get_components_mut::<&mut GameInventory>(player_entity) {
         inventory.award(Item::Crop(crop.crop), crop.award);
       }
+      let _ = scene.despawn(harvesting_entity);
     }
 
     for (_, (model, _, _)) in scene.query_mut::<(
@@ -339,13 +343,21 @@ impl PickupsSystem {
   }
 
   pub fn handle_update_ui(&self, scene: &mut Scene, backpack: &mut Backpack) {
-    let (character, seeds, maybe_water) =
-      match scene.query_one::<(&SelfComponent, &Character, &Seeds, Option<&WaterCan>)>() {
-        Some((entity, (_, character, seeds, water))) => {
-          (character.clone(), seeds.clone(), water.cloned())
-        }
-        None => return,
-      };
+    let (character, seeds, inventory, maybe_water) = match scene.query_one::<(
+      &SelfComponent,
+      &Character,
+      &Seeds,
+      &GameInventory,
+      Option<&WaterCan>,
+    )>() {
+      Some((entity, (_, character, seeds, inventory, water))) => (
+        character.clone(),
+        seeds.clone(),
+        inventory.clone(),
+        water.cloned(),
+      ),
+      None => return,
+    };
 
     if let Some((_, (text, _))) = scene.query_one::<(&mut TextComponent, &InventoryDisplay)>() {
       if let Some(machine) = backpack.get_mut::<StateMachine>() {
@@ -362,8 +374,13 @@ impl PickupsSystem {
       }
 
       texts.push(format!("---"));
-      texts.push(format!("Seeds"));
-      texts.push(format!("Pumpking: {:}", seeds.pumpkins));
+      for (item, quantity) in inventory.items {
+        match quantity {
+          Quantity::Infinite => texts.push(format!("{:}", &item)),
+          Quantity::Empty => texts.push(format!("{:}", &item)),
+          Quantity::Finite(quantity) => texts.push(format!("{:} ({:})", &item, quantity)),
+        }
+      }
       texts.push(format!("---"));
       texts.push(format!("Action"));
       texts.push(match character.action {

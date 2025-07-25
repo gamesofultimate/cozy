@@ -320,6 +320,11 @@
             }
           },
           {
+            "Inventory": {
+              "items": {}
+            }
+          },
+          {
             "WaterCan": {
               "level": {
                 "max": 5,

@@ -238,6 +238,14 @@ pub enum CropType {
   Pumpkin,
 }
 
+impl std::fmt::Display for CropType {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    match self {
+      Self::Pumpkin => write!(f, "Pumpkin"),
+    }
+  }
+}
+
 impl CropType {
   pub fn get_prefab(&self) -> &'static str {
     match self {
@@ -463,15 +471,23 @@ pub struct Inventory {
 
 impl Inventory {
   pub fn award(&mut self, item: Item, quantity: usize) {
-    if let Some(item) = self.items.get_mut(&item) {
-      item.increase_by(quantity);
-    }
+    let item = self.items.entry(item).or_insert_with(|| Quantity::Empty);
+    item.increase_by(quantity);
   }
 
   pub fn can_use(&self, item: &Item) -> bool {
     match self.items.get(item) {
       Some(item) => item.can_use(),
       None => false,
+    }
+  }
+}
+
+impl std::fmt::Display for Item {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    match self {
+      Self::Crop(crop) => write!(f, "{:} - Crop", crop),
+      Self::Seed(crop) => write!(f, "{:} - Seed", crop),
     }
   }
 }
