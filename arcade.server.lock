@@ -636,6 +636,13 @@
                 "docs": null,
                 "default_values": "\"Mature\"",
                 "duplicate_values": "null"
+              },
+              {
+                "tag": "Unit",
+                "name": "Display",
+                "docs": null,
+                "default_values": "\"Display\"",
+                "duplicate_values": "null"
               }
             ],
             "private": false
@@ -801,6 +808,16 @@
       "tag": "Struct",
       "name": "DebugNavmeshStart",
       "label": "Debug Navmesh Start",
+      "default_values": "{  }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [],
+      "private": false
+    },
+    {
+      "tag": "Struct",
+      "name": "DisplayItem",
+      "label": "Display Item",
       "default_values": "{  }",
       "duplicate_values": "null",
       "docs": null,
@@ -4683,6 +4700,26 @@
           }
         }
       ],
+      "private": false
+    },
+    {
+      "tag": "Struct",
+      "name": "IsCelebrating",
+      "label": "Is Celebrating",
+      "default_values": "{  }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [],
+      "private": false
+    },
+    {
+      "tag": "Struct",
+      "name": "IsDoneCelebrating",
+      "label": "Is Done Celebrating",
+      "default_values": "{  }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [],
       "private": false
     }
   ],

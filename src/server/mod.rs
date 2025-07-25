@@ -10,6 +10,7 @@ use crate::shared::inputs;
 use crate::shared::pickups;
 use crate::shared::timeofday;
 use crate::shared::ui_components;
+use crate::shared::animations;
 //use crate::shared::tileset;
 use crate::server::network_controller::NetworkController;
 use crate::shared::game_input::GameInput;
@@ -42,6 +43,7 @@ pub async fn main() {
     HdrPipeline::<NetworkController, GameInput>::new("resources", rpc_address, session_address);
   let mut scheduler = Scheduler::new(FRAMES_PER_SECOND);
   scheduler.attach_plugin(hdr);
+  scheduler.attach_registry::<animations::AnimationTransitions>();
   scheduler.attach_registry::<components::GameComponents>();
   scheduler.attach_registry::<ui_components::UiComponents>();
   scheduler.attach_registry::<idling::IdleRegistry>();

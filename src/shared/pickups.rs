@@ -287,31 +287,62 @@ impl PickupsSystem {
     }
 
     let mut harvesting_entities = vec![];
-    for (player_entity, (input, character)) in
-      scene.query_mut::<(&GameInput, &mut CharacterState)>()
+    for (player_entity, (transform, input, character)) in
+      scene.query_mut::<(&TransformComponent, &GameInput, &mut CharacterState)>()
     {
       if let CharacterState::Harvesting(harvesting_entity, timing) = character
         && let Some(_) = timing.tick()
       {
-        harvesting_entities.push((player_entity, *harvesting_entity));
+        harvesting_entities.push((player_entity, *harvesting_entity, transform.clone()));
         *character = CharacterState::Normal;
       }
     }
 
-    for (player_entity, harvesting_entity) in harvesting_entities {
-      {
-        use engine::application::scene::Prefab;
-        let prefab = Prefab::pack(scene, harvesting_entity);
-      }
+    for (player_entity, harvesting_entity, player_transform) in harvesting_entities {
+      let mut is_showoff = false;
 
       let crop = match scene.get_components_mut::<&Crop>(harvesting_entity) {
         Some(data) => data.clone(),
         None => continue,
       };
-      if let Some(inventory) = scene.get_components_mut::<&mut GameInventory>(player_entity) {
-        inventory.award(Item::Crop(crop.crop), crop.award);
+
+      if let Some((inventory, character)) =
+        scene.get_components_mut::<(&mut GameInventory, &mut CharacterState)>(player_entity)
+      {
+        is_showoff = inventory.award(Item::Crop(crop.crop), crop.award);
+        if is_showoff {
+          *character = CharacterState::ShowingOff {
+            item: Item::Crop(crop.crop),
+          };
+        }
       }
+
       let _ = scene.despawn(harvesting_entity);
+
+      if is_showoff
+        && let Some(prefabs) = scene.get_prefab_owned(crop.crop.get_prefab())
+        && let Some((mut parent, _)) = prefabs
+          .iter()
+          .cloned()
+          .find(|(prefab, _)| prefab.tag.name == crop.crop.get_prefab())
+        && let Some((mut prefab, _)) = prefabs
+          .iter()
+          .cloned()
+          .find(|(prefab, _)| prefab.tag.name == Stage::Display.get_prefab())
+      {
+        let crop_entity = scene.create_raw_entity("Display");
+
+        prefab.transform = player_transform;
+        prefab.transform.translation -= Vector3::z();
+        prefab.transform.translation -= Vector3::y() * 0.25;
+
+        prefab.remove::<ParentComponent>();
+        if let Some(crop) = parent.get_mut::<Crop>() {
+          crop.stage = Stage::Display;
+        }
+        scene.create_with_prefab(crop_entity, parent);
+        scene.create_with_prefab(crop_entity, prefab);
+      }
     }
 
     for (_, (model, _, _)) in scene.query_mut::<(
@@ -429,6 +460,7 @@ impl PickupsSystem {
           }
           */
         }
+        Stage::Display => {}
       };
     }
 
@@ -444,7 +476,7 @@ impl PickupsSystem {
           .find(|(prefab, _)| prefab.tag.name == stage.get_next_stage().get_prefab())
       {
         let _ = scene.despawn(entity);
-        let crop_entity = scene.create_raw_entity("Pumpkin Crop");
+        let crop_entity = scene.create_raw_entity("Crop");
         prefab.transform = transform;
         prefab.remove::<ParentComponent>();
         if let Some(crop) = parent.get_mut::<Crop>() {
@@ -471,6 +503,7 @@ impl System for PickupsSystem {
     self.handle_throw_seeds(scene, backpack);
     self.handle_harvest(scene, backpack);
     self.handle_plant_growth(scene, backpack);
+    //self.handle_showoff_discovery(scene, backpack);
     self.handle_update_ui(scene, backpack);
   }
 }

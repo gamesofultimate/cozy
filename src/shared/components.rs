@@ -23,6 +23,7 @@ impl Registry for GameComponents {
     Player::register();
     CameraFollower::register();
     Character::register();
+    DisplayItem::register();
     WaterCan::register();
     WaterSource::register();
     Harvestable::register();
@@ -211,10 +212,12 @@ pub struct Player {}
 
 impl ProvideAssets for Player {}
 
+#[derive(Debug, Clone)]
 pub enum CharacterState {
   Normal,
   Running,
   CollectingWater,
+  ShowingOff { item: Item },
   WorkingTile(Entity),
   ThrowingSeed(Entity, Level),
   Harvesting(Entity, Level),
@@ -261,6 +264,7 @@ pub enum Stage {
   Flowering,
   //Sprout,
   Mature,
+  Display,
 }
 
 impl Stage {
@@ -271,6 +275,7 @@ impl Stage {
       Self::Flowering => Self::Mature,
       //Self::Sprout => Sprout,
       Self::Mature => Self::Mature,
+      Self::Display => Self::Display,
     }
   }
 
@@ -281,6 +286,7 @@ impl Stage {
       Self::Flowering => "Flowering",
       //Self::Sprout => "Sprout",
       Self::Mature => "Mature",
+      Self::Display => "Display",
     }
   }
 }
@@ -314,6 +320,11 @@ impl ProvideAssets for Crop {}
 pub struct Harvestable {}
 
 impl ProvideAssets for Harvestable {}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct DisplayItem {}
+
+impl ProvideAssets for DisplayItem {}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
 pub struct Rock {
@@ -470,9 +481,15 @@ pub struct Inventory {
 }
 
 impl Inventory {
-  pub fn award(&mut self, item: Item, quantity: usize) {
-    let item = self.items.entry(item).or_insert_with(|| Quantity::Empty);
+  pub fn award(&mut self, item: Item, quantity: usize) -> bool {
+    let mut is_new = false;
+    let item = self.items.entry(item).or_insert_with(|| {
+      is_new = true;
+      Quantity::Empty
+    });
+
     item.increase_by(quantity);
+    is_new
   }
 
   pub fn can_use(&self, item: &Item) -> bool {

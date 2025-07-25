@@ -139,7 +139,8 @@
                 "49081c9c-34df-4991-934c-3b229399031f",
                 "9f8f7ddc-c2d1-4a93-aaa1-2f174a4cfafe",
                 "98c56216-61f0-4926-b15b-62e8a54107a6",
-                "9be011a0-cd16-4b00-b5c6-585122403d17"
+                "9be011a0-cd16-4b00-b5c6-585122403d17",
+                "d6bb056b-3b18-4e71-84f1-ee8c94158f4d"
               ]
             }
           }
@@ -551,7 +552,7 @@
       "1898b259-3947-4ee2-947b-fefd4365e2f8": {
         "id": "1898b259-3947-4ee2-947b-fefd4365e2f8",
         "tag": {
-          "name": "Full"
+          "name": "Display"
         },
         "transform": {
           "transform": {
@@ -11689,6 +11690,11 @@
         "id": "e5ef4192-40d6-4072-a17f-0c5bb777e08f",
         "source": "models/crops/pumpkin-wilting.gltf",
         "maxInstances": 10
+      },
+      "2f2a2480-84ff-4426-89f5-64affd497a2e": {
+        "id": "2f2a2480-84ff-4426-89f5-64affd497a2e",
+        "source": "test/test.gltf",
+        "maxInstances": 10
       }
     },
     "trimeshes": {
@@ -11823,6 +11829,19 @@
           }
         ],
         "loops": true
+      },
+      "27a0f1e7-bc14-4210-adb1-820151323b9e": {
+        "id": "27a0f1e7-bc14-4210-adb1-820151323b9e",
+        "source": "animations/player/victory-dance.gltf",
+        "definitions": [
+          {
+            "id": "06fafe3d-29aa-4e35-b5ec-0603fb5e2509",
+            "collection_id": "27a0f1e7-bc14-4210-adb1-820151323b9e",
+            "name": "Armature|mixamo.com|Layer0",
+            "loops": true
+          }
+        ],
+        "loops": true
       }
     },
     "terrains": {},
@@ -11858,7 +11877,8 @@
               "a9466e07-7ef6-478c-9db6-76ffb470ac47"
             ],
             "transitions": [
-              "b25c07d0-69c9-4e08-aece-29040c95f1e4"
+              "b25c07d0-69c9-4e08-aece-29040c95f1e4",
+              "4041723c-4df0-4a49-ae3a-8e03cd89febe"
             ]
           },
           {
@@ -11873,7 +11893,8 @@
             ],
             "transitions": [
               "1685f4f3-43ac-442c-a011-b31b11d0be52",
-              "b56e28d9-d3e1-49b8-9f68-1115cf6c63d4"
+              "b56e28d9-d3e1-49b8-9f68-1115cf6c63d4",
+              "e74cc03a-0439-4165-9948-41bcbdd5dc39"
             ],
             "loops": true
           },
@@ -11888,7 +11909,23 @@
               "07355af1-e7f8-4a05-b5a4-53f0ddddec9f"
             ],
             "transitions": [
-              "724abceb-5e07-4df1-9e79-977990efae14"
+              "724abceb-5e07-4df1-9e79-977990efae14",
+              "6b7b1e94-01c7-46a0-9d0e-1b16aad12b25"
+            ],
+            "loops": true
+          },
+          {
+            "id": "44caa6f5-755a-4dc6-895a-b6a3d23b8306",
+            "position": {
+              "x": 390,
+              "y": -75
+            },
+            "animation_id": [
+              "06fafe3d-29aa-4e35-b5ec-0603fb5e2509",
+              "27a0f1e7-bc14-4210-adb1-820151323b9e"
+            ],
+            "transitions": [
+              "bda77ba4-e38d-4601-9591-bc1446037b43"
             ],
             "loops": true
           }
@@ -11945,6 +11982,42 @@
               }
             },
             "time": 0.4
+          },
+          {
+            "id": "e74cc03a-0439-4165-9948-41bcbdd5dc39",
+            "to": "44caa6f5-755a-4dc6-895a-b6a3d23b8306",
+            "from": "eb0f2086-1bf5-4445-b3be-93435efecc6c",
+            "transition": {
+              "IsCelebrating": {}
+            },
+            "time": 2
+          },
+          {
+            "id": "bda77ba4-e38d-4601-9591-bc1446037b43",
+            "to": "a1d1b1c1-489a-404a-b1b2-0ab053bcdfc7",
+            "from": "44caa6f5-755a-4dc6-895a-b6a3d23b8306",
+            "transition": {
+              "IsDoneCelebrating": {}
+            },
+            "time": 2
+          },
+          {
+            "id": "4041723c-4df0-4a49-ae3a-8e03cd89febe",
+            "to": "44caa6f5-755a-4dc6-895a-b6a3d23b8306",
+            "from": "a1d1b1c1-489a-404a-b1b2-0ab053bcdfc7",
+            "transition": {
+              "IsCelebrating": {}
+            },
+            "time": 2
+          },
+          {
+            "id": "6b7b1e94-01c7-46a0-9d0e-1b16aad12b25",
+            "to": "44caa6f5-755a-4dc6-895a-b6a3d23b8306",
+            "from": "a7bc7096-b24d-4f7e-a736-debd3723413c",
+            "transition": {
+              "IsCelebrating": {}
+            },
+            "time": 2
           }
         ]
       },

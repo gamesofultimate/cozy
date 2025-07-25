@@ -2,8 +2,8 @@ mod camera;
 
 use crate::planners::{idling, life, social};
 use crate::shared::{
-  collision, components, game_input::GameInput, inputs, loading, pickups, state_machine, timeofday,
-  ui_components,
+  animations, collision, components, game_input::GameInput, inputs, loading, pickups,
+  state_machine, timeofday, ui_components,
 };
 use engine::application::bus::BrowserBus;
 //use engine::systems::browser::BrowserActor;
@@ -49,6 +49,7 @@ pub fn main(
 
   scheduler.attach_plugin(hdr);
 
+  scheduler.attach_registry::<animations::AnimationTransitions>();
   scheduler.attach_registry::<components::GameComponents>();
   scheduler.attach_registry::<ui_components::UiComponents>();
   scheduler.attach_registry::<idling::IdleRegistry>();

@@ -1,4 +1,4 @@
-//pub mod animations;
+pub mod animations;
 pub mod collision;
 pub mod components;
 pub mod game_input;

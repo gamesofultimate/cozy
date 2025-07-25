@@ -1,5 +1,5 @@
 //use crate::shared::audio_components::{AudioGameStart, SoundtrackIntro};
-use crate::shared::components::{ActiveCamera, Player};
+use crate::shared::components::{ActiveCamera, CharacterState, Player};
 use crate::shared::game_input::{GameInput, InputState};
 use chrono::{DateTime, TimeDelta, Utc};
 use engine::{
@@ -258,16 +258,20 @@ impl StateMachineSystem {
   fn handle_camera_dof(&mut self, scene: &mut Scene, backpack: &mut Backpack) -> Option<()> {
     use crate::shared::components::CameraFollower;
 
-    let mut focus_position = Vector3::zeros();
-
     let (delta_time, camera_config) = match backpack.fetch_mut::<(Seconds, CameraConfig)>() {
       Some((delta_time, camera_config)) => Some((delta_time.clone(), camera_config.clone())),
       None => None,
     }?;
 
-    for (_, (transform, _)) in scene.query_mut::<(&mut TransformComponent, &ActiveCamera)>() {
-      focus_position = transform.translation;
-    }
+    let focus_position = match scene.query_one::<(&mut TransformComponent, &ActiveCamera)>() {
+      Some((_, (transform, _))) => transform.translation,
+      None => return None,
+    };
+
+    let character = match scene.query_one::<(&CharacterState, &SelfComponent)>() {
+      Some((_, (character, _))) => character,
+      None => return None,
+    };
 
     let camera_position = camera_config.translation;
 
@@ -281,11 +285,30 @@ impl StateMachineSystem {
       let distance = Vector3::metric_distance(&camera_position, &focus_position);
 
       match game.state {
+        GameState::Playing if matches!(character, CharacterState::ShowingOff { .. }) => {
+          config.dof.focus_point = lerp(config.dof.focus_point, distance - 1.0, 0.9);
+          config.dof.focus_scale = (config.dof.focus_scale + 0.001 * *delta_time).clamp(0.0, 3.0);
+
+          for (entity, (transform, _)) in
+            scene.query_mut::<(&mut TransformComponent, &CameraComponent)>()
+          {
+            transform.translation = Vector3::new(0.0, 0.0, -3.0);
+            transform.rotation = Vector3::new(0.0, 0.0, 0.0);
+          }
+        }
         GameState::Playing => {
           config.dof.focus_point = lerp(config.dof.focus_point, distance, 0.9);
           config.dof.focus_scale = (config.dof.focus_scale - 0.001 * *delta_time).clamp(0.0, 3.0);
           for (_, follower) in scene.query_mut::<&mut CameraFollower>() {
             follower.interpolation_speed = 0.08;
+          }
+
+          for (entity, (transform, _)) in
+            scene.query_mut::<(&mut TransformComponent, &CameraComponent)>()
+          {
+            let degrees = Radians::from(Degrees::new(45.0));
+            transform.translation = Vector3::new(0.0, 6.0, -6.0);
+            transform.rotation = Vector3::new(*degrees, 0.0, 0.0);
           }
         }
         GameState::Paused => {
