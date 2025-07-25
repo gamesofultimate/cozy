@@ -248,21 +248,24 @@ impl PickupsSystem {
         scene.add_component(tile_entity, CropTile {});
         let crop_entity = scene.create_raw_entity("Pumpkin Crop");
         prefab.transform = transform;
+        prefab.remove::<ParentComponent>();
         scene.create_with_prefab(crop_entity, parent);
         scene.create_with_prefab(crop_entity, prefab);
       }
     }
 
-    for (_, (model, _, maybe_collision)) in scene
-      .query_mut::<(&mut ModelComponent, &Tile, Option<&Collision<Action, Tile>>)>()
+    for (_, (model, _, _)) in scene
+      .query_mut::<(&mut ModelComponent, &Tile, &CollisionEnter<Action, Tile>)>()
       .without::<CropTile>()
     {
-      if let Some(_) = maybe_collision {
-        model.color = Vector3::new(0.0, 1.0, 1.0);
-        model.color_intensity = 0.1;
-      } else {
-        model.color_intensity = 0.0;
-      }
+      model.color = Vector3::new(0.0, 1.0, 1.0);
+      model.color_intensity = 0.1;
+    }
+    for (_, (model, _, _)) in scene
+      .query_mut::<(&mut ModelComponent, &Tile, &CollisionExit<Action, Tile>)>()
+      .without::<CropTile>()
+    {
+      model.color_intensity = 0.0;
     }
   }
 
@@ -426,6 +429,7 @@ impl PickupsSystem {
         let _ = scene.despawn(entity);
         let crop_entity = scene.create_raw_entity("Pumpkin Crop");
         prefab.transform = transform;
+        prefab.remove::<ParentComponent>();
         if let Some(crop) = parent.get_mut::<Crop>() {
           crop.stage = stage.get_next_stage();
         }
