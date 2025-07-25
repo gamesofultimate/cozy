@@ -136,7 +136,10 @@
                 "9fb4859d-187f-4b3c-a7c8-4c6aea3452d8",
                 "a152f452-89a5-49d7-bc66-0ca3cadf90d4",
                 "049b3d93-911d-4919-a128-cc0c5d06fcb0",
-                "49081c9c-34df-4991-934c-3b229399031f"
+                "49081c9c-34df-4991-934c-3b229399031f",
+                "9f8f7ddc-c2d1-4a93-aaa1-2f174a4cfafe",
+                "98c56216-61f0-4926-b15b-62e8a54107a6",
+                "9be011a0-cd16-4b00-b5c6-585122403d17"
               ]
             }
           }
@@ -454,6 +457,7 @@
           {
             "Crop": {
               "crop": "Pumpkin",
+              "award": 10,
               "flowering_timeout": {
                 "seconds": 2
               },
@@ -731,7 +735,7 @@
                     }
                   },
                   "density": 1,
-                  "dynamic_type": "Kinematic",
+                  "dynamic_type": "Static",
                   "friction": 0.1,
                   "groups": {
                     "filters": "0b11111111111111111111111111111111",
@@ -839,7 +843,7 @@
                     }
                   },
                   "density": 1,
-                  "dynamic_type": "Kinematic",
+                  "dynamic_type": "Static",
                   "friction": 0.1,
                   "groups": {
                     "filters": "0b11111111111111111111111111111111",
@@ -859,6 +863,9 @@
                 ]
               }
             }
+          },
+          {
+            "Harvestable": {}
           }
         ]
       },
@@ -947,7 +954,7 @@
                     }
                   },
                   "density": 1,
-                  "dynamic_type": "Kinematic",
+                  "dynamic_type": "Static",
                   "friction": 0.1,
                   "groups": {
                     "filters": "0b11111111111111111111111111111111",
@@ -11452,284 +11459,6 @@
                   0
                 ]
               }
-            }
-          }
-        ]
-      },
-      "83eb667f-5157-4b6f-942d-3b6305fd1657": {
-        "id": "83eb667f-5157-4b6f-942d-3b6305fd1657",
-        "tag": {
-          "name": "Preload - Pumpkin"
-        },
-        "transform": {
-          "transform": {
-            "translation": [
-              11.192898,
-              -1.8150374,
-              0.20051253
-            ],
-            "rotation": [
-              0,
-              0,
-              0
-            ],
-            "scale": [
-              1,
-              1,
-              1
-            ]
-          }
-        },
-        "components": []
-      },
-      "bf57534d-79b3-4f50-999f-6c56bbf5ed85": {
-        "id": "bf57534d-79b3-4f50-999f-6c56bbf5ed85",
-        "tag": {
-          "name": "Seed"
-        },
-        "transform": {
-          "transform": {
-            "translation": [
-              0,
-              0,
-              0
-            ],
-            "rotation": [
-              0,
-              0,
-              0
-            ],
-            "scale": [
-              1,
-              1,
-              1
-            ]
-          }
-        },
-        "components": [
-          {
-            "ParentComponent": {
-              "parent_id": "83eb667f-5157-4b6f-942d-3b6305fd1657"
-            }
-          },
-          {
-            "ModelComponent": {
-              "cast_shadows": true,
-              "color": [
-                0,
-                0,
-                0
-              ],
-              "color_intensity": 0,
-              "id": "49081c9c-34df-4991-934c-3b229399031f",
-              "skip": false,
-              "transform": {
-                "rotation": [
-                  0,
-                  0,
-                  0,
-                  1
-                ],
-                "scale": [
-                  1,
-                  1,
-                  1
-                ],
-                "translation": [
-                  0,
-                  0,
-                  0
-                ]
-              }
-            }
-          }
-        ]
-      },
-      "b919694f-8a90-4877-98c4-60674cf16cad": {
-        "id": "b919694f-8a90-4877-98c4-60674cf16cad",
-        "tag": {
-          "name": "Seedling"
-        },
-        "transform": {
-          "transform": {
-            "translation": [
-              0,
-              0,
-              0
-            ],
-            "rotation": [
-              0,
-              0,
-              0
-            ],
-            "scale": [
-              1,
-              1,
-              1
-            ]
-          }
-        },
-        "components": [
-          {
-            "ModelComponent": {
-              "cast_shadows": true,
-              "color": [
-                0,
-                0,
-                0
-              ],
-              "color_intensity": 0,
-              "id": "9f8f7ddc-c2d1-4a93-aaa1-2f174a4cfafe",
-              "skip": false,
-              "transform": {
-                "rotation": [
-                  0,
-                  0,
-                  0,
-                  1
-                ],
-                "scale": [
-                  1,
-                  1,
-                  1
-                ],
-                "translation": [
-                  0,
-                  0,
-                  0
-                ]
-              }
-            }
-          },
-          {
-            "ParentComponent": {
-              "parent_id": "83eb667f-5157-4b6f-942d-3b6305fd1657"
-            }
-          }
-        ]
-      },
-      "1c5a08c4-f615-4301-b08c-c478fe45c2aa": {
-        "id": "1c5a08c4-f615-4301-b08c-c478fe45c2aa",
-        "tag": {
-          "name": "Flowering"
-        },
-        "transform": {
-          "transform": {
-            "translation": [
-              0,
-              0,
-              0
-            ],
-            "rotation": [
-              0,
-              0,
-              0
-            ],
-            "scale": [
-              1,
-              1,
-              1
-            ]
-          }
-        },
-        "components": [
-          {
-            "ModelComponent": {
-              "cast_shadows": true,
-              "color": [
-                0,
-                0,
-                0
-              ],
-              "color_intensity": 0,
-              "id": "98c56216-61f0-4926-b15b-62e8a54107a6",
-              "skip": false,
-              "transform": {
-                "rotation": [
-                  0,
-                  0,
-                  0,
-                  1
-                ],
-                "scale": [
-                  1,
-                  1,
-                  1
-                ],
-                "translation": [
-                  0,
-                  0,
-                  0
-                ]
-              }
-            }
-          },
-          {
-            "ParentComponent": {
-              "parent_id": "83eb667f-5157-4b6f-942d-3b6305fd1657"
-            }
-          }
-        ]
-      },
-      "4da5d2f2-b9dd-4a92-877f-4be68a3a05bb": {
-        "id": "4da5d2f2-b9dd-4a92-877f-4be68a3a05bb",
-        "tag": {
-          "name": "Mature"
-        },
-        "transform": {
-          "transform": {
-            "translation": [
-              0,
-              0,
-              0
-            ],
-            "rotation": [
-              0,
-              0,
-              0
-            ],
-            "scale": [
-              1,
-              1,
-              1
-            ]
-          }
-        },
-        "components": [
-          {
-            "ModelComponent": {
-              "cast_shadows": true,
-              "color": [
-                0,
-                0,
-                0
-              ],
-              "color_intensity": 0,
-              "id": "9be011a0-cd16-4b00-b5c6-585122403d17",
-              "skip": false,
-              "transform": {
-                "rotation": [
-                  0,
-                  0,
-                  0,
-                  1
-                ],
-                "scale": [
-                  1,
-                  1,
-                  1
-                ],
-                "translation": [
-                  0,
-                  0,
-                  0
-                ]
-              }
-            }
-          },
-          {
-            "ParentComponent": {
-              "parent_id": "83eb667f-5157-4b6f-942d-3b6305fd1657"
             }
           }
         ]

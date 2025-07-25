@@ -307,7 +307,7 @@
       "tag": "Struct",
       "name": "CameraFollower",
       "label": "Camera Follower",
-      "default_values": "{ fov: { radians: 0.0 }, interpolation_speed: 0.0, shake_multiplier: 0.0 }",
+      "default_values": "{ interpolation_speed: 0.0, shake_multiplier: 0.0 }",
       "duplicate_values": "null",
       "docs": null,
       "fields": [
@@ -335,18 +335,6 @@
             },
             "default_values": "0.0",
             "duplicate_values": "null"
-          }
-        },
-        {
-          "name": "fov",
-          "label": "Fov",
-          "docs": null,
-          "ty": {
-            "tag": "Custom",
-            "name": "Radians",
-            "default_values": "{ radians: 0.0 }",
-            "duplicate_values": "null",
-            "ty": "Radians"
           }
         }
       ],
@@ -563,6 +551,13 @@
                 "docs": null,
                 "default_values": "\"ThrowSeed\"",
                 "duplicate_values": "null"
+              },
+              {
+                "tag": "Unit",
+                "name": "Harvest",
+                "docs": null,
+                "default_values": "\"Harvest\"",
+                "duplicate_values": "null"
               }
             ],
             "private": false
@@ -575,7 +570,7 @@
       "tag": "Struct",
       "name": "Crop",
       "label": "Crop",
-      "default_values": "{ crop: \"Pumpkin\", flowering_timeout: { seconds: 0.0 }, mature_timeout: { seconds: 0.0 }, phase_timing: { seconds: 0.0 }, season_end: 0, season_start: 0, seed_timeout: { seconds: 0.0 }, seedling_timeout: { seconds: 0.0 }, stage: \"Seeds\" }",
+      "default_values": "{ award: 0, crop: \"Pumpkin\", flowering_timeout: { seconds: 0.0 }, mature_timeout: { seconds: 0.0 }, phase_timing: { seconds: 0.0 }, season_end: 0, season_start: 0, seed_timeout: { seconds: 0.0 }, seedling_timeout: { seconds: 0.0 }, stage: \"Seeds\" }",
       "duplicate_values": "null",
       "docs": null,
       "fields": [
@@ -731,6 +726,19 @@
             "duplicate_values": "null",
             "ty": "Seconds"
           }
+        },
+        {
+          "name": "award",
+          "label": "Award",
+          "docs": null,
+          "ty": {
+            "tag": "Primitive",
+            "ty": {
+              "tag": "USize"
+            },
+            "default_values": "0",
+            "duplicate_values": "null"
+          }
         }
       ],
       "private": false
@@ -871,6 +879,16 @@
     },
     {
       "tag": "Struct",
+      "name": "Harvestable",
+      "label": "Harvestable",
+      "default_values": "{  }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [],
+      "private": false
+    },
+    {
+      "tag": "Struct",
       "name": "HouseEntrance",
       "label": "House Entrance",
       "default_values": "{ owner: (() => { \n            return Symbol.for(\"PrefabId\");\n           })() }",
@@ -960,6 +978,93 @@
             "default_values": "{ kph: 1.0}",
             "duplicate_values": "null",
             "ty": "Kph"
+          }
+        }
+      ],
+      "private": false
+    },
+    {
+      "tag": "Struct",
+      "name": "Inventory",
+      "label": "Inventory",
+      "default_values": "{ items: {  } }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [
+        {
+          "name": "items",
+          "label": "Items",
+          "docs": null,
+          "ty": {
+            "tag": "Type",
+            "name": "HashMap",
+            "default_values": "{  }",
+            "duplicate_values": "null",
+            "ty": {
+              "tag": "HashMap",
+              "data": [
+                {
+                  "tag": "Enum",
+                  "name": "CropType",
+                  "label": "Crop Type",
+                  "default_values": "\"Pumpkin\"",
+                  "duplicate_values": "null",
+                  "docs": null,
+                  "variants": [
+                    {
+                      "tag": "Unit",
+                      "name": "Pumpkin",
+                      "docs": null,
+                      "default_values": "\"Pumpkin\"",
+                      "duplicate_values": "null"
+                    }
+                  ],
+                  "private": false
+                },
+                {
+                  "tag": "Enum",
+                  "name": "Quantity",
+                  "label": "Quantity",
+                  "default_values": "\"Empty\"",
+                  "duplicate_values": "null",
+                  "docs": null,
+                  "variants": [
+                    {
+                      "tag": "Unit",
+                      "name": "Empty",
+                      "docs": null,
+                      "default_values": "\"Empty\"",
+                      "duplicate_values": "null"
+                    },
+                    {
+                      "tag": "Tuple",
+                      "name": "Finite",
+                      "default_values": "[0]",
+                      "duplicate_values": "null",
+                      "docs": null,
+                      "types": [
+                        {
+                          "tag": "Primitive",
+                          "ty": {
+                            "tag": "USize"
+                          },
+                          "default_values": "0",
+                          "duplicate_values": "null"
+                        }
+                      ]
+                    },
+                    {
+                      "tag": "Unit",
+                      "name": "Infinite",
+                      "docs": null,
+                      "default_values": "\"Infinite\"",
+                      "duplicate_values": "null"
+                    }
+                  ],
+                  "private": false
+                }
+              ]
+            }
           }
         }
       ],

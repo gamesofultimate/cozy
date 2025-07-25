@@ -1,6 +1,7 @@
 use crate::shared::components::{
-  Action, ActionTypes, Character, CharacterState, Crop, CropTile, CropType, Level, Log, Pickup,
-  PickupSpace, Seeds, Stage, Tile, TimeOfDay, WaterCan, WaterSource, WateredTile,
+  Action, ActionTypes, Character, CharacterState, Crop, CropTile, CropType, Harvestable,
+  Inventory as GameInventory, Level, Log, Pickup, PickupSpace, Seeds, Stage, Tile, TimeOfDay,
+  WaterCan, WaterSource, WateredTile,
 };
 use crate::shared::game_input::{GameInput, InputState};
 use crate::shared::state_machine::{GameState, StateMachine};
@@ -11,7 +12,7 @@ use engine::{
       LightComponent, ModelComponent, NetworkedPlayerComponent, ParentComponent, SelfComponent,
       TextComponent,
     },
-    scene::{Collision, IdComponent, Scene, TransformComponent},
+    scene::{Collision, CollisionEnter, CollisionExit, IdComponent, Scene, TransformComponent},
   },
   nalgebra::Vector3,
   systems::{Backpack, Initializable, Inventory, System},
@@ -34,12 +35,14 @@ impl PickupsSystem {
       if input.check(InputState::ChangeActionUp) {
         character.action = match character.action {
           ActionTypes::WaterTile => ActionTypes::ThrowSeed,
-          ActionTypes::ThrowSeed => ActionTypes::WaterTile,
+          ActionTypes::ThrowSeed => ActionTypes::Harvest,
+          ActionTypes::Harvest => ActionTypes::WaterTile,
         };
       }
       if input.check(InputState::ChangeActionDown) {
         character.action = match character.action {
-          ActionTypes::WaterTile => ActionTypes::ThrowSeed,
+          ActionTypes::WaterTile => ActionTypes::Harvest,
+          ActionTypes::Harvest => ActionTypes::ThrowSeed,
           ActionTypes::ThrowSeed => ActionTypes::WaterTile,
         };
       }
@@ -114,17 +117,21 @@ impl PickupsSystem {
       }
     }
 
-    for (_, (model, _, maybe_collision)) in scene.query_mut::<(
+    for (_, (model, _, _)) in scene.query_mut::<(
       &mut ModelComponent,
       &WaterSource,
-      Option<&Collision<Action, WaterSource>>,
+      &CollisionEnter<Action, WaterSource>,
     )>() {
-      if let Some(_) = maybe_collision {
-        model.color = Vector3::new(0.0, 0.0, 1.0);
-        model.color_intensity = 0.1;
-      } else {
-        model.color_intensity = 0.0;
-      }
+      model.color = Vector3::new(0.0, 0.0, 1.0);
+      model.color_intensity = 0.1;
+    }
+
+    for (_, (model, _, _)) in scene.query_mut::<(
+      &mut ModelComponent,
+      &WaterSource,
+      &CollisionExit<Action, WaterSource>,
+    )>() {
+      model.color_intensity = 0.0;
     }
   }
 
@@ -173,16 +180,19 @@ impl PickupsSystem {
       }
     }
 
-    for (_, (model, _, maybe_collision)) in scene
-      .query_mut::<(&mut ModelComponent, &Tile, Option<&Collision<Action, Tile>>)>()
+    for (_, (model, _, _)) in scene
+      .query_mut::<(&mut ModelComponent, &Tile, &CollisionEnter<Action, Tile>)>()
       .without::<WateredTile>()
     {
-      if let Some(_) = maybe_collision {
-        model.color = Vector3::new(1.0, 1.0, 0.0);
-        model.color_intensity = 0.1;
-      } else {
-        model.color_intensity = 0.0;
-      }
+      model.color = Vector3::new(1.0, 1.0, 0.0);
+      model.color_intensity = 0.1;
+    }
+
+    for (_, (model, _, _)) in scene
+      .query_mut::<(&mut ModelComponent, &Tile, &Collision<Action, Tile>)>()
+      .without::<WateredTile>()
+    {
+      model.color_intensity = 0.0;
     }
   }
 
@@ -256,6 +266,64 @@ impl PickupsSystem {
     }
   }
 
+  pub fn handle_harvest(&self, scene: &mut Scene, backpack: &mut Backpack) {
+    let delta_time = backpack.get::<Seconds>().unwrap();
+
+    for (_, (input, character, state, collision)) in scene.query_mut::<(
+      &GameInput,
+      &mut Character,
+      &mut CharacterState,
+      &Collision<Action, Harvestable>,
+    )>() {
+      if input.check(InputState::Action)
+        && let ActionTypes::Harvest = character.action
+        && let CharacterState::Normal | CharacterState::Running = state
+      {
+        *state = CharacterState::Harvesting(collision.other, Level::to_max(1.0, Seconds::new(4.0)));
+      }
+    }
+
+    let mut harvesting_entities = vec![];
+    for (player_entity, (input, character)) in
+      scene.query_mut::<(&GameInput, &mut CharacterState)>()
+    {
+      if let CharacterState::Harvesting(entity, timing) = character
+        && let Some(_) = timing.tick()
+      {
+        harvesting_entities.push((player_entity, *entity));
+        *character = CharacterState::Normal;
+      }
+    }
+
+    for (player_entity, harvesting_entity) in harvesting_entities {
+      let _ = scene.despawn(harvesting_entity);
+
+      let crop = match scene.get_components_mut::<&Crop>(harvesting_entity) {
+        Some(data) => data.clone(),
+        None => continue,
+      };
+      if let Some(inventory) = scene.get_components_mut::<&mut GameInventory>(player_entity) {
+        inventory.award(&crop.crop, crop.award);
+      }
+    }
+
+    for (_, (model, _, _)) in scene.query_mut::<(
+      &mut ModelComponent,
+      &Harvestable,
+      &CollisionEnter<Action, Harvestable>,
+    )>() {
+      model.color = Vector3::new(1.0, 0.0, 1.0);
+      model.color_intensity = 0.1;
+    }
+    for (_, (model, _, _)) in scene.query_mut::<(
+      &mut ModelComponent,
+      &Harvestable,
+      &CollisionExit<Action, Harvestable>,
+    )>() {
+      model.color_intensity = 0.0;
+    }
+  }
+
   pub fn handle_add_state(&self, scene: &mut Scene) {
     let mut entities = vec![];
     for (entity, _) in scene.query_mut::<&Character>().without::<CharacterState>() {
@@ -298,6 +366,7 @@ impl PickupsSystem {
       texts.push(match character.action {
         ActionTypes::WaterTile => format!("Water tile"),
         ActionTypes::ThrowSeed => format!("Plant pumpkin"),
+        ActionTypes::Harvest => format!("Harvest"),
       });
 
       texts.push(format!("---"));
@@ -379,6 +448,7 @@ impl System for PickupsSystem {
     self.handle_water_sources(scene, backpack);
     self.handle_watering_tiles(scene, backpack);
     self.handle_throw_seeds(scene, backpack);
+    self.handle_harvest(scene, backpack);
     self.handle_plant_growth(scene, backpack);
     self.handle_update_ui(scene, backpack);
   }

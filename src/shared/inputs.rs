@@ -99,22 +99,24 @@ impl InputsSystem {
 
       let mut velocity = Vector3::new(0.0, -9.8, 0.0);
 
-      if let Some(machine) = backpack.get_mut::<StateMachine>() {
-        match &machine.state {
-          GameState::Playing => {
-            if input.check(InputState::IsMouseLocked) || input.check(InputState::HasJoystick) {
-              if input.forward.abs() > component.deadzone {
-                velocity.z += input.forward * *speed;
-              }
-
-              if input.right.abs() > component.deadzone {
-                velocity.x += input.right * *speed;
-              }
-            }
-          }
-          _ => {}
+      if input.check(InputState::IsMouseLocked) || input.check(InputState::HasJoystick) {
+        if input.forward.abs() > component.deadzone {
+          velocity.z += input.forward * *speed;
         }
-      };
+
+        if input.right.abs() > component.deadzone {
+          velocity.x += input.right * *speed;
+        }
+      }
+      /*
+        if let Some(machine) = backpack.get_mut::<StateMachine>() {
+          match &machine.state {
+            GameState::Playing => {
+            }
+            _ => {}
+          }
+        };
+      */
 
       if let Some(audio) = maybe_audio
         && audio.state == SourceState::Stopped

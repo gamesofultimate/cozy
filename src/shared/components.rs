@@ -6,6 +6,7 @@ use engine::{
   utils::units::{Framerate, Kph, Seconds},
   Entity,
 };
+use std::collections::HashMap;
 use tagged::{Duplicate, Registerable, Schema};
 use uuid::Uuid;
 
@@ -24,6 +25,7 @@ impl Registry for GameComponents {
     Character::register();
     WaterCan::register();
     WaterSource::register();
+    Harvestable::register();
     Rock::register();
     Durability::register();
     Crop::register();
@@ -37,6 +39,7 @@ impl Registry for GameComponents {
     HouseEntrance::register();
     Tile::register();
     Preloader::register();
+    Inventory::register();
   }
 }
 
@@ -214,6 +217,7 @@ pub enum CharacterState {
   CollectingWater,
   WorkingTile(Entity),
   ThrowingSeed(Entity, Level),
+  Harvesting(Entity, Level),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
@@ -227,7 +231,9 @@ pub struct Character {
 
 impl ProvideAssets for Character {}
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+#[derive(
+  Debug, Clone, Copy, Eq, PartialEq, Hash, Serialize, Deserialize, Registerable, Schema, Duplicate,
+)]
 pub enum CropType {
   Pumpkin,
 }
@@ -291,9 +297,15 @@ pub struct Crop {
   pub mature_timeout: Seconds,
 
   pub phase_timing: Seconds,
+  pub award: usize,
 }
 
 impl ProvideAssets for Crop {}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct Harvestable {}
+
+impl ProvideAssets for Harvestable {}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
 pub struct Rock {
@@ -346,6 +358,7 @@ pub enum SeedTypes {
 pub enum ActionTypes {
   WaterTile,
   ThrowSeed,
+  Harvest,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
@@ -434,3 +447,83 @@ impl ProvideAssets for Preloader {
 pub struct ActiveCamera {}
 
 impl ProvideAssets for ActiveCamera {}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct Inventory {
+  pub items: HashMap<CropType, Quantity>,
+}
+
+impl Inventory {
+  pub fn award(&mut self, item: &CropType, quantity: usize) {
+    if let Some(item) = self.items.get_mut(item) {
+      item.increase_by(quantity);
+    }
+  }
+
+  pub fn can_use(&self, item: &CropType) -> bool {
+    match self.items.get(item) {
+      Some(item) => item.can_use(),
+      None => false,
+    }
+  }
+}
+
+impl ProvideAssets for Inventory {}
+
+#[derive(
+  Debug,
+  Clone,
+  Default,
+  Hash,
+  PartialEq,
+  Eq,
+  Serialize,
+  Deserialize,
+  Registerable,
+  Schema,
+  Duplicate,
+)]
+pub enum Quantity {
+  #[default]
+  Empty,
+  Finite(usize),
+  Infinite,
+}
+
+#[allow(unused)]
+impl Quantity {
+  pub fn increase_by(&mut self, increment: usize) {
+    match self {
+      Quantity::Finite(value) => {
+        *value += increment;
+      }
+      Quantity::Infinite => {}
+      Quantity::Empty => {
+        *self = Quantity::Finite(increment);
+      }
+    }
+  }
+
+  pub fn decrement_by(&mut self, decrement: usize) {
+    match self {
+      Quantity::Finite(value) => {
+        if *value > decrement {
+          *value -= decrement;
+        } else if *value == decrement {
+          *self = Quantity::Empty;
+        }
+      }
+      Quantity::Infinite => {}
+      Quantity::Empty => {}
+    }
+  }
+
+  pub fn can_use(&self) -> bool {
+    match self {
+      Quantity::Infinite => true,
+      Quantity::Empty => false,
+      Quantity::Finite(0) => false,
+      Quantity::Finite(1..) => true,
+    }
+  }
+}
