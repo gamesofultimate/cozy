@@ -1,6 +1,6 @@
 use crate::shared::components::{
   Action, ActionTypes, Character, CharacterState, Crop, CropTile, CropType, Harvestable,
-  Inventory as GameInventory, Level, Log, Pickup, PickupSpace, Seeds, Stage, Tile, TimeOfDay,
+  Inventory as GameInventory, Item, Level, Log, Pickup, PickupSpace, Seeds, Stage, Tile, TimeOfDay,
   WaterCan, WaterSource, WateredTile,
 };
 use crate::shared::game_input::{GameInput, InputState};
@@ -306,7 +306,7 @@ impl PickupsSystem {
         None => continue,
       };
       if let Some(inventory) = scene.get_components_mut::<&mut GameInventory>(player_entity) {
-        inventory.award(&crop.crop, crop.award);
+        inventory.award(Item::Crop(crop.crop), crop.award);
       }
     }
 

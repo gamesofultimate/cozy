@@ -1005,18 +1005,65 @@
               "data": [
                 {
                   "tag": "Enum",
-                  "name": "CropType",
-                  "label": "Crop Type",
-                  "default_values": "\"Pumpkin\"",
+                  "name": "Item",
+                  "label": "Item",
+                  "default_values": "\"Crop\"",
                   "duplicate_values": "null",
                   "docs": null,
                   "variants": [
                     {
-                      "tag": "Unit",
-                      "name": "Pumpkin",
+                      "tag": "Tuple",
+                      "name": "Crop",
+                      "default_values": "[\"Pumpkin\"]",
+                      "duplicate_values": "null",
                       "docs": null,
-                      "default_values": "\"Pumpkin\"",
-                      "duplicate_values": "null"
+                      "types": [
+                        {
+                          "tag": "Enum",
+                          "name": "CropType",
+                          "label": "Crop Type",
+                          "default_values": "\"Pumpkin\"",
+                          "duplicate_values": "null",
+                          "docs": null,
+                          "variants": [
+                            {
+                              "tag": "Unit",
+                              "name": "Pumpkin",
+                              "docs": null,
+                              "default_values": "\"Pumpkin\"",
+                              "duplicate_values": "null"
+                            }
+                          ],
+                          "private": false
+                        }
+                      ]
+                    },
+                    {
+                      "tag": "Tuple",
+                      "name": "Seed",
+                      "default_values": "[\"Pumpkin\"]",
+                      "duplicate_values": "null",
+                      "docs": null,
+                      "types": [
+                        {
+                          "tag": "Enum",
+                          "name": "CropType",
+                          "label": "Crop Type",
+                          "default_values": "\"Pumpkin\"",
+                          "duplicate_values": "null",
+                          "docs": null,
+                          "variants": [
+                            {
+                              "tag": "Unit",
+                              "name": "Pumpkin",
+                              "docs": null,
+                              "default_values": "\"Pumpkin\"",
+                              "duplicate_values": "null"
+                            }
+                          ],
+                          "private": false
+                        }
+                      ]
                     }
                   ],
                   "private": false

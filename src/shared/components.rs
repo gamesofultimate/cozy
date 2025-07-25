@@ -448,19 +448,27 @@ pub struct ActiveCamera {}
 
 impl ProvideAssets for ActiveCamera {}
 
+#[derive(
+  Debug, Clone, Copy, Eq, PartialEq, Hash, Serialize, Deserialize, Registerable, Schema, Duplicate,
+)]
+pub enum Item {
+  Crop(CropType),
+  Seed(CropType),
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
 pub struct Inventory {
-  pub items: HashMap<CropType, Quantity>,
+  pub items: HashMap<Item, Quantity>,
 }
 
 impl Inventory {
-  pub fn award(&mut self, item: &CropType, quantity: usize) {
-    if let Some(item) = self.items.get_mut(item) {
+  pub fn award(&mut self, item: Item, quantity: usize) {
+    if let Some(item) = self.items.get_mut(&item) {
       item.increase_by(quantity);
     }
   }
 
-  pub fn can_use(&self, item: &CropType) -> bool {
+  pub fn can_use(&self, item: &Item) -> bool {
     match self.items.get(item) {
       Some(item) => item.can_use(),
       None => false,
