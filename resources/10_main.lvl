@@ -11690,11 +11690,6 @@
         "id": "e5ef4192-40d6-4072-a17f-0c5bb777e08f",
         "source": "models/crops/pumpkin-wilting.gltf",
         "maxInstances": 10
-      },
-      "2f2a2480-84ff-4426-89f5-64affd497a2e": {
-        "id": "2f2a2480-84ff-4426-89f5-64affd497a2e",
-        "source": "test/test.gltf",
-        "maxInstances": 10
       }
     },
     "trimeshes": {

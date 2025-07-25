@@ -176,7 +176,10 @@ impl GameInput {
       DeviceEvent::Keyboard(KeyboardEvent::Button(ButtonState::Down, KeyboardKey::Escape)) => {
         self.state |= InputState::Escape;
       }
-      DeviceEvent::Keyboard(KeyboardEvent::Button(ButtonState::Down, KeyboardKey::Space)) => {
+      DeviceEvent::Keyboard(KeyboardEvent::Button(
+        ButtonState::Down,
+        KeyboardKey::Space | KeyboardKey::NumpadEnter | KeyboardKey::Return,
+      )) => {
         self.state |= InputState::Action;
       }
       DeviceEvent::Keyboard(KeyboardEvent::Button(ButtonState::Down, KeyboardKey::P)) => {
@@ -227,7 +230,10 @@ impl GameInput {
       DeviceEvent::Keyboard(KeyboardEvent::Button(ButtonState::Up, KeyboardKey::Escape)) => {
         self.state -= InputState::Escape;
       }
-      DeviceEvent::Keyboard(KeyboardEvent::Button(ButtonState::Up, KeyboardKey::Space)) => {
+      DeviceEvent::Keyboard(KeyboardEvent::Button(
+        ButtonState::Up,
+        KeyboardKey::Space | KeyboardKey::NumpadEnter | KeyboardKey::Return,
+      )) => {
         self.state -= InputState::Action;
       }
       DeviceEvent::Keyboard(KeyboardEvent::Button(ButtonState::Up, KeyboardKey::P)) => {
