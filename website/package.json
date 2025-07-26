@@ -1,0 +1,70 @@
+{
+  "name": "website",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "NODE_PATH=src react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-app-rewired eject"
+  },
+  "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@emotion/styled": "^11.13.0",
+    "@fingerprintjs/fingerprintjs-pro-react": "^2.6.3",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.18.104",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@ultimate-games/canvas": "^1.0.80",
+    "formik": "^2.4.6",
+    "http-proxy-middleware": "^3.0.0",
+    "lodash": "^4.17.21",
+    "mobx": "^6.13.1",
+    "mobx-react": "^9.1.1",
+    "mousetrap": "^1.6.5",
+    "platform-detect": "^3.0.1",
+    "polished": "^4.3.1",
+    "prettier": "^3.3.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-helmet": "^6.1.0",
+    "react-router-dom": "^6.25.1",
+    "react-scripts": "5.0.1",
+    "typescript": "^4.9.5",
+    "uuid": "^10.0.0",
+    "web-vitals": "^2.1.4"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@emotion/babel-plugin": "^11.13.5",
+    "@emotion/react": "^11.14.0",
+    "@types/lodash": "^4.17.7",
+    "@types/mousetrap": "^1.6.15",
+    "@types/react-helmet": "^6.1.11",
+    "@types/uuid": "^10.0.0",
+    "copy-webpack-plugin": "^12.0.2",
+    "customize-cra": "^1.0.0",
+    "react-app-rewired": "^2.2.1"
+  }
+}

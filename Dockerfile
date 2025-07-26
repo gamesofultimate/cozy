@@ -7,6 +7,6 @@ RUN dpkg-reconfigure -p critical ca-certificates
 
 COPY ./.env ./.env
 COPY ./resources ./resources
-COPY ./moonfallen_server ./dist/moonfallen_server
+COPY ./cozy ./dist/cozy
 
-CMD ["/opt/app/dist/moonfallen_server"]
+CMD ["/opt/app/dist/cozy"]
