@@ -25,7 +25,7 @@ export const World = styled.div<FocusedProps>(({ theme, focused }) => [
   {
     position: 'relative',
     padding: 0,
-    background: '#000',
+    background: '#A3D9F8',
   },
   focused === FocusState.Focused && {
     height: '100vh',
@@ -94,11 +94,12 @@ export const Main = styled.div<FocusedProps>(({ focused }) => [
 export const Logo = styled.div<FocusedProps>(({ focused }) => [
   {
     position: 'absolute',
-    top: '40vh',
+    top: '10vh',
     transition: `top ${TRANSITION_TIMING} ease-in-out, left ${TRANSITION_TIMING} ease-in-out`,
+    width: '100vw',
   },
   (focused === FocusState.Unfocused || focused === FocusState.Relax) && {
-    left: 40,
+    left: 50,
   },
   focused === FocusState.Focused && {
     left: -900,
@@ -110,6 +111,7 @@ export const LogoInner = styled.div(() => [
   {
     pointerEvents: 'none',
     margin: '10px 0 10px 0',
+    textAlign: 'center',
   },
 ]);
 

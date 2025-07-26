@@ -20,6 +20,7 @@ import Logo2x from 'images/logo@2x.png';
 import Pirate1x from 'images/pirate-face@1x.png';
 import Pirate2x from 'images/pirate-face@2x.png';
 
+import tmp from 'images/tmp.png';
 import Story1x from 'images/story@1x.png';
 import Story2x from 'images/story@2x.png';
 
@@ -118,8 +119,8 @@ const Title = styled.div(({ theme }) => ({
   fontFamily: theme.fonts.primary,
   color: '#fff',
   textTransform: 'uppercase',
-  letterSpacing: '.5em',
-  fontSize: 64,
+  fontSize: 46,
+  fontWeight: 900,
   textShadow: '0 0 19px #fff',
 }));
 
@@ -131,9 +132,10 @@ const Subheader = styled.div(({ theme }) => ({
   background: '#ca551e',
   // @ts-ignore
   // eslint-disable-next-line no-dupe-keys
-  background: 'linear-gradient(to right, #CA551E 0%, #FFB235 100%)',
+  background: '#A3D9F8',
   backgroundClip: 'text',
   textFillColor: 'transparent',
+  marginBottom: 16,
 }));
 
 // @ts-ignore
@@ -383,256 +385,251 @@ const MainPage: React.FC = () => {
 
   console.log('Gpu info', gpuInfo);
 
-  /*
-  if (plataform.macos) {
-    gpuInfo.tier -= 1;
-  }
-  */
-
-  if (gpuInfo.tier >= 2) {
+  if (gpuInfo.tier < 2) {
     return (
-      <>
-        <Helmet>
-          <meta name="description" content="Play now in your browser. Moonfallen is a fast-paced space opera from Chaotic Games. Fight enemies and escape with friends. Will you survive?" />
-          <title>Moonfallen | Play Now</title>
-
-          {moments.length > 0 && (
+      <Workspace focused={game.focused} mode={game.workspaceMode} >
+        <Logo>
+          <Image source={Logo1x} retina={Logo2x} alt="Mark of the Deep logo" onClick={() => navigate('/')} />
+        </Logo>
+        <Right>
+          {!loadingUser && userQuery && (
             <>
-              <meta property="og:video" content={`${window.location.origin}${moments[0].video_url}`} />
-              <meta property="og:video:alt" content="The most popular moment of Moonfallen so far" />
-              <meta property="og:video:width" content="1920" />
-              <meta property="og:video:height" content="1080" />
+              {userQuery.Ok && <LoggedInMenu username={userQuery.Ok.username} onLogout={handleLogout} />}
+              {!userQuery.Ok && <LoggedOutMenu onSignup={() => game.toggleSignup()} />}
             </>
           )}
-          
-          <meta property="og:image" content={`${window.location.origin}${Screenshot}`} />
-          <meta property="og:image:alt" content="An image with dark background featuring a large panther on the left. The title — Light and dark mode in just 14 lines of CSS — is in white text at the centre, and below are icons representing the topics of the shared page." />
-          <meta property="og:image:width" content="3570" />
-          <meta property="og:image:height" content="2048" />
-
-          <meta name="twitter:label1" content="Created by" />
-          <meta name="twitter:data1" content="Chaotic Games" />
-
-          <meta property="og:type" content="game" />
-
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:site" content="@moonfallengame" />
-          <meta name="twitter:creator" content="@moonfallengame" />
-        </Helmet>
-        <Workspace
-          focused={game.focused}
-          mode={game.workspaceMode}
-        >
-          <Logo>
-            <Title>Moonfallen</Title>
-            <Subheader>You must escape before it's too late.</Subheader>
-          </Logo>
-          <Left>
-            <ChaoticLogo href="https://www.getchaotic.com/" target="_blank">
-              <Chaotic />
-            </ChaoticLogo>
-          </Left>
-          <Right>
-            {!loadingUser && userQuery && (
-              <>
-                {userQuery.Ok && <LoggedInMenu username={userQuery.Ok.username} onLogout={handleLogout} />}
-                {!userQuery.Ok && <LoggedOutMenu onSignup={() => game.toggleSignup()} />}
-              </>
-            )}
-          </Right>
-          <Presentation>
-            {config ? (
-              <Memo key="game" config={config} />
-            ) : (
-              <div style={{ background: '#000', width: '100%', height: '100%' }} />
-            )}
-          </Presentation>
-          <Main>
-            <MoreContent>
-              {(ranks && headers && mainRanking) ? (
-                <>
-                  <Table>
-                    <THead>
-                      <Th>#</Th>
-                      {headers.map(rank => (
-                        <Th>{rank}</Th>
-                      ))}
-                    </THead>
-                    {ranks.map(rank => (
-                      <tr>
-                        {rank.map(score => (
-                          <Td>{score}</Td>
-                        ))}
-                      </tr>
-                    ))}
-                  </Table>
-                </>
-              ) : (
-                <div />
-              )}
-              <Moments>
-                {moments.slice(0, 3).map((moment) => (
-                  <Card key={moment.id} onClick={handleNavigateToMoment(moment.id)}>
-                    <Video autoPlay loop muted crossOrigin='anonymous'>
-                      <source src={moment.video_url} />
-                      Download the <a href={moment.video_url}>video demo</a>.
-                    </Video>
-                    <Label>{relative(new Date(moment.created_at))}</Label>
-                  </Card>
-                ))}
-              </Moments>
-              <div style={{ padding: 10 }}>
-                <FancyButton>
-                  Play
-                </FancyButton>
-              </div>
-            </MoreContent>
-          </Main>
-          <Footer>
-            <Description>
-              <Subtitle>Moonfallen</Subtitle>
-              <Text>
-                Hundreds of years ago, bio-engineered soldiers were developed in secret as a deterrent to any and all opposition to the government of Earth. Over time, whispers of these soldiers developed a mythos around their being and their incredible capabilities. The year is 3077, and Martian Republic and Earthen Alliance tensions are at an all-time high. Reports received from all over the world indicate the moon is under attack. As Earth scrambles to respond, the Martians take strategic facilities around the Moon in hopes of discovering these soldiers and destroying them.
-              </Text>
-            </Description>
-
-            <div style={{ display: 'flex', width: '100%', justifyContent: 'space-evenly' }}>
-              <div style={{ padding: 15, textAlign: 'center' }}>
-                <Subtitle>Created and Developed by <br />Chaotic Games</Subtitle>
-                <ChaoticLogo href="https://www.getchaotic.com/" target="_blank">
-                  <Chaotic />
-                </ChaoticLogo>
-              </div>
+        </Right>
+        <Main>
+          <Notification>
+            <NotificationContent>
+              <ThinBox>
+                <UnsupportedGpu />
+              </ThinBox>
+            </NotificationContent>
+          </Notification>
+          <Centered>
+            <Box>
+              <InfoBlock
+                title="Character"
+                image={{ main: Pirate1x, retina: Pirate2x, alt: 'Character' }}
+                description="An epic pirate-themed adventure in thrilling mix of Metroidvania and Souls-Like elements."
+              />
+              <InfoBlock
+                title="Story"
+                image={{ main: Story1x, retina: Story2x, alt: 'Story' }}
+                description="Explore biomes and fight abyssal monsters to find your lost crew in a cursed world."
+              />
+              <InfoBlock
+                title="Survival"
+                image={{ main: Survival1x, retina: Survival2x, alt: 'Survival' }}
+                description="Explore biomes and fight abyssal monsters to find your lost crew in a cursed world."
+              />
+            </Box>
+          </Centered>
+        </Main>
+        <Footer>
+          <div style={{ display: 'flex', width: '100%', justifyContent: 'space-evenly' }}>
+            <div style={{ padding: 15, textAlign: 'center' }}>
+              <Subtitle>Powered by <br />Chaotic Games</Subtitle>
+              <ChaoticLogo href="https://www.getchaotic.com/" target="_blank">
+                <Chaotic />
+              </ChaoticLogo>
             </div>
-            <div>
-              <Image source={Moon1x} retina={Moon2x} alt="moon" />
-            </div>
-            <Continue>
-              <a href="https://discord.gg/ag46Jufg7F" target="_blank" rel="noreferrer">
-                <Discord />
-                <span>Join our Discord</span>
-              </a>
-            </Continue>
-          </Footer>
-          {game.pauseDialog && (
-            <Notification>
-              <NotificationContent>
-                <ThinBox>
-                  <Pause unique_id={uniqueId} onClose={() => game.closePauseDialog()} />
-                </ThinBox>
-              </NotificationContent>
-            </Notification>
-          )}
-          {
-            game.isSigningUp && (
-              <Dialog onClose={() => game.finishSignup()}>
-                <DialogContent>
-                  <SignupForm onSubmit={handleSubmit} />
-                </DialogContent>
-              </Dialog>
-            )
-          }
-          {
-            game.invitationDialog && (
-              <Dialog>
-                <DialogContent>
-                  <InvitationForm unique_id={uniqueId} onSubmit={handleInvite} />
-                </DialogContent>
-              </Dialog>
-            )
-          }
-          {
-            game.wishlistDialog && (
-              <Notification>
-                <NotificationContent>
-                  <ThinBox>
-                    <Wishlist
-                      kills={game.kills}
-                      deaths={game.deaths}
-                      time={game.time}
-                      unique_id={uniqueId}
-                      onClose={() => game.closeWishlistDialog()}
-                    />
-                  </ThinBox>
-                </NotificationContent>
-              </Notification>
-            )
-          }
-          {game.outOfCapacityDialog && (
-            <Notification>
-              <NotificationContent>
-                <ThinBox>
-                  <OutOfCapacity onClose={() => game.closeOutOfCapacityDialog()} />
-                </ThinBox>
-              </NotificationContent>
-            </Notification>
-          )}
-        </Workspace >
-      </>
+          </div>
+        </Footer>
+        {
+          game.isSigningUp && (
+            <Dialog onClose={() => game.finishSignup()}>
+              <DialogContent>
+                <SignupForm onSubmit={handleSubmit} />
+              </DialogContent>
+            </Dialog>
+          )
+        }
+      </Workspace >
     );
   }
 
   return (
-    <Workspace focused={game.focused} mode={game.workspaceMode} >
-      <Logo>
-        <Image source={Logo1x} retina={Logo2x} alt="Mark of the Deep logo" onClick={() => navigate('/')} />
-      </Logo>
-      <Right>
-        {!loadingUser && userQuery && (
+    <>
+      <Helmet>
+        <meta name="description" content="Play now in your browser. Moonfallen is a fast-paced space opera from Chaotic Games. Fight enemies and escape with friends. Will you survive?" />
+        <title>Moonfallen | Play Now</title>
+
+        {moments.length > 0 && (
           <>
-            {userQuery.Ok && <LoggedInMenu username={userQuery.Ok.username} onLogout={handleLogout} />}
-            {!userQuery.Ok && <LoggedOutMenu onSignup={() => game.toggleSignup()} />}
+            <meta property="og:video" content={`${window.location.origin}${moments[0].video_url}`} />
+            <meta property="og:video:alt" content="The most popular moment of Moonfallen so far" />
+            <meta property="og:video:width" content="1920" />
+            <meta property="og:video:height" content="1080" />
           </>
         )}
-      </Right>
-      <Main>
-        <Notification>
-          <NotificationContent>
-            <ThinBox>
-              <UnsupportedGpu />
-            </ThinBox>
-          </NotificationContent>
-        </Notification>
-        <Centered>
-          <Box>
-            <InfoBlock
-              title="Character"
-              image={{ main: Pirate1x, retina: Pirate2x, alt: 'Character' }}
-              description="An epic pirate-themed adventure in thrilling mix of Metroidvania and Souls-Like elements."
-            />
-            <InfoBlock
-              title="Story"
-              image={{ main: Story1x, retina: Story2x, alt: 'Story' }}
-              description="Explore biomes and fight abyssal monsters to find your lost crew in a cursed world."
-            />
-            <InfoBlock
-              title="Survival"
-              image={{ main: Survival1x, retina: Survival2x, alt: 'Survival' }}
-              description="Explore biomes and fight abyssal monsters to find your lost crew in a cursed world."
-            />
-          </Box>
-        </Centered>
-      </Main>
-      <Footer>
-        <div style={{ display: 'flex', width: '100%', justifyContent: 'space-evenly' }}>
-          <div style={{ padding: 15, textAlign: 'center' }}>
-            <Subtitle>Powered by <br />Chaotic Games</Subtitle>
-            <ChaoticLogo href="https://www.getchaotic.com/" target="_blank">
-              <Chaotic />
-            </ChaoticLogo>
+        
+        <meta property="og:image" content={`${window.location.origin}${Screenshot}`} />
+        <meta property="og:image:alt" content="An image with dark background featuring a large panther on the left. The title — Light and dark mode in just 14 lines of CSS — is in white text at the centre, and below are icons representing the topics of the shared page." />
+        <meta property="og:image:width" content="3570" />
+        <meta property="og:image:height" content="2048" />
+
+        <meta name="twitter:label1" content="Created by" />
+        <meta name="twitter:data1" content="Chaotic Games" />
+
+        <meta property="og:type" content="game" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@moonfallengame" />
+        <meta name="twitter:creator" content="@moonfallengame" />
+      </Helmet>
+      <Workspace
+        focused={game.focused}
+        mode={game.workspaceMode}
+      >
+        <Logo>
+          <Title>Fireflies Meadows</Title>
+          <Subheader>Slow down, dig in, and let the meadow bloom.</Subheader>
+          <FancyButton>
+            Play
+          </FancyButton>
+        </Logo>
+        <Left>
+          <ChaoticLogo href="https://www.getchaotic.com/" target="_blank">
+            <Chaotic />
+          </ChaoticLogo>
+        </Left>
+        <Right>
+          {!loadingUser && userQuery && (
+            <>
+              {userQuery.Ok && <LoggedInMenu username={userQuery.Ok.username} onLogout={handleLogout} />}
+              {!userQuery.Ok && <LoggedOutMenu onSignup={() => game.toggleSignup()} />}
+            </>
+          )}
+        </Right>
+        <Presentation>
+          {/*config ? (
+            <Memo key="game" config={config} />
+          ) : (
+            <div style={{ background: '#000', width: '100%', height: '100%' }} />
+          )*/}
+          <img style={{ background: '#000', objectFit: 'cover', width: '100%', height: '100%' }} src={tmp} />
+        </Presentation>
+        <Main>
+          <MoreContent>
+            {(ranks && headers && mainRanking) ? (
+              <>
+                <Table>
+                  <THead>
+                    <Th>#</Th>
+                    {headers.map(rank => (
+                      <Th>{rank}</Th>
+                    ))}
+                  </THead>
+                  {ranks.map(rank => (
+                    <tr>
+                      {rank.map(score => (
+                        <Td>{score}</Td>
+                      ))}
+                    </tr>
+                  ))}
+                </Table>
+              </>
+            ) : (
+              <div />
+            )}
+            <Moments>
+              {moments.slice(0, 3).map((moment) => (
+                <Card key={moment.id} onClick={handleNavigateToMoment(moment.id)}>
+                  <Video autoPlay loop muted crossOrigin='anonymous'>
+                    <source src={moment.video_url} />
+                    Download the <a href={moment.video_url}>video demo</a>.
+                  </Video>
+                  <Label>{relative(new Date(moment.created_at))}</Label>
+                </Card>
+              ))}
+            </Moments>
+            <div style={{ padding: 10 }}>
+            </div>
+          </MoreContent>
+        </Main>
+        <Footer>
+          <Description>
+            <Subtitle>Fireflies Meadows</Subtitle>
+            <Text>
+              In Fireflies Meadows, life moves gently. Plant seeds, raise animals, and watch your meadow bloom under golden skies.
+            </Text>
+          </Description>
+
+          <div style={{ display: 'flex', width: '100%', justifyContent: 'space-evenly' }}>
+            <div style={{ padding: 15, textAlign: 'center' }}>
+              <Subtitle>Created and Developed by <br />Chaotic Games</Subtitle>
+              <ChaoticLogo href="https://www.getchaotic.com/" target="_blank">
+                <Chaotic />
+              </ChaoticLogo>
+            </div>
           </div>
-        </div>
-      </Footer>
-      {
-        game.isSigningUp && (
-          <Dialog onClose={() => game.finishSignup()}>
-            <DialogContent>
-              <SignupForm onSubmit={handleSubmit} />
-            </DialogContent>
-          </Dialog>
-        )
-      }
-    </Workspace >
+          <div>
+            <Image source={Moon1x} retina={Moon2x} alt="moon" />
+          </div>
+          <Continue>
+            <a href="https://discord.gg/ag46Jufg7F" target="_blank" rel="noreferrer">
+              <Discord />
+              <span>Join our Discord</span>
+            </a>
+          </Continue>
+        </Footer>
+        {game.pauseDialog && (
+          <Notification>
+            <NotificationContent>
+              <ThinBox>
+                <Pause unique_id={uniqueId} onClose={() => game.closePauseDialog()} />
+              </ThinBox>
+            </NotificationContent>
+          </Notification>
+        )}
+        {
+          game.isSigningUp && (
+            <Dialog onClose={() => game.finishSignup()}>
+              <DialogContent>
+                <SignupForm onSubmit={handleSubmit} />
+              </DialogContent>
+            </Dialog>
+          )
+        }
+        {
+          game.invitationDialog && (
+            <Dialog>
+              <DialogContent>
+                <InvitationForm unique_id={uniqueId} onSubmit={handleInvite} />
+              </DialogContent>
+            </Dialog>
+          )
+        }
+        {
+          game.wishlistDialog && (
+            <Notification>
+              <NotificationContent>
+                <ThinBox>
+                  <Wishlist
+                    kills={0}
+                    deaths={0}
+                    time={''}
+                    unique_id={uniqueId}
+                    onClose={() => game.closeWishlistDialog()}
+                  />
+                </ThinBox>
+              </NotificationContent>
+            </Notification>
+          )
+        }
+        {game.outOfCapacityDialog && (
+          <Notification>
+            <NotificationContent>
+              <ThinBox>
+                <OutOfCapacity onClose={() => game.closeOutOfCapacityDialog()} />
+              </ThinBox>
+            </NotificationContent>
+          </Notification>
+        )}
+      </Workspace >
+    </>
   );
 };
 

@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 
 export const Main = styled.h2(({ theme }) => ({
   fontSize: 28,
-  fontFamily: theme.fonts.primary,
+  fontFamily: theme.fonts.secondary,
   color: theme.colors.basic.white,
   padding: 0,
   margin: 0,

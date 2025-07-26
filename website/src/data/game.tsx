@@ -18,11 +18,6 @@ type Config = {
 };
 
 type Stats = {
-  hasGun: boolean;
-  hasHookshot: boolean;
-  kills: number;
-  deaths: number;
-  time: number; // seconds
 }
 
 export enum WebsiteMode {
@@ -48,13 +43,7 @@ const defaultConfig = (): Config => {
 };
 
 const defaultStats = (): Stats => {
-  return {
-    hasGun: true,
-    hasHookshot: true,
-    kills: 0,
-    deaths: 0,
-    time: 0,
-  };
+  return { };
 };
 
 export class Game {
@@ -91,10 +80,6 @@ export class Game {
       setTimeout(() => {
         this.config.debouncingEscape = false;
       }, 750);
-    } else if (message === 'ReceivedGun') {
-      this.stats.hasGun = true;
-    } else if (message === 'ReceivedHookshot') {
-      this.stats.hasHookshot = true;
     } else if (message === 'TriggerInvitation') {
       this.website.mode = WebsiteMode.Inviting;
     }
@@ -208,26 +193,6 @@ export class Game {
 
   get pauseDialog(): boolean {
     return this.website.mode === WebsiteMode.Pause;
-  }
-
-  get kills(): number {
-    return this.stats.kills;
-  }
-
-  get deaths(): number {
-    return this.stats.deaths;
-  }
-
-  get time(): string {
-    const hours = Math.floor(this.stats.timer / 3600);
-    const minutes = Math.floor((this.stats.timer % 3600) / 60);
-    const seconds = Math.floor(this.stats.timer % 60);
-
-    const formattedHours = String(hours).padStart(2, '0');
-    const formattedMinutes = String(minutes).padStart(2, '0');
-    const formattedSeconds = String(seconds).padStart(2, '0');
-
-    return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
   }
 
   get workspaceMode(): WorkspaceMode {

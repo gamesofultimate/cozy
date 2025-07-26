@@ -11537,6 +11537,64 @@
             "SalesBin": {}
           }
         ]
+      },
+      "f7a596ee-56e2-4ed6-bbb9-96b2b55510e9": {
+        "id": "f7a596ee-56e2-4ed6-bbb9-96b2b55510e9",
+        "tag": {
+          "name": "Temp 1"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              14.140587,
+              1,
+              6.565568
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "ModelComponent": {
+              "cast_shadows": true,
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0,
+              "id": "33b56cd7-0aa3-4a7a-8c4e-a740e353d338",
+              "skip": false,
+              "transform": {
+                "rotation": [
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ],
+                "translation": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          }
+        ]
       }
     },
     "models": {

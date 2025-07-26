@@ -26,7 +26,7 @@ export const MainTheme = {
     },
   },
   fonts: {
-    primary: '"Iceland", sans-serif',
-    secondary: '"Exo 2", sans-serif',
+    primary: '"Luckiest Guy", cursive',
+    secondary: '"Quicksand", sans-serif',
   },
 };
