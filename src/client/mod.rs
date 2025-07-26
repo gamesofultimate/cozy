@@ -1,3 +1,4 @@
+mod browser;
 mod camera;
 
 use crate::planners::{idling, life, social};
@@ -6,10 +7,12 @@ use crate::shared::{
   state_machine, timeofday, ui_components,
 };
 use engine::application::bus::BrowserBus;
-//use engine::systems::browser::BrowserActor;
+use engine::systems::browser::BrowserActor;
 use engine::systems::hdr::HdrMultiplayerPipeline;
 use engine::systems::Scheduler;
 use engine::utils::browser::grow_memory;
+
+use crate::client::browser::{BrowserSystem, Message};
 
 // 1080p
 const DEFAULT_WIDTH: u32 = 1920;
@@ -20,7 +23,7 @@ const GROW_MEMORY_IN_MB: u32 = 800;
 pub fn main(
   canvas_id: String,
   assets_location: String,
-  _bus: BrowserBus,
+  bus: BrowserBus,
   session_id: String,
   connection_id: String,
   unique_id: String,
@@ -48,6 +51,10 @@ pub fn main(
   );
 
   scheduler.attach_plugin(hdr);
+
+  let browser = BrowserActor::<Message, Message>::new(bus);
+  scheduler.attach_actor(browser);
+  scheduler.attach_system::<BrowserSystem>();
 
   scheduler.attach_registry::<animations::AnimationTransitions>();
   scheduler.attach_registry::<components::GameComponents>();

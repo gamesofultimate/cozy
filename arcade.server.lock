@@ -2727,6 +2727,16 @@
     },
     {
       "tag": "Struct",
+      "name": "SalesBin",
+      "label": "Sales Bin",
+      "default_values": "{  }",
+      "duplicate_values": "null",
+      "docs": null,
+      "fields": [],
+      "private": false
+    },
+    {
+      "tag": "Struct",
       "name": "Seat",
       "label": "Seat",
       "default_values": "{ resting_factor: 0.0 }",

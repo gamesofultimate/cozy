@@ -9605,43 +9605,6 @@
           }
         ]
       },
-      "21cb32bf-b968-44b1-a875-b580487fcca1": {
-        "id": "21cb32bf-b968-44b1-a875-b580487fcca1",
-        "tag": {
-          "name": "Tree 162"
-        },
-        "transform": {
-          "transform": {
-            "translation": [
-              -34.72448,
-              -2.3481617,
-              2.633235
-            ],
-            "rotation": [
-              0,
-              0,
-              0
-            ],
-            "scale": [
-              1,
-              1,
-              1
-            ]
-          }
-        },
-        "components": [
-          {
-            "ParentComponent": {
-              "parent_id": "0b681df5-efd3-4803-bb2d-83c33306c679"
-            }
-          },
-          {
-            "PrefabComponent": {
-              "id": "71ed2072-a1e2-4a57-9b55-acddd295ff4d"
-            }
-          }
-        ]
-      },
       "2efffc24-04ee-4413-87c0-f2e52479a3fa": {
         "id": "2efffc24-04ee-4413-87c0-f2e52479a3fa",
         "tag": {
@@ -11466,6 +11429,112 @@
                 ]
               }
             }
+          }
+        ]
+      },
+      "44ac0bb0-473a-40c2-9f5e-2a6f911b8092": {
+        "id": "44ac0bb0-473a-40c2-9f5e-2a6f911b8092",
+        "tag": {
+          "name": "Silo"
+        },
+        "transform": {
+          "transform": {
+            "translation": [
+              11.089753,
+              0,
+              16.638663
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "components": [
+          {
+            "ModelComponent": {
+              "cast_shadows": true,
+              "color": [
+                0,
+                0,
+                0
+              ],
+              "color_intensity": 0,
+              "id": "ad932d80-1003-4101-9494-224729de20d0",
+              "skip": false,
+              "transform": {
+                "rotation": [
+                  4.329780281177467e-17,
+                  -0.7071067811865475,
+                  4.329780281177466e-17,
+                  0.7071067811865476
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ],
+                "translation": [
+                  0.1,
+                  0,
+                  -0.5
+                ]
+              }
+            }
+          },
+          {
+            "PhysicsComponent": {
+              "debug": false,
+              "id": "36978f46-a82b-4435-8f18-2af3b32a347a",
+              "joint": {
+                "body": {
+                  "allow_rotation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "allow_translation": [
+                    true,
+                    true,
+                    true
+                  ],
+                  "ccd": false,
+                  "collider_type": {
+                    "Cylinder": {
+                      "half_height": 4,
+                      "radius": 2.2
+                    }
+                  },
+                  "density": 1,
+                  "dynamic_type": "Static",
+                  "friction": 0.1,
+                  "groups": {
+                    "filters": "0b11111111111111111111111111111111",
+                    "memberships": "0b11111111111111111111111111111111"
+                  },
+                  "id": "7c0c5433-3b90-43cd-859d-94cc354a9917",
+                  "is_sensor": false,
+                  "restitution": 0.1
+                },
+                "config": null,
+                "id": "fd1a580d-c686-41aa-81bc-bc301585a279",
+                "name": "Joint",
+                "offset": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          },
+          {
+            "SalesBin": {}
           }
         ]
       }

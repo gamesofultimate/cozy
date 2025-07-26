@@ -1,17 +1,22 @@
 #![cfg(target_arch = "wasm32")]
-use crate::client::game_input::GameInput;
 use engine::{
-  application::scene::Scene,
+  application::{
+    input::InputsReader,
+    scene::{Collision, Scene},
+  },
   systems::{
     browser::{BrowserController, BrowserReceiver},
-    input::InputsReader,
     Backpack, Initializable, Inventory, System,
   },
+  tsify,
+  utils::units::Seconds,
 };
 use serde::{Deserialize, Serialize};
-use tsify::Tsify;
 
-#[derive(Debug, Serialize, Deserialize, Tsify)]
+use crate::shared::components::{Action, ActionTypes, Character, CharacterState, Harvestable};
+use crate::shared::game_input::{GameInput, InputState};
+
+#[derive(Debug, Serialize, Deserialize, tsify::Tsify)]
 pub enum Message {
   StartGame,
   StopGame,
@@ -21,6 +26,8 @@ pub enum Message {
   Login,
   TriggerInvitation,
   FinishInvitation,
+
+  StartSale,
 }
 
 pub struct BrowserSystem {
@@ -42,19 +49,44 @@ impl Initializable for BrowserSystem {
   }
 }
 
-impl System for BrowserSystem {
+impl BrowserSystem {
   fn get_name(&self) -> &'static str {
     "BrowserSystem"
   }
 
-  fn run(&mut self, _scene: &mut Scene, _backpack: &mut Backpack) {
-    let input = self.inputs.read();
-    if input.left_click {
+  pub fn handle_game_start(&self) {
+    let input = self.inputs.read_client();
+    if input.check(InputState::LeftClick) {
       self.controller.send(Message::StartGame);
     }
 
-    if input.escape {
+    if input.check(InputState::Escape) {
       self.controller.send(Message::StopGame);
     }
+  }
+
+  pub fn handle_sales(&self, scene: &mut Scene, backpack: &mut Backpack) {
+    let delta_time = backpack.get::<Seconds>().unwrap();
+
+    for (_, (input, character, state, collision)) in scene.query_mut::<(
+      &GameInput,
+      &mut Character,
+      &mut CharacterState,
+      &Collision<Action, Harvestable>,
+    )>() {
+      if input.check(InputState::Action)
+        && let ActionTypes::Harvest = character.action
+        && let CharacterState::Normal | CharacterState::Running = state
+      {
+        self.controller.send(Message::StartSale);
+      }
+    }
+  }
+}
+
+impl System for BrowserSystem {
+  fn run(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
+    self.handle_game_start();
+    self.handle_sales(scene, backpack);
   }
 }

@@ -1,7 +1,7 @@
 use crate::shared::components::{
   Action, ActionTypes, Character, CharacterState, Crop, CropTile, CropType, Harvestable,
-  Inventory as GameInventory, Item, Level, Log, Pickup, PickupSpace, Quantity, Seeds, Stage, Tile,
-  TimeOfDay, WaterCan, WaterSource, WateredTile,
+  Inventory as GameInventory, Item, Level, Log, Pickup, PickupSpace, Quantity, SalesBin, Seeds,
+  Stage, Tile, TimeOfDay, WaterCan, WaterSource, WateredTile,
 };
 use crate::shared::game_input::{GameInput, InputState};
 use crate::shared::state_machine::{GameState, StateMachine};
@@ -24,7 +24,7 @@ use std::f32::consts::PI;
 pub struct PickupsSystem {}
 
 impl Initializable for PickupsSystem {
-  fn initialize(_: &Inventory) -> Self {
+  fn initialize(inventory: &Inventory) -> Self {
     Self {}
   }
 }
@@ -362,6 +362,87 @@ impl PickupsSystem {
     }
   }
 
+  pub fn handle_sales(&self, scene: &mut Scene, backpack: &mut Backpack) {
+    let delta_time = backpack.get::<Seconds>().unwrap();
+
+    /*
+      let mut harvesting_entities = vec![];
+      for (player_entity, (transform, input, character)) in
+        scene.query_mut::<(&TransformComponent, &GameInput, &mut CharacterState)>()
+      {
+        if let CharacterState::Harvesting(harvesting_entity, timing) = character
+          && let Some(_) = timing.tick()
+        {
+          harvesting_entities.push((player_entity, *harvesting_entity, transform.clone()));
+          *character = CharacterState::Normal;
+        }
+      }
+
+      for (player_entity, harvesting_entity, player_transform) in harvesting_entities {
+        let mut is_showoff = false;
+
+        let crop = match scene.get_components_mut::<&Crop>(harvesting_entity) {
+          Some(data) => data.clone(),
+          None => continue,
+        };
+
+        if let Some((inventory, character)) =
+          scene.get_components_mut::<(&mut GameInventory, &mut CharacterState)>(player_entity)
+        {
+          is_showoff = inventory.award(Item::Crop(crop.crop), crop.award);
+          if is_showoff {
+            *character = CharacterState::ShowingOff {
+              item: Item::Crop(crop.crop),
+            };
+          }
+        }
+
+        let _ = scene.despawn(harvesting_entity);
+
+        if is_showoff
+          && let Some(prefabs) = scene.get_prefab_owned(crop.crop.get_prefab())
+          && let Some((mut parent, _)) = prefabs
+            .iter()
+            .cloned()
+            .find(|(prefab, _)| prefab.tag.name == crop.crop.get_prefab())
+          && let Some((mut prefab, _)) = prefabs
+            .iter()
+            .cloned()
+            .find(|(prefab, _)| prefab.tag.name == Stage::Display.get_prefab())
+        {
+          let crop_entity = scene.create_raw_entity("Display");
+
+          prefab.transform = player_transform;
+          prefab.transform.translation -= Vector3::z();
+          prefab.transform.translation -= Vector3::y() * 0.25;
+
+          prefab.remove::<ParentComponent>();
+          if let Some(crop) = parent.get_mut::<Crop>() {
+            crop.stage = Stage::Display;
+          }
+          scene.create_with_prefab(crop_entity, parent);
+          scene.create_with_prefab(crop_entity, prefab);
+        }
+      }
+    */
+
+    for (_, (model, _, _)) in scene.query_mut::<(
+      &mut ModelComponent,
+      &SalesBin,
+      &CollisionEnter<Action, SalesBin>,
+    )>() {
+      model.color = Vector3::new(0.0, 0.0, 1.0);
+      model.color_intensity = 0.1;
+    }
+    for (_, (model, _, _)) in scene.query_mut::<(
+      &mut ModelComponent,
+      &SalesBin,
+      &CollisionExit<Action, SalesBin>,
+    )>() {
+      model.color_intensity = 0.0;
+    }
+  }
+
   pub fn handle_add_state(&self, scene: &mut Scene) {
     let mut entities = vec![];
     for (entity, _) in scene.query_mut::<&Character>().without::<CharacterState>() {
@@ -503,7 +584,6 @@ impl System for PickupsSystem {
     self.handle_throw_seeds(scene, backpack);
     self.handle_harvest(scene, backpack);
     self.handle_plant_growth(scene, backpack);
-    //self.handle_showoff_discovery(scene, backpack);
     self.handle_update_ui(scene, backpack);
   }
 }

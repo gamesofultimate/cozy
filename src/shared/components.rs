@@ -24,6 +24,7 @@ impl Registry for GameComponents {
     CameraFollower::register();
     Character::register();
     DisplayItem::register();
+    SalesBin::register();
     WaterCan::register();
     WaterSource::register();
     Harvestable::register();
@@ -325,6 +326,11 @@ impl ProvideAssets for Harvestable {}
 pub struct DisplayItem {}
 
 impl ProvideAssets for DisplayItem {}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct SalesBin {}
+
+impl ProvideAssets for SalesBin {}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
 pub struct Rock {

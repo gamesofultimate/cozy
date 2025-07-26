@@ -12,7 +12,7 @@ use engine::{
 };
 use std::collections::VecDeque;
 
-use crate::shared::components::{Action, Harvestable, Pickup, Tile, WaterSource};
+use crate::shared::components::{Action, Harvestable, Pickup, SalesBin, Tile, WaterSource};
 
 pub struct CollisionSystem {
   physics: PhysicsController,
@@ -56,4 +56,5 @@ fn handle_collision_event(
   physics.try_handle_collision::<Action, Tile>(scene, collision_event);
   physics.try_handle_collision::<Action, WaterSource>(scene, collision_event);
   physics.try_handle_collision::<Action, Harvestable>(scene, collision_event);
+  physics.try_handle_collision::<Action, SalesBin>(scene, collision_event);
 }
