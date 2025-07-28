@@ -33,6 +33,7 @@ import Survival1x from 'images/survival@1x.png';
 import Survival2x from 'images/survival@2x.png';
 
 import FancyButton from 'components/FancyButton';
+import ProgressBar from 'components/ProgressBar';
 import LoggedOutMenu from 'components/LoggedOutMenu';
 import LoggedInMenu from 'components/LoggedInMenu';
 import Subtitle from 'components/Subtitle';
@@ -486,8 +487,12 @@ const MainPage: React.FC = () => {
         <Logo>
           <Title>Fireflies Meadow</Title>
           <Subheader>Slow down, dig in, and let the meadow bloom.</Subheader>
-          {(game.website.download_percent >= 1) && (
-            <FancyButton>Play</FancyButton>
+          {(game.website.download_percent >= 1) ? (
+            <FancyButton onClick={() => { game.pressPlay() }}>Play</FancyButton>
+          ) : (
+            <div>
+              <ProgressBar percent={game.website.download_percent} />
+            </div>
           )}
         </Logo>
         <Left>

@@ -190,7 +190,7 @@
                 ],
                 "translation": [
                   0,
-                  -0.65,
+                  -0.7,
                   0
                 ]
               },
@@ -11573,7 +11573,7 @@
               ],
               "color_intensity": 0,
               "id": "33b56cd7-0aa3-4a7a-8c4e-a740e353d338",
-              "skip": false,
+              "skip": true,
               "transform": {
                 "rotation": [
                   0,

@@ -2,13 +2,13 @@ import React from 'react';
 
 import styled from '@emotion/styled';
 
-export enum ButtonKind {
+export enum ProgressBarKind {
   Normal,
   Large,
 }
 
 type KindProps = {
-  kind?: ButtonKind;
+  kind?: ProgressBarKind;
 };
 
 
@@ -26,20 +26,24 @@ const GrowingRoom = styled.div(({ theme }) => ({
   },
 }));
 
+type InnerProps = {
+  percent: number;
+};
+
 // @ts-ignore
-const Inner = styled.div(({ theme }) => ({
+const Inner = styled.div<InnerProps>(({ theme, percent = 0 }) => ({
   background: '#8CDD4B',
   fontSize: 32,
   fontWeight: 900,
-  padding: '10px 20px',
+  padding: '10px 0px',
   textTransform: 'uppercase',
   borderRadius: 16,
+  width: `${100 * percent}%`,
 }));
 
 // @ts-ignore
 const Main = styled.div(({ theme }) => ({
   display: 'inline-block',
-  pointerEvents: 'auto',
   color: '#5B5B5B',
   fontFamily: theme.fonts.secondary,
   textAlign: 'center',
@@ -47,7 +51,7 @@ const Main = styled.div(({ theme }) => ({
   cursor: 'pointer',
   background: 'transparent',
   padding: 0,
-  maxWidth: 200,
+  width: 400,
 
   transition: 'padding 200ms ease-in-out',
 
@@ -63,19 +67,17 @@ const Main = styled.div(({ theme }) => ({
   }
 }));
 
-type ButtonProps = {
-  children: any;
-  onClick?: (event: any) => void;
-  submit?: boolean;
+type ProgressBarProps = {
+  percent: number;
 };
-const Button: React.FC<ButtonProps & KindProps> = ({ children, submit, kind, onClick }) => {
+const ProgressBar: React.FC<ProgressBarProps & KindProps> = ({ percent }) => {
   return (
-    <Main onClick={onClick}>
+    <Main>
       <GrowingRoom>
-        <Inner>{children}</Inner>
+        <Inner percent={percent} />
       </GrowingRoom>
     </Main>
   );
 };
 
-export default Button;
+export default ProgressBar;

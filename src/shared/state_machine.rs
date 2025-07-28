@@ -288,28 +288,11 @@ impl StateMachineSystem {
       let total_necessary =
         pending_required + pending_priority + downloaded_required + downloaded_priority;
 
-      log::info!(
-        "({:} != {:} || {:} != {:} || {:} != {:} || {:} != {:}) = {:}",
-        pending_required,
-        self.pending_required,
-        pending_priority,
-        self.pending_priority,
-        downloaded_required,
-        self.downloaded_required,
-        downloaded_priority,
-        self.downloaded_priority,
-        pending_required != self.pending_required
-          || pending_priority != self.pending_priority
-          || downloaded_required != self.downloaded_required
-          || downloaded_priority != self.downloaded_priority
-      );
-
       if pending_required != self.pending_required
         || pending_priority != self.pending_priority
         || downloaded_required != self.downloaded_required
         || downloaded_priority != self.downloaded_priority
       {
-        log::info!("UPDATING!");
         // send message
         self.pending_required = pending_required;
         self.pending_priority = pending_priority;

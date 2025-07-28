@@ -109,14 +109,6 @@ export class Game {
       if (percent >= 1) {
         this.website.mode = WebsiteMode.Normal;
       }
-      /*
-      this.website.mode = WebsiteMode.Wishlist;
-      this.website.focused = FocusState.Unfocused;
-
-      if (document.fullscreenElement) {
-        document.exitFullscreen();
-      }
-       */
     }
   }
 
@@ -177,6 +169,12 @@ export class Game {
     const canvas = document.getElementById('canvas');
     canvas?.focus();
 
+    sendToGame('StartGame');
+  }
+
+  pressPlay() {
+    this.website.mode = WebsiteMode.Normal;
+    this.website.focused = FocusState.Focused;
     sendToGame('StartGame');
   }
 
