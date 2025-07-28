@@ -473,6 +473,7 @@ impl PickupsSystem {
 
     if let Some((_, (text, _))) = scene.query_one::<(&mut TextComponent, &InventoryDisplay)>() {
       if let Some(machine) = backpack.get_mut::<StateMachine>() {
+        log::info!("active: {:?} -> {:?}", machine.is_active(), machine.state);
         if machine.is_active() {
           text.opacity = lerp(text.opacity, 1.0, 0.9);
         } else {

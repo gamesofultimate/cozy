@@ -15,6 +15,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::shared::components::{Action, ActionTypes, Character, CharacterState, Harvestable};
 use crate::shared::game_input::{GameInput, InputState};
+use crate::shared::state_machine::{GameState, StateMachine};
 
 #[derive(Debug, Serialize, Deserialize, tsify::Tsify)]
 pub enum Message {
@@ -60,6 +61,21 @@ impl BrowserSystem {
     "BrowserSystem"
   }
 
+  pub fn handle_browser_messages(&self, backpack: &mut Backpack) -> Option<()> {
+    let machine = backpack.get_mut::<StateMachine>()?;
+    for message in self.receiver.receive() {
+      log::info!("message: {message:?}");
+      match message {
+        Message::StartGame => {
+          machine.start_game();
+        }
+        _ => {}
+      }
+    }
+
+    Some(())
+  }
+
   pub fn handle_game_start(&self) {
     let input = self.inputs.read_client();
 
@@ -93,6 +109,7 @@ impl BrowserSystem {
 
 impl System for BrowserSystem {
   fn run(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
+    self.handle_browser_messages(backpack);
     self.handle_game_start();
     self.handle_sales(scene, backpack);
   }

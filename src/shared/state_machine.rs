@@ -277,34 +277,35 @@ impl StateMachineSystem {
   fn handle_game_loading(&mut self, scene: &mut Scene, backpack: &mut Backpack) -> Option<()> {
     let (machine, manager) = backpack.fetch_mut::<(StateMachine, AssetManager)>()?;
 
-    if !manager.is_downloading_required() {
-      machine.set_downloading();
-      let pending_required = manager.pending_required_count();
-      let pending_priority = manager.pending_priority_count();
-      let downloaded_required = manager.downloaded_required_count();
-      let downloaded_priority = manager.downloaded_priority_count();
+    let pending_required = manager.pending_required_count();
+    let pending_priority = manager.pending_priority_count();
+    let downloaded_required = manager.downloaded_required_count();
+    let downloaded_priority = manager.downloaded_priority_count();
 
-      let total_downloaded = downloaded_required + downloaded_priority;
-      let total_necessary =
-        pending_required + pending_priority + downloaded_required + downloaded_priority;
+    let total_downloaded = downloaded_required + downloaded_priority;
+    let total_necessary =
+      pending_required + pending_priority + downloaded_required + downloaded_priority;
 
-      if pending_required != self.pending_required
-        || pending_priority != self.pending_priority
-        || downloaded_required != self.downloaded_required
-        || downloaded_priority != self.downloaded_priority
-      {
-        // send message
-        self.pending_required = pending_required;
-        self.pending_priority = pending_priority;
-        self.downloaded_required = downloaded_required;
-        self.downloaded_priority = downloaded_priority;
+    if pending_required != self.pending_required
+      || pending_priority != self.pending_priority
+      || downloaded_required != self.downloaded_required
+      || downloaded_priority != self.downloaded_priority
+    {
+      // send message
+      self.pending_required = pending_required;
+      self.pending_priority = pending_priority;
+      self.downloaded_required = downloaded_required;
+      self.downloaded_priority = downloaded_priority;
 
-        self.browser.send(Message::UpdateDownloadStats {
-          pending_required,
-          pending_priority,
-          downloaded_required,
-          downloaded_priority,
-        });
+      self.browser.send(Message::UpdateDownloadStats {
+        pending_required,
+        pending_priority,
+        downloaded_required,
+        downloaded_priority,
+      });
+
+      if manager.is_downloading_required() || manager.is_downloading_priority() {
+        machine.set_downloading();
       }
 
       if total_downloaded == total_necessary {
@@ -392,8 +393,12 @@ impl StateMachineSystem {
   fn set_camera(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
     if let Some((next, Prev(prev))) = backpack.fetch_mut::<(StateMachine, Prev<StateMachine>)>() {
       match (&prev.state, &next.state) {
+        /*
         (GameState::Loaded, GameState::RequestTransition)
+        | (GameState::Loaded, GameState::Playing)
         | (GameState::Loaded, GameState::TransitionToGame { .. }) => {
+        */
+        (_, GameState::Playing) => {
           let mut player = None;
           for (entity, (_, _, _)) in
             scene.query_mut::<(&Player, &NetworkedPlayerComponent, &SelfComponent)>()
@@ -606,7 +611,8 @@ impl StateMachine {
   }
 
   pub fn start_game(&mut self) {
-    self.state = GameState::RequestTransition;
+    //self.state = GameState::RequestTransition;
+    self.state = GameState::Playing;
   }
 
   pub fn resume_game(&mut self) {
