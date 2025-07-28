@@ -11,6 +11,7 @@ import type {
 type Website = {
   focused: FocusState;
   mode: WebsiteMode;
+  download_percent: number;
 };
 
 type Config = {
@@ -21,6 +22,7 @@ type Stats = {
 }
 
 export enum WebsiteMode {
+  Downloading,
   Normal,
   SigningUp,
   Inviting,
@@ -32,7 +34,9 @@ export enum WebsiteMode {
 const defaultWebsite = (): Website => {
   return {
     focused: FocusState.Unfocused,
-    mode: WebsiteMode.Normal,
+    //mode: WebsiteMode.Normal,
+    mode: WebsiteMode.Downloading,
+    download_percent: 0,
   };
 };
 
@@ -91,6 +95,28 @@ export class Game {
       if (document.fullscreenElement) {
         document.exitFullscreen();
       }
+    }
+    else if ("UpdateDownloadStats" in message) {
+      const pendingRequired = message.UpdateDownloadStats.pending_required;
+      const pendingPriority = message.UpdateDownloadStats.pending_priority;
+      const downloadedRequired = message.UpdateDownloadStats.downloaded_required;
+      const downloadedPriority = message.UpdateDownloadStats.downloaded_priority;
+      const total = (pendingPriority + pendingRequired + downloadedRequired + downloadedPriority) ?? 1;
+      const downloaded = downloadedRequired + downloadedPriority;
+      const percent = downloaded / total;
+      console.log('download', message.UpdateDownloadStats, `${downloaded} / ${total} = ${percent * 100}`);
+      this.website.download_percent = percent;
+      if (percent >= 1) {
+        this.website.mode = WebsiteMode.Normal;
+      }
+      /*
+      this.website.mode = WebsiteMode.Wishlist;
+      this.website.focused = FocusState.Unfocused;
+
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      }
+       */
     }
   }
 

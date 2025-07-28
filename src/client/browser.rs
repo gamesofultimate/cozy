@@ -28,6 +28,12 @@ pub enum Message {
   FinishInvitation,
 
   StartSale,
+  UpdateDownloadStats {
+    pending_required: usize,
+    pending_priority: usize,
+    downloaded_required: usize,
+    downloaded_priority: usize,
+  },
 }
 
 pub struct BrowserSystem {
@@ -56,6 +62,7 @@ impl BrowserSystem {
 
   pub fn handle_game_start(&self) {
     let input = self.inputs.read_client();
+
     if input.check(InputState::LeftClick) {
       self.controller.send(Message::StartGame);
     }

@@ -484,11 +484,11 @@ const MainPage: React.FC = () => {
         mode={game.workspaceMode}
       >
         <Logo>
-          <Title>Fireflies Meadows</Title>
+          <Title>Fireflies Meadow</Title>
           <Subheader>Slow down, dig in, and let the meadow bloom.</Subheader>
-          <FancyButton>
-            Play
-          </FancyButton>
+          {(game.website.download_percent >= 1) && (
+            <FancyButton>Play</FancyButton>
+          )}
         </Logo>
         <Left>
           <ChaoticLogo href="https://www.getchaotic.com/" target="_blank">
@@ -504,36 +504,17 @@ const MainPage: React.FC = () => {
           )}
         </Right>
         <Presentation>
-          {/*config ? (
+          {config ? (
             <Memo key="game" config={config} />
           ) : (
             <div style={{ background: '#000', width: '100%', height: '100%' }} />
-          )*/}
+          )}
+          {/*
           <img style={{ background: '#000', objectFit: 'cover', width: '100%', height: '100%' }} src={tmp} />
+          */}
         </Presentation>
         <Main>
           <MoreContent>
-            {(ranks && headers && mainRanking) ? (
-              <>
-                <Table>
-                  <THead>
-                    <Th>#</Th>
-                    {headers.map(rank => (
-                      <Th>{rank}</Th>
-                    ))}
-                  </THead>
-                  {ranks.map(rank => (
-                    <tr>
-                      {rank.map(score => (
-                        <Td>{score}</Td>
-                      ))}
-                    </tr>
-                  ))}
-                </Table>
-              </>
-            ) : (
-              <div />
-            )}
             <Moments>
               {moments.slice(0, 3).map((moment) => (
                 <Card key={moment.id} onClick={handleNavigateToMoment(moment.id)}>
@@ -551,9 +532,9 @@ const MainPage: React.FC = () => {
         </Main>
         <Footer>
           <Description>
-            <Subtitle>Fireflies Meadows</Subtitle>
+            <Subtitle>Fireflies Meadow</Subtitle>
             <Text>
-              In Fireflies Meadows, life moves gently. Plant seeds, raise animals, and watch your meadow bloom under golden skies.
+              In Fireflies Meadow, life moves gently. Plant seeds, raise animals, and watch your meadow bloom under golden skies.
             </Text>
           </Description>
 

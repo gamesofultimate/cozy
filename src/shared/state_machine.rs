@@ -14,8 +14,8 @@ use engine::{
   },
   nalgebra::{Unit, Vector3},
   systems::{
-    physics::PhysicsController, trusty::MultiplayerController, Backpack, Initializable, Inventory,
-    System,
+    physics::PhysicsController, trusty::AssetManager, trusty::MultiplayerController, Backpack,
+    Initializable, Inventory, System,
   },
   utils::{
     easing::Easing,
@@ -29,13 +29,23 @@ use std::collections::{HashMap, HashSet};
 use tagged::registry::Prev;
 
 #[cfg(target_arch = "wasm32")]
+use crate::client::browser::Message;
+#[cfg(target_arch = "wasm32")]
+use engine::systems::browser::BrowserController;
+#[cfg(target_arch = "wasm32")]
 use engine::systems::rendering::CameraConfig;
 
 pub struct StateMachineSystem {
   current_time: Seconds,
   physics: PhysicsController,
   inputs: InputsReader<GameInput>,
+  #[cfg(target_arch = "wasm32")]
+  browser: BrowserController<Message>,
   multiplayer: MultiplayerController,
+  pending_required: usize,
+  pending_priority: usize,
+  downloaded_required: usize,
+  downloaded_priority: usize,
 }
 
 impl Initializable for StateMachineSystem {
@@ -43,10 +53,18 @@ impl Initializable for StateMachineSystem {
     let physics = inventory.get::<PhysicsController>().clone();
     let inputs = inventory.get::<InputsReader<GameInput>>().clone();
     let multiplayer = inventory.get::<MultiplayerController>().clone();
+    #[cfg(target_arch = "wasm32")]
+    let browser = inventory.get::<BrowserController<Message>>().clone();
     Self {
       physics,
       inputs,
       multiplayer,
+      #[cfg(target_arch = "wasm32")]
+      browser,
+      pending_required: 0,
+      pending_priority: 0,
+      downloaded_required: 0,
+      downloaded_priority: 0,
       current_time: Seconds::new(0.0),
     }
   }
@@ -69,6 +87,7 @@ impl System for StateMachineSystem {
       self.handle_start(scene, backpack);
       self.handle_receive_from_server(scene, backpack);
       self.handle_camera_dof(scene, backpack);
+      self.handle_game_loading(scene, backpack);
     }
     self.set_camera(scene, backpack);
     //self.handle_transitions(scene, backpack);
@@ -255,6 +274,65 @@ impl StateMachineSystem {
   }
 
   #[cfg(target_arch = "wasm32")]
+  fn handle_game_loading(&mut self, scene: &mut Scene, backpack: &mut Backpack) -> Option<()> {
+    let (machine, manager) = backpack.fetch_mut::<(StateMachine, AssetManager)>()?;
+
+    if !manager.is_downloading_required() {
+      machine.set_downloading();
+      let pending_required = manager.pending_required_count();
+      let pending_priority = manager.pending_priority_count();
+      let downloaded_required = manager.downloaded_required_count();
+      let downloaded_priority = manager.downloaded_priority_count();
+
+      let total_downloaded = downloaded_required + downloaded_priority;
+      let total_necessary =
+        pending_required + pending_priority + downloaded_required + downloaded_priority;
+
+      log::info!(
+        "({:} != {:} || {:} != {:} || {:} != {:} || {:} != {:}) = {:}",
+        pending_required,
+        self.pending_required,
+        pending_priority,
+        self.pending_priority,
+        downloaded_required,
+        self.downloaded_required,
+        downloaded_priority,
+        self.downloaded_priority,
+        pending_required != self.pending_required
+          || pending_priority != self.pending_priority
+          || downloaded_required != self.downloaded_required
+          || downloaded_priority != self.downloaded_priority
+      );
+
+      if pending_required != self.pending_required
+        || pending_priority != self.pending_priority
+        || downloaded_required != self.downloaded_required
+        || downloaded_priority != self.downloaded_priority
+      {
+        log::info!("UPDATING!");
+        // send message
+        self.pending_required = pending_required;
+        self.pending_priority = pending_priority;
+        self.downloaded_required = downloaded_required;
+        self.downloaded_priority = downloaded_priority;
+
+        self.browser.send(Message::UpdateDownloadStats {
+          pending_required,
+          pending_priority,
+          downloaded_required,
+          downloaded_priority,
+        });
+      }
+
+      if total_downloaded == total_necessary {
+        machine.set_loaded();
+      }
+    }
+
+    Some(())
+  }
+
+  #[cfg(target_arch = "wasm32")]
   fn handle_camera_dof(&mut self, scene: &mut Scene, backpack: &mut Backpack) -> Option<()> {
     use crate::shared::components::CameraFollower;
 
@@ -331,8 +409,8 @@ impl StateMachineSystem {
   fn set_camera(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
     if let Some((next, Prev(prev))) = backpack.fetch_mut::<(StateMachine, Prev<StateMachine>)>() {
       match (&prev.state, &next.state) {
-        (GameState::Loading, GameState::RequestTransition)
-        | (GameState::Loading, GameState::TransitionToGame { .. }) => {
+        (GameState::Loaded, GameState::RequestTransition)
+        | (GameState::Loaded, GameState::TransitionToGame { .. }) => {
           let mut player = None;
           for (entity, (_, _, _)) in
             scene.query_mut::<(&Player, &NetworkedPlayerComponent, &SelfComponent)>()
@@ -411,7 +489,7 @@ impl StateMachineSystem {
     let input = self.inputs.read_client();
     if let Some(machine) = backpack.get_mut::<StateMachine>() {
       match &machine.state {
-        GameState::Loading if input.state.contains(InputState::LeftClick) => machine.start_game(),
+        GameState::Loaded if input.state.contains(InputState::LeftClick) => machine.start_game(),
         GameState::Playing if input.state.contains(InputState::Escape) => machine.pause_game(),
         GameState::Paused if input.state.contains(InputState::LeftClick) => machine.resume_game(),
         _ => {}
@@ -449,7 +527,8 @@ impl StateMachineSystem {
 #[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 pub enum GameState {
   Initializing,
-  Loading,
+  Downloading,
+  Loaded,
   RequestTransition,
   TransitionToGame { timeout: Seconds },
   Playing,
@@ -551,6 +630,14 @@ impl StateMachine {
     self.state = GameState::Playing;
   }
 
+  pub fn set_downloading(&mut self) {
+    self.state = GameState::Downloading;
+  }
+
+  pub fn set_loaded(&mut self) {
+    self.state = GameState::Loaded;
+  }
+
   pub fn pause_game(&mut self) {
     self.state = GameState::Paused;
   }
@@ -564,7 +651,7 @@ impl StateMachine {
 
     match self.state {
       GameState::Initializing => {
-        self.state = GameState::Loading;
+        self.state = GameState::Downloading;
         Some(())
       }
       GameState::RequestTransition => {

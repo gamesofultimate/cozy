@@ -1,4 +1,4 @@
-mod browser;
+pub mod browser;
 mod camera;
 
 use crate::planners::{idling, life, social};
