@@ -51,7 +51,7 @@ const Main = styled.div(({ theme }) => ({
   cursor: 'pointer',
   background: 'transparent',
   padding: 0,
-  width: 400,
+  width: '100%',
 
   transition: 'padding 200ms ease-in-out',
 

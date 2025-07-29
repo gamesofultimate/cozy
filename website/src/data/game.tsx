@@ -23,6 +23,9 @@ type Ui = {
   inventory: InventoryItem[],
   mode: UiMode,
   cash: number;
+  rest: number;
+  social: number;
+  hunger: number;
   current_action: string;
 }
 
@@ -59,6 +62,9 @@ const defaultUi = (): Ui => {
     //mode: UiMode.Hidden,
     mode: UiMode.Small,
     cash: 0,
+    rest: 1,
+    social: 1,
+    hunger: 1,
     current_action: 'Starting',
   }
 }

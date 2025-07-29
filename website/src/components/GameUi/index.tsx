@@ -6,6 +6,7 @@ import { UiMode, useGameData } from 'data/game';
 
 import PumpkinCrop from 'images/crops/pumpkin-crops.png';
 import PumpkinSeeds from 'images/crops/pumpkin-seeds.png';
+import ProgressBar from 'components/ProgressBar';
 
 type CenteredProps = {
   mode: UiMode;
@@ -20,10 +21,10 @@ const Centered = styled.div<CenteredProps>(({ mode }) => [
     margin: '0 auto',
     display: 'grid',
     gridTemplateAreas: `
-      'storage action'
-      'storage footer'
+      'character storage action'
+      'character storage footer'
     `,
-    gridTemplateColumns: 'minmax(0, 1fr) 300px',
+    gridTemplateColumns: '300px minmax(0, 1fr) 300px',
     gridTemplateRows: 'minmax(0, 1fr) 100px',
     gap: '10px 10px',
     pointerEvents: 'none',
@@ -41,6 +42,14 @@ const Centered = styled.div<CenteredProps>(({ mode }) => [
     opacity: 1,
   },
 ]);
+
+// @ts-ignore
+const Character = styled.div(() => ({
+  gridArea: 'character',
+  overflowY: 'scroll',
+  paddingRight: 15,
+  textAlign: 'left',
+}));
 
 // @ts-ignore
 const Storage = styled.div(() => ({
@@ -163,6 +172,23 @@ const Pause: React.FC<PauseProps> = () => {
 
   return (
     <Centered mode={game.ui.mode}>
+      <Character>
+        <Card>
+          <Subtitle>Name</Subtitle>
+          <div>
+            <Body>Rest</Body>
+            <ProgressBar percent={game.ui.rest} />
+          </div>
+          <div>
+            <Body>Hunger</Body>
+            <ProgressBar percent={game.ui.hunger} />
+          </div>
+          <div>
+            <Body>Social</Body>
+            <ProgressBar percent={game.ui.social} />
+          </div>
+        </Card>
+      </Character>
       <Storage>
         <StorageCard>
           <StorageSpace>
