@@ -90,7 +90,6 @@ impl System for StateMachineSystem {
       self.handle_game_loading(scene, backpack);
       self.handle_update_ui(scene);
     }
-    self.set_camera(scene, backpack);
     //self.handle_transitions(scene, backpack);
 
     self.handle_state(scene, backpack);
@@ -378,6 +377,14 @@ impl StateMachineSystem {
             transform.rotation = Vector3::new(*degrees, 0.0, 0.0);
           }
         }
+        GameState::Initializing => {
+          for (entity, (transform, _)) in
+            scene.query_mut::<(&mut TransformComponent, &CameraComponent)>()
+          {
+            transform.translation = Vector3::new(0.0, 0.0, -3.0);
+            transform.rotation = Vector3::new(0.0, 0.0, 0.0);
+          }
+        }
         GameState::Paused => {
           config.dof.focus_point = lerp(config.dof.focus_point, 0.0, 0.9);
           config.dof.focus_scale = (config.dof.focus_scale + 0.001 * *delta_time).clamp(0.0, 3.0);
@@ -393,88 +400,6 @@ impl StateMachineSystem {
     }
 
     Some(())
-  }
-
-  fn set_camera(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
-    if let Some((next, Prev(prev))) = backpack.fetch_mut::<(StateMachine, Prev<StateMachine>)>() {
-      match (&prev.state, &next.state) {
-        /*
-        (GameState::Loaded, GameState::RequestTransition)
-        | (GameState::Loaded, GameState::Playing)
-        | (GameState::Loaded, GameState::TransitionToGame { .. }) => {
-        */
-        (_, GameState::Playing) => {
-          let mut player = None;
-          for (entity, (_, _, _)) in
-            scene.query_mut::<(&Player, &NetworkedPlayerComponent, &SelfComponent)>()
-          {
-            player = Some(entity);
-          }
-
-          if let Some(entity) = player {
-            scene.add_local_component(entity, ActiveCamera {});
-          }
-
-          for (entity, (transform, _)) in
-            scene.query_mut::<(&mut TransformComponent, &CameraComponent)>()
-          {
-            let degrees = Radians::from(Degrees::new(45.0));
-            transform.translation = Vector3::new(0.0, 6.0, -6.0);
-            transform.rotation = Vector3::new(*degrees, 0.0, 0.0);
-          }
-        }
-        (_, GameState::Initializing) => {
-          for (entity, (transform, _)) in
-            scene.query_mut::<(&mut TransformComponent, &CameraComponent)>()
-          {
-            transform.translation = Vector3::new(0.0, 0.0, -3.0);
-            transform.rotation = Vector3::new(0.0, 0.0, 0.0);
-          }
-        }
-        _ => {}
-      }
-      /*
-      scene.clear_component::<ActiveCamera>();
-      if let Some((current_player, _)) = game.get_current() {
-        let mut next_camera = None;
-
-        for (entity, (_, network)) in scene.query_mut::<(&Player, &NetworkedPlayerComponent)>() {
-          if network.connection_id == *current_player {
-            next_camera = Some(entity);
-            break;
-          }
-        }
-        if let Some(entity) = next_camera {
-          scene.add_local_component(entity, ActiveCamera {});
-        }
-      } else if let GameState::TeamSelection { .. } = game.state {
-        let mut next_camera = None;
-
-        for (entity, (_, _, _)) in
-          scene.query_mut::<(&Player, &SelfComponent, &NetworkedPlayerComponent)>()
-        {
-          next_camera = Some(entity);
-          break;
-        }
-        if let Some(entity) = next_camera {
-          scene.add_local_component(entity, ActiveCamera {});
-        }
-      } else if let GameState::Starting { .. } = game.state {
-        // Show my new location when the game starts
-        let mut next_camera = None;
-
-        for (entity, (_, _, _)) in
-          scene.query_mut::<(&Player, &SelfComponent, &NetworkedPlayerComponent)>()
-        {
-          next_camera = Some(entity);
-          break;
-        }
-        if let Some(entity) = next_camera {
-          scene.add_local_component(entity, ActiveCamera {});
-        }
-      }
-      */
-    }
   }
 
   #[cfg(target_arch = "wasm32")]
