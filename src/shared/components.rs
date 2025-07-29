@@ -279,6 +279,37 @@ impl Character {
       None => false,
     }
   }
+
+  pub fn has_at_least(&self, item: &Item, quantity: usize) -> bool {
+    match self
+      .inventory
+      .iter()
+      .find(|inventory| &inventory.item == item)
+    {
+      Some(item) => item.quantity.has_at_least(quantity),
+      None => false,
+    }
+  }
+
+  pub fn decrement_by(&mut self, item: &Item, quantity: usize) {
+    if let Some(item) = self
+      .inventory
+      .iter_mut()
+      .find(|inventory| &inventory.item == item)
+    {
+      item.quantity.decrement_by(quantity);
+    }
+  }
+
+  pub fn increase_by(&mut self, item: &Item, quantity: usize) {
+    if let Some(item) = self
+      .inventory
+      .iter_mut()
+      .find(|inventory| &inventory.item == item)
+    {
+      item.quantity.increase_by(quantity);
+    }
+  }
 }
 
 impl ProvideAssets for Character {}
@@ -630,6 +661,15 @@ impl Quantity {
       Quantity::Empty => false,
       Quantity::Finite(0) => false,
       Quantity::Finite(1..) => true,
+    }
+  }
+
+  pub fn has_at_least(&self, quantity: usize) -> bool {
+    match self {
+      Quantity::Infinite => true,
+      Quantity::Empty => false,
+      Quantity::Finite(n) if *n >= quantity => true,
+      Quantity::Finite(_) => false,
     }
   }
 }

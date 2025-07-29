@@ -199,24 +199,23 @@ impl PickupsSystem {
   pub fn handle_throw_seeds(&self, scene: &mut Scene, backpack: &mut Backpack) {
     let delta_time = backpack.get::<Seconds>().unwrap();
 
-    for (_, (input, character, state, seeds, collision)) in scene
+    for (_, (input, character, state, collision)) in scene
       .query_mut::<(
         &GameInput,
         &mut Character,
         &mut CharacterState,
-        &mut Seeds,
         &Collision<Action, Tile>,
       )>()
       .without::<CropTile>()
     {
       if input.check(InputState::Action)
         && let ActionTypes::ThrowSeed = character.action
-        && seeds.pumpkins >= 1
+        && character.has_at_least(&Item::Seed(CropType::Pumpkin), 1)
         && let CharacterState::Normal | CharacterState::Running = state
       {
         *state =
           CharacterState::ThrowingSeed(collision.other, Level::to_max(1.0, Seconds::new(4.0)));
-        seeds.pumpkins -= 1;
+        character.decrement_by(&Item::Seed(CropType::Pumpkin), 1);
       }
     }
 
@@ -456,63 +455,6 @@ impl PickupsSystem {
       scene.add_local_component(entity, CharacterState::Normal);
     }
   }
-
-  /*
-  pub fn handle_update_ui(&self, scene: &mut Scene, backpack: &mut Backpack) {
-    let (character, seeds, inventory, maybe_water) = match scene.query_one::<(
-      &SelfComponent,
-      &Character,
-      &Seeds,
-      &GameInventory,
-      Option<&WaterCan>,
-    )>() {
-      Some((entity, (_, character, seeds, inventory, water))) => (
-        character.clone(),
-        seeds.clone(),
-        inventory.clone(),
-        water.cloned(),
-      ),
-      None => return,
-    };
-
-    if let Some((_, (text, _))) = scene.query_one::<(&mut TextComponent, &InventoryDisplay)>() {
-      if let Some(machine) = backpack.get_mut::<StateMachine>() {
-        log::info!("active: {:?} -> {:?}", machine.is_active(), machine.state);
-        if machine.is_active() {
-          text.opacity = lerp(text.opacity, 1.0, 0.9);
-        } else {
-          text.opacity = lerp(text.opacity, 0.0, 0.9);
-        }
-      }
-      let mut texts = vec![];
-
-      if let Some(water) = maybe_water {
-        texts.push(format!("Water: {:03.2}%", water.level.percent() * 100.0));
-      }
-
-      texts.push(format!("---"));
-      for (item, quantity) in inventory.items {
-        match quantity {
-          Quantity::Infinite => texts.push(format!("{:}", &item)),
-          Quantity::Empty => texts.push(format!("{:}", &item)),
-          Quantity::Finite(quantity) => texts.push(format!("{:} ({:})", &item, quantity)),
-        }
-      }
-      texts.push(format!("---"));
-      texts.push(format!("Action"));
-      texts.push(match character.action {
-        ActionTypes::WaterTile => format!("Water tile"),
-        ActionTypes::ThrowSeed => format!("Plant pumpkin"),
-        ActionTypes::Harvest => format!("Harvest"),
-      });
-
-      texts.push(format!("---"));
-
-      texts.push(format!("Cash: {:}", character.cash));
-      text.text = texts.join("\n");
-    }
-  }
-  */
 
   pub fn handle_plant_growth(&self, scene: &mut Scene, backpack: &mut Backpack) {
     let delta_time = backpack.get::<Seconds>().unwrap().clone();

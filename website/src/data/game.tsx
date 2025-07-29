@@ -59,8 +59,8 @@ const defaultUi = (): Ui => {
 
   return {
     inventory,
-    //mode: UiMode.Hidden,
-    mode: UiMode.Small,
+    mode: UiMode.Hidden,
+    // mode: UiMode.Small,
     cash: 0,
     rest: 1,
     social: 1,
@@ -71,8 +71,8 @@ const defaultUi = (): Ui => {
 
 const defaultWebsite = (): Website => {
   return {
-    //focused: FocusState.Unfocused,
-    focused: FocusState.Focused,
+    focused: FocusState.Unfocused,
+    //focused: FocusState.Focused,
     mode: WebsiteMode.Normal,
     //mode: WebsiteMode.Downloading,
     //mode: WebsiteMode.SalesDialog,

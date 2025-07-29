@@ -1469,8 +1469,8 @@
           {
             "TextComponent": {
               "block_alignment": {
-                "horizontal": "Left",
-                "vertical": "Bottom"
+                "horizontal": "Right",
+                "vertical": "Top"
               },
               "color": [
                 1,
@@ -1485,7 +1485,7 @@
               "max_width": 300,
               "opacity": 1,
               "text": "10:00 am",
-              "text_alignment": "Left"
+              "text_alignment": "Right"
             }
           }
         ]
