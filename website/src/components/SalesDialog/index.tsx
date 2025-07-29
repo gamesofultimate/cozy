@@ -176,9 +176,6 @@ const Pause: React.FC<PauseProps> = ({ onClose, unique_id }) => {
     window.open(`/moment/${id}`, '_blank');
   };
 
-  const buckets = [...new Array(12)].map(_ => {});
-  console.log(buckets);
-
   return (
     <Centered>
       <Content>

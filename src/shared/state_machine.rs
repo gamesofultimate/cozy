@@ -1,5 +1,5 @@
 //use crate::shared::audio_components::{AudioGameStart, SoundtrackIntro};
-use crate::shared::components::{ActiveCamera, CharacterState, Player};
+use crate::shared::components::{ActiveCamera, Character, CharacterState, Player};
 use crate::shared::game_input::{GameInput, InputState};
 use chrono::{DateTime, TimeDelta, Utc};
 use engine::{
@@ -88,6 +88,7 @@ impl System for StateMachineSystem {
       self.handle_receive_from_server(scene, backpack);
       self.handle_camera_dof(scene, backpack);
       self.handle_game_loading(scene, backpack);
+      self.handle_update_ui(scene);
     }
     self.set_camera(scene, backpack);
     //self.handle_transitions(scene, backpack);
@@ -102,6 +103,10 @@ impl System for StateMachineSystem {
 impl StateMachineSystem {
   pub fn handle_prev(&mut self, backpack: &mut Backpack) {
     if let Some((curr, Prev(prev))) = backpack.fetch_mut::<(StateMachine, Prev<StateMachine>)>() {
+      *prev = curr.clone();
+    }
+
+    if let Some((curr, Prev(prev))) = backpack.fetch_mut::<(Character, Prev<Character>)>() {
       *prev = curr.clone();
     }
   }
@@ -508,6 +513,36 @@ impl StateMachineSystem {
       if game != prev {
         self.multiplayer.broadcast_custom(game.clone());
       }
+    }
+  }
+
+  #[cfg(target_arch = "wasm32")]
+  fn handle_update_ui(&mut self, scene: &mut Scene) {
+    for (_, (character, Prev(prev), _)) in
+      scene.query_mut::<(&Character, &Prev<Character>, &SelfComponent)>()
+    {
+      if character != prev {
+        self.browser.send(Message::UpdateCharacter {
+          character: character.clone(),
+          state: String::from("Test"),
+        });
+      }
+    }
+
+    let mut new_entities = vec![];
+    for (entity, (character, _)) in scene
+      .query_mut::<(&Character, &SelfComponent)>()
+      .without::<&Prev<Character>>()
+    {
+      new_entities.push((entity.clone(), character.clone()));
+    }
+
+    for (entity, character) in new_entities {
+      scene.add_local_component(entity, Prev(character.clone()));
+      self.browser.send(Message::UpdateCharacter {
+        character,
+        state: String::from("Test"),
+      });
     }
   }
 }

@@ -4,39 +4,55 @@ import styled from '@emotion/styled';
 
 import { UiMode, useGameData } from 'data/game';
 
-// @ts-ignore
-const Centered = styled.div(() => ({
-  width: 356,
-  height: 'calc(100vh - 350px)',
-  margin: '0 auto',
-  display: 'grid',
-  gridTemplateAreas: `
-    'storage'
-    'action'
-    'footer'
-  `,
-  gridTemplateColumns: 'minmax(0, 1fr)',
-  gridTemplateRows: 'minmax(0, 1fr) 100px 100px',
-  gap: '10px 10px',
-  pointerEvents: 'none',
+import PumpkinCrop from 'images/crops/pumpkin-crops.png';
+import PumpkinSeeds from 'images/crops/pumpkin-seeds.png';
 
-  position: 'fixed',
-  bottom: 20,
-  right: 20,
-}));
-
+type CenteredProps = {
+  mode: UiMode;
+};
 
 // @ts-ignore
-const Action = styled.div(() => ({
-  gridArea: 'action',
+const Centered = styled.div<CenteredProps>(({ mode }) => [
+    {
+    //width: '100%',
+    height: 250,
+    // height: 'calc(100vh - 350px)',
+    margin: '0 auto',
+    display: 'grid',
+    gridTemplateAreas: `
+      'storage action'
+      'storage footer'
+    `,
+    gridTemplateColumns: 'minmax(0, 1fr) 300px',
+    gridTemplateRows: 'minmax(0, 1fr) 100px',
+    gap: '10px 10px',
+    pointerEvents: 'none',
+
+    position: 'fixed',
+    bottom: 20,
+    right: 20,
+    left: 20,
+    transition: 'opacity 300ms ease-in-out',
+  },
+  mode === UiMode.Hidden && {
+    opacity: 0,
+  },
+  mode !== UiMode.Hidden && {
+    opacity: 1,
+  },
+]);
+
+// @ts-ignore
+const Storage = styled.div(() => ({
+  gridArea: 'storage',
   overflowY: 'scroll',
   paddingRight: 15,
   textAlign: 'right',
 }));
 
 // @ts-ignore
-const Storage = styled.div(() => ({
-  gridArea: 'storage',
+const Action = styled.div(() => ({
+  gridArea: 'action',
   overflowY: 'scroll',
   paddingRight: 15,
   textAlign: 'right',
@@ -50,10 +66,6 @@ const Footer = styled.div(() => ({
   paddingRight: 15,
 }));
 
-const StoragePadding = styled.div(({ theme }) => ({
-  padding: '20px 20px 0px 20px',
-}));
-
 const StorageCard = styled.div(({ theme }) => ({
   boxShadow: '3px 3px 16px #a3d9f873',
   backdropFilter: 'blur(7px) brightness(1.3)',
@@ -65,8 +77,8 @@ const StorageCard = styled.div(({ theme }) => ({
 
 const StorageSpace = styled.div(({ theme }) => ({
   display: 'grid',
-  gridTemplateColumns: 'repeat(4, 1fr)',
-  gridTemplateRows: 'repeat(4, 1fr)',
+  gridTemplateColumns: 'repeat(5, minmax(0, 1fr))',
+  gridTemplateRows: 'repeat(2, minmax(0, 1fr))',
   gridColumnGap: 10,
   gridRowGap: 10,
   padding: 10,
@@ -76,13 +88,42 @@ const StorageSpace = styled.div(({ theme }) => ({
 }));
 
 // @ts-ignore
-const StorageItem = styled.div(() => ({
+const StorageBucket = styled.div(() => ({
   width: '100%',
   height: '100%',
   borderRadius: 20,
   boxShadow: 'inset 0 0 10px #00000091',
   pointerEvents: 'auto',
   cursor: 'pointer',
+  position: 'relative',
+}));
+
+// @ts-ignore
+const StorageItem = styled.img(() => ({
+  width: '100%',
+  height: '100%',
+  borderRadius: 20,
+  boxShadow: 'inset 0 0 10px #00000091',
+  pointerEvents: 'auto',
+  cursor: 'pointer',
+  position: 'relative',
+  objectFit: 'cover',
+}));
+
+// @ts-ignore
+const QuantityTag = styled.div(({ theme }) => ({
+  width: 30,
+  height: 30,
+  fontFamily: theme.fonts.secondary,
+  fontSize: 14,
+  position: 'absolute',
+  bottom: -7,
+  right: -5,
+  lineHeight: '28px',
+  background: '#B64040',
+  borderRadius: 999,
+  color: '#fff',
+  textAlign: 'center',
 }));
 
 // @ts-ignore
@@ -115,38 +156,62 @@ const Body = styled.div(({ theme }) => ({
 }));
 
 type PauseProps = {
-  mode: UiMode;
 };
 
-const Pause: React.FC<PauseProps> = ({ mode }) => {
+const Pause: React.FC<PauseProps> = () => {
   const game = useGameData();
 
-  const buckets = [...new Array(12)].map(_ => {});
-  console.log(buckets);
-
   return (
-    <Centered>
+    <Centered mode={game.ui.mode}>
       <Storage>
         <StorageCard>
-          <StoragePadding>
-            <Subtitle>Backpack</Subtitle>
-          </StoragePadding>
           <StorageSpace>
-            {buckets.map(item => (
-              <StorageItem />
-            ))}
+            {game.ui.inventory.map(inventory => {
+              let item = null;
+              if (!inventory) {
+                return <StorageBucket />;
+              } else if (inventory?.item === "Nothing") {
+              } else if ("Crop" in inventory.item && inventory?.item?.Crop === "Pumpkin") {
+                item = PumpkinCrop;
+              } else if ("Seed" in inventory.item && inventory?.item?.Seed === "Pumpkin") {
+                item = PumpkinSeeds;
+              }
+            
+              if (!item) {
+                return <StorageBucket />;
+              }
+
+              if (inventory.quantity === "Empty") {
+                return <StorageBucket />;
+              } else if (inventory.quantity === "Infinite") {
+                return (
+                  <StorageBucket>
+                    <StorageItem src={item} />
+                  </StorageBucket>
+                )
+              } else if ("Finite" in inventory.quantity) {
+                return (
+                  <StorageBucket>
+                    <StorageItem src={item} />
+                    <QuantityTag>{inventory.quantity.Finite}</QuantityTag>
+                  </StorageBucket>
+                )
+              } else {
+                return null
+              }
+            })}
           </StorageSpace>
         </StorageCard>
       </Storage>
       <Action>
         <Card>
-          <Subtitle>Water the Soil</Subtitle>
+          <Subtitle>{game.ui.current_action}</Subtitle>
           <Body>Current Action</Body>
         </Card>
       </Action>
       <Footer>
         <Card>
-          <Subtitle>$ 1,000</Subtitle>
+          <Subtitle>$ {game.ui.cash}</Subtitle>
           <Body>Cash</Body>
         </Card>
       </Footer>

@@ -291,6 +291,7 @@
                 "max": 10,
                 "min": 0
               },
+              "inventory": [{"item":{"Seed":"Pumpkin"},"quantity":{"Finite":6}},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"}],
               "cash": 1000
             }
           },
@@ -318,11 +319,6 @@
             "StateMachineComponent": {
               "id": "f506a105-dab2-45a8-b595-6f903a110c37",
               "machine_id": "26684034-a35c-4e02-9fa1-1267ecac6c0a"
-            }
-          },
-          {
-            "Inventory": {
-              "items": {}
             }
           },
           {
@@ -1310,6 +1306,7 @@
                 "max": 10,
                 "min": 0
               },
+              "inventory": [{"item":{"Seed":"Pumpkin"},"quantity":{"Finite":6}},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"}],
               "cash": 1000
             }
           },
@@ -2002,6 +1999,7 @@
                 "max": 10,
                 "min": 0
               },
+              "inventory": [{"item":{"Seed":"Pumpkin"},"quantity":{"Finite":6}},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"},{"item":"Nothing","quantity":"Empty"}],
               "cash": 10000
             }
           },

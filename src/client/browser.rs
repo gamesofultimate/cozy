@@ -13,7 +13,9 @@ use engine::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::shared::components::{Action, ActionTypes, Character, CharacterState, Harvestable};
+use crate::shared::components::{
+  Action, ActionTypes, Character, CharacterState, Harvestable, Item, Quantity,
+};
 use crate::shared::game_input::{GameInput, InputState};
 use crate::shared::state_machine::{GameState, StateMachine};
 
@@ -29,6 +31,10 @@ pub enum Message {
   FinishInvitation,
 
   StartSale,
+  UpdateCharacter {
+    character: Character,
+    state: String,
+  },
   UpdateDownloadStats {
     pending_required: usize,
     pending_priority: usize,
@@ -101,7 +107,7 @@ impl BrowserSystem {
         && let ActionTypes::Harvest = character.action
         && let CharacterState::Normal | CharacterState::Running = state
       {
-        self.controller.send(Message::StartSale);
+        //self.controller.send(Message::StartSale);
       }
     }
   }

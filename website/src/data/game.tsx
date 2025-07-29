@@ -5,19 +5,26 @@ import { makeAutoObservable } from 'mobx';
 import type {
   Message,
   GameplayStats,
+  InventoryItem,
   // @ts-ignore
 } from 'types/ultimate';
 
 type Website = {
   focused: FocusState;
   mode: WebsiteMode;
-  ui: UiMode;
   download_percent: number;
 };
 
 type Config = {
   debouncingEscape: boolean;
 };
+
+type Ui = {
+  inventory: InventoryItem[],
+  mode: UiMode,
+  cash: number;
+  current_action: string;
+}
 
 type Stats = {
 }
@@ -39,6 +46,23 @@ export enum WebsiteMode {
   SalesDialog,
 }
 
+const defaultUi = (): Ui => {
+  const inventory: InventoryItem[] = [...new Array(15)].map(_ => ({
+    item: "Nothing",
+    quantity: "Empty",
+  }));
+
+  inventory[0] = {item:{Seed:"Pumpkin"},quantity:{Finite:6}};
+
+  return {
+    inventory,
+    //mode: UiMode.Hidden,
+    mode: UiMode.Small,
+    cash: 0,
+    current_action: 'Starting',
+  }
+}
+
 const defaultWebsite = (): Website => {
   return {
     //focused: FocusState.Unfocused,
@@ -47,8 +71,6 @@ const defaultWebsite = (): Website => {
     //mode: WebsiteMode.Downloading,
     //mode: WebsiteMode.SalesDialog,
     //mode: WebsiteMode.Pause,
-
-    ui: UiMode.Hidden,
 
     download_percent: 0,
   };
@@ -65,6 +87,7 @@ const defaultStats = (): Stats => {
 };
 
 export class Game {
+  ui: Ui;
   website: Website;
   config: Config;
   stats: GameplayStats;
@@ -73,6 +96,7 @@ export class Game {
     this.website = defaultWebsite();
     this.config = defaultConfig();
     this.stats = defaultStats();
+    this.ui = defaultUi();
 
     makeAutoObservable(this);
   }
@@ -82,7 +106,7 @@ export class Game {
     if (message === 'StartGame') {
       this.website.focused = FocusState.Focused;
       this.website.mode = WebsiteMode.Normal;
-      this.website.ui = UiMode.Small;
+      this.ui.mode = UiMode.Small;
     } else if (message === 'StopGame' && this.invitationDialog && !this.config.debouncingEscape) {
       this.config.debouncingEscape = true;
       setTimeout(() => {
@@ -95,7 +119,7 @@ export class Game {
       console.log('regular stop');
       this.website.focused = FocusState.Unfocused;
       this.website.mode = WebsiteMode.Pause;
-      this.website.ui = UiMode.Hidden;
+      this.ui.mode = UiMode.Hidden;
 
       setTimeout(() => {
         this.config.debouncingEscape = false;
@@ -103,7 +127,7 @@ export class Game {
     } else if (message === 'TriggerInvitation') {
       this.website.mode = WebsiteMode.Inviting;
     }
-    else if ("SalesDialog" in message) {
+    else if ("StartSale" in message) {
       this.website.mode = WebsiteMode.SalesDialog;
     }
     else if ("FinishGame" in message) {
@@ -114,6 +138,13 @@ export class Game {
       if (document.fullscreenElement) {
         document.exitFullscreen();
       }
+    }
+    else if ("UpdateCharacter" in message) {
+      //console.log(message);
+      if (!message.UpdateCharacter) return;
+
+      this.ui.inventory = message.UpdateCharacter.character.inventory;
+      this.ui.cash = message.UpdateCharacter.character.cash;
     }
     else if ("UpdateDownloadStats" in message) {
       const pendingRequired = message.UpdateDownloadStats.pending_required;
@@ -188,7 +219,7 @@ export class Game {
   restartGame() {
     this.website.mode = WebsiteMode.Normal;
     this.website.focused = FocusState.Focused;
-    this.website.ui = UiMode.Small;
+    this.ui.mode = UiMode.Small;
 
     const canvas = document.getElementById('canvas');
     canvas?.focus();
@@ -199,7 +230,7 @@ export class Game {
   pressPlay() {
     this.website.mode = WebsiteMode.Normal;
     this.website.focused = FocusState.Focused;
-    this.website.ui = UiMode.Small;
+    this.ui.mode = UiMode.Small;
     sendToGame('StartGame');
   }
 
@@ -236,10 +267,6 @@ export class Game {
     return this.website.mode === WebsiteMode.OutOfCapacity;
   }
 
-  get ui(): UiMode {
-    return this.website.ui
-  }
-
   get isSelling(): boolean {
     return this.website.mode === WebsiteMode.SalesDialog;
   }
@@ -249,7 +276,8 @@ export class Game {
   }
 
   get pauseDialog(): boolean {
-    return this.website.mode === WebsiteMode.Pause;
+    return false;
+    //return this.website.mode === WebsiteMode.Pause;
   }
 
   get workspaceMode(): WorkspaceMode {

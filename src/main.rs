@@ -1,4 +1,4 @@
-#![feature(async_closure, let_chains, variant_count)]
+#![feature(async_closure, let_chains, variant_count, extern_types)]
 
 #[cfg(target_arch = "wasm32")]
 use engine::systems::Scheduler;

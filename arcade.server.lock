@@ -344,7 +344,7 @@
       "tag": "Struct",
       "name": "Character",
       "label": "Character",
-      "default_values": "{ action: \"WaterTile\", cash: 0, hunger: { current: 0.0, max: 0.0, min: 0.0 }, rest: { current: 0.0, max: 0.0, min: 0.0 }, social: { current: 0.0, max: 0.0, min: 0.0 } }",
+      "default_values": "{ action: \"WaterTile\", cash: 0, hunger: { current: 0.0, max: 0.0, min: 0.0 }, inventory: [], rest: { current: 0.0, max: 0.0, min: 0.0 }, social: { current: 0.0, max: 0.0, min: 0.0 } }",
       "duplicate_values": "null",
       "docs": null,
       "fields": [
@@ -561,6 +561,155 @@
               }
             ],
             "private": false
+          }
+        },
+        {
+          "name": "inventory",
+          "label": "Inventory",
+          "docs": null,
+          "ty": {
+            "tag": "Type",
+            "name": "Vec",
+            "default_values": "[]",
+            "duplicate_values": "null",
+            "ty": {
+              "tag": "Vector",
+              "data": {
+                "tag": "Struct",
+                "name": "InventoryItem",
+                "label": "Inventory Item",
+                "default_values": "{ item: \"Nothing\", quantity: \"Empty\" }",
+                "duplicate_values": "null",
+                "docs": null,
+                "fields": [
+                  {
+                    "name": "item",
+                    "label": "Item",
+                    "docs": null,
+                    "ty": {
+                      "tag": "Enum",
+                      "name": "Item",
+                      "label": "Item",
+                      "default_values": "\"Nothing\"",
+                      "duplicate_values": "null",
+                      "docs": null,
+                      "variants": [
+                        {
+                          "tag": "Unit",
+                          "name": "Nothing",
+                          "docs": null,
+                          "default_values": "\"Nothing\"",
+                          "duplicate_values": "null"
+                        },
+                        {
+                          "tag": "Tuple",
+                          "name": "Crop",
+                          "default_values": "[\"Pumpkin\"]",
+                          "duplicate_values": "null",
+                          "docs": null,
+                          "types": [
+                            {
+                              "tag": "Enum",
+                              "name": "CropType",
+                              "label": "Crop Type",
+                              "default_values": "\"Pumpkin\"",
+                              "duplicate_values": "null",
+                              "docs": null,
+                              "variants": [
+                                {
+                                  "tag": "Unit",
+                                  "name": "Pumpkin",
+                                  "docs": null,
+                                  "default_values": "\"Pumpkin\"",
+                                  "duplicate_values": "null"
+                                }
+                              ],
+                              "private": false
+                            }
+                          ]
+                        },
+                        {
+                          "tag": "Tuple",
+                          "name": "Seed",
+                          "default_values": "[\"Pumpkin\"]",
+                          "duplicate_values": "null",
+                          "docs": null,
+                          "types": [
+                            {
+                              "tag": "Enum",
+                              "name": "CropType",
+                              "label": "Crop Type",
+                              "default_values": "\"Pumpkin\"",
+                              "duplicate_values": "null",
+                              "docs": null,
+                              "variants": [
+                                {
+                                  "tag": "Unit",
+                                  "name": "Pumpkin",
+                                  "docs": null,
+                                  "default_values": "\"Pumpkin\"",
+                                  "duplicate_values": "null"
+                                }
+                              ],
+                              "private": false
+                            }
+                          ]
+                        }
+                      ],
+                      "private": false
+                    }
+                  },
+                  {
+                    "name": "quantity",
+                    "label": "Quantity",
+                    "docs": null,
+                    "ty": {
+                      "tag": "Enum",
+                      "name": "Quantity",
+                      "label": "Quantity",
+                      "default_values": "\"Empty\"",
+                      "duplicate_values": "null",
+                      "docs": null,
+                      "variants": [
+                        {
+                          "tag": "Unit",
+                          "name": "Empty",
+                          "docs": null,
+                          "default_values": "\"Empty\"",
+                          "duplicate_values": "null"
+                        },
+                        {
+                          "tag": "Tuple",
+                          "name": "Finite",
+                          "default_values": "[0]",
+                          "duplicate_values": "null",
+                          "docs": null,
+                          "types": [
+                            {
+                              "tag": "Primitive",
+                              "ty": {
+                                "tag": "USize"
+                              },
+                              "default_values": "0",
+                              "duplicate_values": "null"
+                            }
+                          ]
+                        },
+                        {
+                          "tag": "Unit",
+                          "name": "Infinite",
+                          "docs": null,
+                          "default_values": "\"Infinite\"",
+                          "duplicate_values": "null"
+                        }
+                      ],
+                      "private": false
+                    }
+                  }
+                ],
+                "private": false
+              }
+            }
           }
         }
       ],
@@ -1004,134 +1153,10 @@
       "tag": "Struct",
       "name": "Inventory",
       "label": "Inventory",
-      "default_values": "{ items: {  } }",
+      "default_values": "{  }",
       "duplicate_values": "null",
       "docs": null,
-      "fields": [
-        {
-          "name": "items",
-          "label": "Items",
-          "docs": null,
-          "ty": {
-            "tag": "Type",
-            "name": "HashMap",
-            "default_values": "{  }",
-            "duplicate_values": "null",
-            "ty": {
-              "tag": "HashMap",
-              "data": [
-                {
-                  "tag": "Enum",
-                  "name": "Item",
-                  "label": "Item",
-                  "default_values": "\"Crop\"",
-                  "duplicate_values": "null",
-                  "docs": null,
-                  "variants": [
-                    {
-                      "tag": "Tuple",
-                      "name": "Crop",
-                      "default_values": "[\"Pumpkin\"]",
-                      "duplicate_values": "null",
-                      "docs": null,
-                      "types": [
-                        {
-                          "tag": "Enum",
-                          "name": "CropType",
-                          "label": "Crop Type",
-                          "default_values": "\"Pumpkin\"",
-                          "duplicate_values": "null",
-                          "docs": null,
-                          "variants": [
-                            {
-                              "tag": "Unit",
-                              "name": "Pumpkin",
-                              "docs": null,
-                              "default_values": "\"Pumpkin\"",
-                              "duplicate_values": "null"
-                            }
-                          ],
-                          "private": false
-                        }
-                      ]
-                    },
-                    {
-                      "tag": "Tuple",
-                      "name": "Seed",
-                      "default_values": "[\"Pumpkin\"]",
-                      "duplicate_values": "null",
-                      "docs": null,
-                      "types": [
-                        {
-                          "tag": "Enum",
-                          "name": "CropType",
-                          "label": "Crop Type",
-                          "default_values": "\"Pumpkin\"",
-                          "duplicate_values": "null",
-                          "docs": null,
-                          "variants": [
-                            {
-                              "tag": "Unit",
-                              "name": "Pumpkin",
-                              "docs": null,
-                              "default_values": "\"Pumpkin\"",
-                              "duplicate_values": "null"
-                            }
-                          ],
-                          "private": false
-                        }
-                      ]
-                    }
-                  ],
-                  "private": false
-                },
-                {
-                  "tag": "Enum",
-                  "name": "Quantity",
-                  "label": "Quantity",
-                  "default_values": "\"Empty\"",
-                  "duplicate_values": "null",
-                  "docs": null,
-                  "variants": [
-                    {
-                      "tag": "Unit",
-                      "name": "Empty",
-                      "docs": null,
-                      "default_values": "\"Empty\"",
-                      "duplicate_values": "null"
-                    },
-                    {
-                      "tag": "Tuple",
-                      "name": "Finite",
-                      "default_values": "[0]",
-                      "duplicate_values": "null",
-                      "docs": null,
-                      "types": [
-                        {
-                          "tag": "Primitive",
-                          "ty": {
-                            "tag": "USize"
-                          },
-                          "default_values": "0",
-                          "duplicate_values": "null"
-                        }
-                      ]
-                    },
-                    {
-                      "tag": "Unit",
-                      "name": "Infinite",
-                      "docs": null,
-                      "default_values": "\"Infinite\"",
-                      "duplicate_values": "null"
-                    }
-                  ],
-                  "private": false
-                }
-              ]
-            }
-          }
-        }
-      ],
+      "fields": [],
       "private": false
     },
     {

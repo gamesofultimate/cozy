@@ -595,6 +595,7 @@ dependencies = [
  "serde",
  "tagged",
  "tokio",
+ "tsify",
  "uuid 1.11.0",
  "wasm-bindgen",
  "wasm-bindgen-futures",

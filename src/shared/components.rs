@@ -3,6 +3,7 @@ use engine::{
   nalgebra::{Unit, Vector3},
   resources::model::ModelId,
   systems::Registry,
+  tsify,
   utils::units::{Framerate, Kph, Seconds},
   Entity,
 };
@@ -70,13 +71,13 @@ impl ProvideAssets for CameraFollower {}
 #[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
 pub struct Pickup {}
 
-#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Registerable, Schema, Duplicate)]
 enum ChangeDirection {
   Add { want: f32, rate: f32 },
   Remove { want: f32, rate: f32 },
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Registerable, Schema, Duplicate)]
 pub struct Level {
   pub current: f32,
   pub min: f32,
@@ -224,19 +225,77 @@ pub enum CharacterState {
   Harvesting(Entity, Level),
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Registerable, Schema, Duplicate)]
 pub struct Character {
   pub cash: u64,
   pub rest: Level,
   pub social: Level,
   pub hunger: Level,
   pub action: ActionTypes,
+  pub inventory: Vec<InventoryItem>,
+}
+
+impl Character {
+  pub fn award(&mut self, search: Item, increase: usize) -> Option<bool> {
+    let mut is_new = false;
+
+    if let Some(item) = self
+      .inventory
+      .iter_mut()
+      .find(|inventory| inventory.item == search)
+    {
+      item.quantity.increase_by(increase);
+      return Some(false);
+    }
+
+    match self
+      .inventory
+      .iter_mut()
+      .find(|inventory| inventory.item == Item::Nothing)
+    {
+      Some(inventory) if increase == 0 => {
+        inventory.item = search;
+        inventory.quantity = Quantity::Empty;
+
+        Some(true)
+      }
+      Some(inventory) => {
+        inventory.item = search;
+        inventory.quantity = Quantity::Finite(increase);
+
+        Some(true)
+      }
+      None => None,
+    }
+  }
+
+  pub fn can_use(&self, item: &Item) -> bool {
+    match self
+      .inventory
+      .iter()
+      .find(|inventory| &inventory.item == item)
+    {
+      Some(item) => item.quantity.can_use(),
+      None => false,
+    }
+  }
 }
 
 impl ProvideAssets for Character {}
 
 #[derive(
-  Debug, Clone, Copy, Eq, PartialEq, Hash, Serialize, Deserialize, Registerable, Schema, Duplicate,
+  Debug,
+  Clone,
+  Copy,
+  Eq,
+  PartialEq,
+  Hash,
+  Serialize,
+  Deserialize,
+  Registerable,
+  Schema,
+  Duplicate,
+  tsify::Tsify,
 )]
 pub enum CropType {
   Pumpkin,
@@ -379,7 +438,9 @@ pub enum SeedTypes {
   Pumpkin,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+#[derive(
+  Debug, Clone, PartialEq, Serialize, Deserialize, Registerable, Schema, Duplicate, tsify::Tsify,
+)]
 pub enum ActionTypes {
   WaterTile,
   ThrowSeed,
@@ -474,41 +535,38 @@ pub struct ActiveCamera {}
 impl ProvideAssets for ActiveCamera {}
 
 #[derive(
-  Debug, Clone, Copy, Eq, PartialEq, Hash, Serialize, Deserialize, Registerable, Schema, Duplicate,
+  Debug,
+  Clone,
+  Copy,
+  Eq,
+  PartialEq,
+  Hash,
+  Serialize,
+  Deserialize,
+  Registerable,
+  Schema,
+  Duplicate,
+  tsify::Tsify,
 )]
 pub enum Item {
+  Nothing,
   Crop(CropType),
   Seed(CropType),
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Registerable, Schema, Duplicate)]
-pub struct Inventory {
-  pub items: HashMap<Item, Quantity>,
-}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct Inventory {}
 
-impl Inventory {
-  pub fn award(&mut self, item: Item, quantity: usize) -> bool {
-    let mut is_new = false;
-    let item = self.items.entry(item).or_insert_with(|| {
-      is_new = true;
-      Quantity::Empty
-    });
-
-    item.increase_by(quantity);
-    is_new
-  }
-
-  pub fn can_use(&self, item: &Item) -> bool {
-    match self.items.get(item) {
-      Some(item) => item.can_use(),
-      None => false,
-    }
-  }
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Registerable, Schema, Duplicate)]
+pub struct InventoryItem {
+  pub item: Item,
+  pub quantity: Quantity,
 }
 
 impl std::fmt::Display for Item {
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
     match self {
+      Self::Nothing => write!(f, "Nothing"),
       Self::Crop(crop) => write!(f, "{:} - Crop", crop),
       Self::Seed(crop) => write!(f, "{:} - Seed", crop),
     }
@@ -529,6 +587,7 @@ impl ProvideAssets for Inventory {}
   Registerable,
   Schema,
   Duplicate,
+  tsify::Tsify,
 )]
 pub enum Quantity {
   #[default]

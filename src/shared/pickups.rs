@@ -299,19 +299,22 @@ impl PickupsSystem {
     }
 
     for (player_entity, harvesting_entity, player_transform) in harvesting_entities {
-      let mut is_showoff = false;
+      let mut is_showoff = None;
 
       let crop = match scene.get_components_mut::<&Crop>(harvesting_entity) {
         Some(data) => data.clone(),
         None => continue,
       };
 
-      if let Some((inventory, character)) =
-        scene.get_components_mut::<(&mut GameInventory, &mut CharacterState)>(player_entity)
+      if let Some((character, state)) =
+        scene.get_components_mut::<(&mut Character, &mut CharacterState)>(player_entity)
       {
-        is_showoff = inventory.award(Item::Crop(crop.crop), crop.award);
-        if is_showoff {
-          *character = CharacterState::ShowingOff {
+        is_showoff = character.award(Item::Crop(crop.crop), crop.award);
+
+        // NOTE: if there is no room in the inventory, `is_showoff == None` and
+        // we still need to handle that case
+        if let Some(true) = is_showoff {
+          *state = CharacterState::ShowingOff {
             item: Item::Crop(crop.crop),
           };
         }
@@ -319,7 +322,7 @@ impl PickupsSystem {
 
       let _ = scene.despawn(harvesting_entity);
 
-      if is_showoff
+      if let Some(true) = is_showoff
         && let Some(prefabs) = scene.get_prefab_owned(crop.crop.get_prefab())
         && let Some((mut parent, _)) = prefabs
           .iter()
@@ -454,6 +457,7 @@ impl PickupsSystem {
     }
   }
 
+  /*
   pub fn handle_update_ui(&self, scene: &mut Scene, backpack: &mut Backpack) {
     let (character, seeds, inventory, maybe_water) = match scene.query_one::<(
       &SelfComponent,
@@ -508,6 +512,7 @@ impl PickupsSystem {
       text.text = texts.join("\n");
     }
   }
+  */
 
   pub fn handle_plant_growth(&self, scene: &mut Scene, backpack: &mut Backpack) {
     let delta_time = backpack.get::<Seconds>().unwrap().clone();
@@ -585,7 +590,7 @@ impl System for PickupsSystem {
     self.handle_throw_seeds(scene, backpack);
     self.handle_harvest(scene, backpack);
     self.handle_plant_growth(scene, backpack);
-    self.handle_update_ui(scene, backpack);
+    //self.handle_update_ui(scene, backpack);
   }
 }
 

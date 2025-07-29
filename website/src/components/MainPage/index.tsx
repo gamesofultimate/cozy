@@ -410,13 +410,13 @@ const MainPage: React.FC = () => {
   return (
     <>
       <Helmet>
-        <meta name="description" content="Play now in your browser. Moonfallen is a fast-paced space opera from Chaotic Games. Fight enemies and escape with friends. Will you survive?" />
-        <title>Moonfallen | Play Now</title>
+        <meta name="description" content="Play now in your browser. Moonfallen is a cozy farming game from Chaotic Games. Plant crops. Raise animals. Invite your friends." />
+        <title>Fireflies Meadow | Play Now</title>
 
         {moments.length > 0 && (
           <>
             <meta property="og:video" content={`${window.location.origin}${moments[0].video_url}`} />
-            <meta property="og:video:alt" content="The most popular moment of Moonfallen so far" />
+            <meta property="og:video:alt" content="The most popular moment of Fireflies Meadow so far" />
             <meta property="og:video:width" content="1920" />
             <meta property="og:video:height" content="1080" />
           </>
@@ -473,7 +473,7 @@ const MainPage: React.FC = () => {
           )}
           */}
           <img style={{ background: '#000', objectFit: 'cover', width: '100%', height: '100%' }} src={tmp} alt='test' />
-          <GameUi mode={game.ui} />
+          <GameUi />
         </Presentation>
         <Main>
           <MoreContent>
