@@ -8,7 +8,7 @@ import { observer } from 'mobx-react';
 
 import * as uuid from 'uuid';
 
-import { Result, Moment, Ranking, PlayerRank } from '@ultimate-games/canvas';
+import { Result, Moment } from '@ultimate-games/canvas';
 import Dialog, { Content as DialogContent } from 'components/Dialog';
 import Notification, { Content as NotificationContent } from 'components/Notification';
 import Workspace, { Footer, Logo, Main, Presentation, Left, Right } from 'components/Workspace';
@@ -38,11 +38,13 @@ import LoggedOutMenu from 'components/LoggedOutMenu';
 import LoggedInMenu from 'components/LoggedInMenu';
 import Subtitle from 'components/Subtitle';
 import SignupForm from 'components/SignupForm';
+import SalesDialog from 'components/SalesDialog';
+import GameUi from 'components/GameUi';
 import { Discord } from 'svgs/SocialMedia';
 import { relative } from 'utils/datetime';
 
 import { NetworkedCanvas, RecordingType, Auth, GameSession, useGpuInfo } from '@ultimate-games/canvas';
-import { Access, GetGlobalMoments, GetGlobalRanking, GetOrCreateSession } from 'types';
+import { Access, GetGlobalMoments, GetOrCreateSession } from 'types';
 
 import styled from '@emotion/styled';
 import Box from 'components/Box';
@@ -180,25 +182,6 @@ const Text = styled.div(({ theme }) => ({
   fontSize: 16,
 }));
 
-const Table = styled.table(({ theme }) => ({
-  borderCollapse: 'collapse',
-  width: '100%',
-}));
-const THead = styled.thead(({ theme }) => ({
-  fontFamily: theme.fonts.secondary,
-  fontSize: 12,
-}));
-const Th = styled.th(({ theme }) => ({
-  padding: 5,
-  color: 'rgba(176,78,33,1)',
-}));
-const Td = styled.td(({ theme }) => ({
-  padding: 5,
-  color: '#fff',
-  fontFamily: theme.fonts.primary,
-  fontSize: 18,
-  textAlign: 'center',
-}));
 
 type MemoProps = {
   config: any;
@@ -254,33 +237,6 @@ const MainPage: React.FC = () => {
   }, []);
   const [, momentsQuery] = useQuery<Result<Moment[], any>, GetGlobalMoments | null>('/get-global-moments', momentsGetter);
   const moments = momentsQuery?.Ok ?? [];
-  const rankingGetter = useMemo((): GetGlobalRanking | null => {
-    return { };
-  }, []);
-  const [, rankingQuery] = useQuery<Result<[Ranking, PlayerRank[]], any>, GetGlobalRanking | null>('/get-global-ranking', rankingGetter);
-  const [mainRanking, headers, ranks] = useMemo(() => {
-    if (!rankingQuery?.Ok) return [null, null, null];
-    const [main, rankings] = rankingQuery.Ok;
-
-    const headers: string[] = [];
-    const ranks: number[][] = [];
-
-    for (const rank of rankings) {
-      headers.push(rank.ranking.title);
-      if (main.id !== rank.ranking.id) continue;
-      for (const [index, score] of rank.scores.entries()) {
-        if (!ranks[index]) ranks[index] = [];
-        ranks[index].push(score.ranking);
-      }
-    }
-    for (const rank of rankings) {
-      for (const [index, score] of rank.scores.entries()) {
-        if (!ranks[index]) ranks[index] = [];
-        ranks[index].push(score.score);
-      }
-    }
-    return [main, headers, ranks];
-  }, [rankingQuery?.Ok]);
 
   const [loadingUser, userQuery] = useQuery<Result<Auth, any>, Access | null>('/user', query);
   const [, sessionQuery, triggerSession] = useTrigger<Result<GameSession, any>, GetOrCreateSession | null>(
@@ -509,14 +465,15 @@ const MainPage: React.FC = () => {
           )}
         </Right>
         <Presentation>
+          {/*
           {config ? (
             <Memo key="game" config={config} />
           ) : (
             <div style={{ background: '#000', width: '100%', height: '100%' }} />
           )}
-          {/*
-          <img style={{ background: '#000', objectFit: 'cover', width: '100%', height: '100%' }} src={tmp} />
           */}
+          <img style={{ background: '#000', objectFit: 'cover', width: '100%', height: '100%' }} src={tmp} alt='test' />
+          <GameUi mode={game.ui} />
         </Presentation>
         <Main>
           <MoreContent>
@@ -565,11 +522,20 @@ const MainPage: React.FC = () => {
           <Notification>
             <NotificationContent>
               <ThinBox>
-                <Pause unique_id={uniqueId} onClose={() => game.closePauseDialog()} />
+                <Pause unique_id={uniqueId} onClose={() => game.restartGame()} />
               </ThinBox>
             </NotificationContent>
           </Notification>
         )}
+        {
+          game.isSelling && (
+            <Notification>
+              <NotificationContent>
+                <SalesDialog unique_id={uniqueId} onClose={() => game.restartGame()} />
+              </NotificationContent>
+            </Notification>
+          )
+        }
         {
           game.isSigningUp && (
             <Dialog onClose={() => game.finishSignup()}>

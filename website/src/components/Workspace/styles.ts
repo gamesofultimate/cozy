@@ -102,7 +102,7 @@ export const Logo = styled.div<FocusedProps>(({ focused }) => [
     left: 50,
   },
   focused === FocusState.Focused && {
-    left: -900,
+    left: -5000,
   },
 ]);
 
@@ -126,7 +126,7 @@ export const Left = styled.div<FocusedProps>(({ focused }) => [
   },
   focused === FocusState.Focused && {
     top: -900,
-    left: -900,
+    left: -5000,
   },
 ]);
 
@@ -153,7 +153,7 @@ export const Right = styled.div<FocusedProps>(({ focused }) => [
   },
   focused === FocusState.Focused && {
     top: -900,
-    right: -900,
+    right: -5000,
   },
 ]);
 //

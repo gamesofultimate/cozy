@@ -54,7 +54,7 @@
     "debug": {
       "empty_shapes": false,
       "shadow": false,
-      "physics": true,
+      "physics": false,
       "lighting": false,
       "render_debug_mode": "None",
       "grid": false,
@@ -11816,6 +11816,11 @@
       "e5ef4192-40d6-4072-a17f-0c5bb777e08f": {
         "id": "e5ef4192-40d6-4072-a17f-0c5bb777e08f",
         "source": "models/crops/pumpkin-wilting.gltf",
+        "maxInstances": 10
+      },
+      "28f18baf-d787-422a-aa0e-e2437a6fba42": {
+        "id": "28f18baf-d787-422a-aa0e-e2437a6fba42",
+        "source": "test/bananinha.gltf",
         "maxInstances": 10
       }
     },

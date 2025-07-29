@@ -11,6 +11,7 @@ import type {
 type Website = {
   focused: FocusState;
   mode: WebsiteMode;
+  ui: UiMode;
   download_percent: number;
 };
 
@@ -21,6 +22,12 @@ type Config = {
 type Stats = {
 }
 
+export enum UiMode {
+  Hidden,
+  Small,
+  Expanded,
+}
+
 export enum WebsiteMode {
   Downloading,
   Normal,
@@ -29,13 +36,20 @@ export enum WebsiteMode {
   Wishlist,
   Pause,
   OutOfCapacity,
+  SalesDialog,
 }
 
 const defaultWebsite = (): Website => {
   return {
-    focused: FocusState.Unfocused,
-    //mode: WebsiteMode.Normal,
-    mode: WebsiteMode.Downloading,
+    //focused: FocusState.Unfocused,
+    focused: FocusState.Focused,
+    mode: WebsiteMode.Normal,
+    //mode: WebsiteMode.Downloading,
+    //mode: WebsiteMode.SalesDialog,
+    //mode: WebsiteMode.Pause,
+
+    ui: UiMode.Hidden,
+
     download_percent: 0,
   };
 };
@@ -68,8 +82,8 @@ export class Game {
     if (message === 'StartGame') {
       this.website.focused = FocusState.Focused;
       this.website.mode = WebsiteMode.Normal;
+      this.website.ui = UiMode.Small;
     } else if (message === 'StopGame' && this.invitationDialog && !this.config.debouncingEscape) {
-      console.log('closing invite');
       this.config.debouncingEscape = true;
       setTimeout(() => {
         this.config.debouncingEscape = false;
@@ -81,11 +95,16 @@ export class Game {
       console.log('regular stop');
       this.website.focused = FocusState.Unfocused;
       this.website.mode = WebsiteMode.Pause;
+      this.website.ui = UiMode.Hidden;
+
       setTimeout(() => {
         this.config.debouncingEscape = false;
       }, 750);
     } else if (message === 'TriggerInvitation') {
       this.website.mode = WebsiteMode.Inviting;
+    }
+    else if ("SalesDialog" in message) {
+      this.website.mode = WebsiteMode.SalesDialog;
     }
     else if ("FinishGame" in message) {
       this.stats = message.FinishGame;
@@ -154,6 +173,10 @@ export class Game {
     this.website.mode = WebsiteMode.Normal;
   }
 
+  finishSales() {
+    this.website.mode = WebsiteMode.Normal;
+  }
+
   openInvitationDialog() {
     this.website.mode = WebsiteMode.Inviting;
   }
@@ -162,9 +185,10 @@ export class Game {
     this.website.mode = WebsiteMode.Normal;
   }
 
-  closePauseDialog() {
+  restartGame() {
     this.website.mode = WebsiteMode.Normal;
     this.website.focused = FocusState.Focused;
+    this.website.ui = UiMode.Small;
 
     const canvas = document.getElementById('canvas');
     canvas?.focus();
@@ -175,6 +199,7 @@ export class Game {
   pressPlay() {
     this.website.mode = WebsiteMode.Normal;
     this.website.focused = FocusState.Focused;
+    this.website.ui = UiMode.Small;
     sendToGame('StartGame');
   }
 
@@ -209,6 +234,14 @@ export class Game {
 
   get outOfCapacityDialog(): boolean {
     return this.website.mode === WebsiteMode.OutOfCapacity;
+  }
+
+  get ui(): UiMode {
+    return this.website.ui
+  }
+
+  get isSelling(): boolean {
+    return this.website.mode === WebsiteMode.SalesDialog;
   }
 
   get wishlistDialog(): boolean {
