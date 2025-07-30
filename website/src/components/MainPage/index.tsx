@@ -446,7 +446,7 @@ const MainPage: React.FC = () => {
           {(game.website.download_percent >= 1) ? (
             <FancyButton onClick={() => { game.pressPlay() }}>Play</FancyButton>
           ) : (
-            <div style={{ width: 400 }}>
+            <div style={{ width: 400, margin: '0 auto' }}>
               <ProgressBar percent={game.website.download_percent} />
             </div>
           )}

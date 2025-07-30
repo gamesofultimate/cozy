@@ -21,6 +21,8 @@ use engine::{
 use std::collections::HashMap;
 use std::f32::consts::PI;
 
+pub struct Showoff;
+
 pub struct PickupsSystem {}
 
 impl Initializable for PickupsSystem {
@@ -271,6 +273,32 @@ impl PickupsSystem {
   pub fn handle_harvest(&self, scene: &mut Scene, backpack: &mut Backpack) {
     let delta_time = backpack.get::<Seconds>().unwrap();
 
+    let mut cleanup_showoff = false;
+    for (_, (input, character)) in scene.query_mut::<(&GameInput, &mut CharacterState)>() {
+      if (input.state.contains(InputState::Action)
+        || input.state.contains(InputState::LeftClick)
+        || input.state.contains(InputState::ChangeActionUp)
+        || input.state.contains(InputState::ChangeActionDown)
+        || input.state.contains(InputState::Escape))
+        && let CharacterState::ShowingOff { .. } = character
+      {
+        *character = CharacterState::Normal;
+        cleanup_showoff = true;
+        continue;
+      }
+    }
+
+    if cleanup_showoff {
+      let mut showoffs = vec![];
+      for (entity, _) in scene.query_mut::<&Showoff>() {
+        showoffs.push(entity);
+      }
+
+      for entity in showoffs {
+        let _ = scene.despawn(entity);
+      }
+    }
+
     for (_, (input, character, state, collision)) in scene.query_mut::<(
       &GameInput,
       &mut Character,
@@ -344,6 +372,7 @@ impl PickupsSystem {
         }
         scene.create_with_prefab(crop_entity, parent);
         scene.create_with_prefab(crop_entity, prefab);
+        scene.add_local_component(crop_entity, Showoff);
       }
     }
 

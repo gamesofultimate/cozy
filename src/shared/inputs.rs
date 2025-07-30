@@ -80,17 +80,6 @@ impl InputsSystem {
       &mut TransformComponent,
       Option<&mut AudioSourceComponent>,
     )>() {
-      if (input.state.contains(InputState::Action)
-        || input.state.contains(InputState::LeftClick)
-        || input.state.contains(InputState::ChangeActionUp)
-        || input.state.contains(InputState::ChangeActionDown)
-        || input.state.contains(InputState::Escape))
-        && let CharacterState::ShowingOff { .. } = character
-      {
-        *character = CharacterState::Normal;
-        continue;
-      }
-
       if input.state.contains(InputState::IsRunning)
         && let CharacterState::Normal = character
       {

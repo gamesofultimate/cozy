@@ -373,7 +373,7 @@ impl StateMachineSystem {
             scene.query_mut::<(&mut TransformComponent, &CameraComponent)>()
           {
             let degrees = Radians::from(Degrees::new(45.0));
-            transform.translation = Vector3::new(0.0, 6.0, -6.0);
+            transform.translation = Vector3::new(0.0, 6.0, -8.0);
             transform.rotation = Vector3::new(*degrees, 0.0, 0.0);
           }
         }
