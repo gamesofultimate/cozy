@@ -152,6 +152,12 @@ export class Game {
       this.ui.inventory = message.UpdateCharacter.character.inventory;
       this.ui.cash = message.UpdateCharacter.character.cash;
       this.ui.current_action = message.UpdateCharacter.state;
+      const rest = message.UpdateCharacter.character.rest;
+      const social = message.UpdateCharacter.character.social;
+      const hunger = message.UpdateCharacter.character.hunger;
+      this.ui.rest = rest.current / rest.max;
+      this.ui.social = social.current / social.max;
+      this.ui.hunger = hunger.current / hunger.max;
     }
     else if ("UpdateDownloadStats" in message) {
       const pendingRequired = message.UpdateDownloadStats.pending_required;
