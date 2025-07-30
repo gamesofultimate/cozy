@@ -146,11 +146,12 @@ export class Game {
       }
     }
     else if ("UpdateCharacter" in message) {
-      //console.log(message);
       if (!message.UpdateCharacter) return;
 
+      //console.log(message.UpdateCharacter);
       this.ui.inventory = message.UpdateCharacter.character.inventory;
       this.ui.cash = message.UpdateCharacter.character.cash;
+      this.ui.current_action = message.UpdateCharacter.state;
     }
     else if ("UpdateDownloadStats" in message) {
       const pendingRequired = message.UpdateDownloadStats.pending_required;

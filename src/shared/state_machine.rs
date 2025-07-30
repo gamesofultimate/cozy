@@ -1,5 +1,5 @@
 //use crate::shared::audio_components::{AudioGameStart, SoundtrackIntro};
-use crate::shared::components::{ActiveCamera, Character, CharacterState, Player};
+use crate::shared::components::{ActionTypes, ActiveCamera, Character, CharacterState, Player};
 use crate::shared::game_input::{GameInput, InputState};
 use chrono::{DateTime, TimeDelta, Utc};
 use engine::{
@@ -102,10 +102,6 @@ impl System for StateMachineSystem {
 impl StateMachineSystem {
   pub fn handle_prev(&mut self, backpack: &mut Backpack) {
     if let Some((curr, Prev(prev))) = backpack.fetch_mut::<(StateMachine, Prev<StateMachine>)>() {
-      *prev = curr.clone();
-    }
-
-    if let Some((curr, Prev(prev))) = backpack.fetch_mut::<(Character, Prev<Character>)>() {
       *prev = curr.clone();
     }
   }
@@ -377,7 +373,7 @@ impl StateMachineSystem {
             transform.rotation = Vector3::new(*degrees, 0.0, 0.0);
           }
         }
-        GameState::Initializing => {
+        GameState::Initializing | GameState::Downloading | GameState::Loaded => {
           for (entity, (transform, _)) in
             scene.query_mut::<(&mut TransformComponent, &CameraComponent)>()
           {
@@ -443,31 +439,84 @@ impl StateMachineSystem {
 
   #[cfg(target_arch = "wasm32")]
   fn handle_update_ui(&mut self, scene: &mut Scene) {
-    for (_, (character, Prev(prev), _)) in
-      scene.query_mut::<(&Character, &Prev<Character>, &SelfComponent)>()
-    {
-      if character != prev {
+    for (_, (character, state, Prev(prev_character), Prev(prev_state), _)) in scene.query_mut::<(
+      &Character,
+      &CharacterState,
+      &Prev<Character>,
+      &Prev<CharacterState>,
+      &SelfComponent,
+    )>() {
+      if character != prev_character || state != prev_state {
         self.browser.send(Message::UpdateCharacter {
           character: character.clone(),
-          state: String::from("Test"),
+          state: match (state, &character.action) {
+            (CharacterState::CollectingWater, _) => String::from("Collecting Water.."),
+            (CharacterState::WorkingTile(_), _) => String::from("Watering Soil.."),
+            (CharacterState::ThrowingSeed(_, _), _) => String::from("Planting Seed.."),
+            (CharacterState::Harvesting(_, _), _) => String::from("Harvesting..."),
+            (_, ActionTypes::WaterTile) => String::from("Water Soil"),
+            (_, ActionTypes::ThrowSeed) => String::from("Plant Seed"),
+            (_, ActionTypes::Harvest) => String::from("Harvest"),
+          },
         });
       }
     }
 
-    let mut new_entities = vec![];
-    for (entity, (character, _)) in scene
-      .query_mut::<(&Character, &SelfComponent)>()
-      .without::<&Prev<Character>>()
-    {
-      new_entities.push((entity.clone(), character.clone()));
+    for (_, (curr, Prev(prev))) in scene.query_mut::<(&Character, &mut Prev<Character>)>() {
+      *prev = curr.clone();
     }
 
-    for (entity, character) in new_entities {
-      scene.add_local_component(entity, Prev(character.clone()));
-      self.browser.send(Message::UpdateCharacter {
-        character,
-        state: String::from("Test"),
-      });
+    for (_, (curr, Prev(prev))) in scene.query_mut::<(&CharacterState, &mut Prev<CharacterState>)>()
+    {
+      *prev = curr.clone();
+    }
+
+    let mut force_update = false;
+    {
+      let mut new_entities = vec![];
+      for (entity, character) in scene.query_mut::<&Character>().without::<Prev<Character>>() {
+        new_entities.push((entity.clone(), character.clone()));
+      }
+
+      for (entity, character) in new_entities {
+        scene.add_local_component(entity, Prev(character));
+        force_update = true;
+      }
+    }
+
+    {
+      let mut new_entities = vec![];
+      for (entity, state) in scene
+        .query_mut::<&CharacterState>()
+        .without::<Prev<CharacterState>>()
+      {
+        new_entities.push((entity.clone(), state.clone()));
+      }
+
+      for (entity, state) in new_entities {
+        scene.add_local_component(entity, Prev(state));
+        force_update = true;
+      }
+    }
+
+    if force_update {
+      for (_, (character, state, _)) in
+        scene.query_mut::<(&Character, &CharacterState, &SelfComponent)>()
+      {
+        log::info!("2");
+        self.browser.send(Message::UpdateCharacter {
+          character: character.clone(),
+          state: match (state, &character.action) {
+            (CharacterState::CollectingWater, _) => String::from("Collecting Water.."),
+            (CharacterState::WorkingTile(_), _) => String::from("Watering Soil.."),
+            (CharacterState::ThrowingSeed(_, _), _) => String::from("Planting Seed.."),
+            (CharacterState::Harvesting(_, _), _) => String::from("Harvesting..."),
+            (_, ActionTypes::WaterTile) => String::from("Water Soil"),
+            (_, ActionTypes::ThrowSeed) => String::from("Plant Seed"),
+            (_, ActionTypes::Harvest) => String::from("Harvest"),
+          },
+        });
+      }
     }
   }
 }

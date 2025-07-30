@@ -214,7 +214,7 @@ pub struct Player {}
 
 impl ProvideAssets for Player {}
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum CharacterState {
   Normal,
   Running,
