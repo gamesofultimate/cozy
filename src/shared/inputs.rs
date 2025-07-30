@@ -47,19 +47,8 @@ impl Initializable for InputsSystem {
 
 impl InputsSystem {
   #[cfg(target_arch = "wasm32")]
-  fn capture_mouse(&mut self, backpack: &mut Backpack) {
+  fn debug(&mut self, backpack: &mut Backpack) {
     let input = self.inputs.read_client();
-    if input.state.contains(InputState::LeftClick)
-      && !input.state.contains(InputState::IsMouseLocked)
-    {
-      self.canvas.capture_mouse(true);
-    } else if input
-      .state
-      .contains(InputState::Escape | InputState::IsMouseLocked)
-    {
-      self.canvas.capture_mouse(false);
-    }
-
     if let Some(world) = backpack.get_mut::<WorldConfig>() {
       if input.state.contains(InputState::ToggleDebugPerformance) {
         world.debug_performance = !world.debug_performance;
@@ -99,15 +88,15 @@ impl InputsSystem {
 
       let mut velocity = Vector3::new(0.0, -9.8, 0.0);
 
-      if input.check(InputState::IsMouseLocked) || input.check(InputState::HasJoystick) {
-        if input.forward.abs() > component.deadzone {
-          velocity.z += input.forward * *speed;
-        }
-
-        if input.right.abs() > component.deadzone {
-          velocity.x += input.right * *speed;
-        }
+      if input.forward.abs() > component.deadzone {
+        velocity.z += input.forward * *speed;
       }
+
+      if input.right.abs() > component.deadzone {
+        velocity.x += input.right * *speed;
+      }
+      // NOTE: This needs to be enabled, but needs to be done
+      // in the server as well, so we can make the game multiplayer
       /*
         if let Some(machine) = backpack.get_mut::<StateMachine>() {
           match &machine.state {
@@ -154,8 +143,7 @@ impl System for InputsSystem {
     let delta_time = backpack.get::<Seconds>().cloned().unwrap();
 
     #[cfg(target_arch = "wasm32")]
-    self.capture_mouse(backpack);
-
+    self.debug(backpack);
     self.handle_move(scene, backpack, delta_time);
   }
 }
