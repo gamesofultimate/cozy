@@ -1,6 +1,7 @@
 #![cfg(target_arch = "wasm32")]
 use engine::{
   application::{
+    components::{NetworkedPlayerComponent, SelfComponent},
     input::InputsReader,
     scene::{Collision, Scene},
   },
@@ -10,6 +11,7 @@ use engine::{
   },
   tsify,
   utils::units::Seconds,
+  PlayerId,
 };
 use serde::{Deserialize, Serialize};
 
@@ -25,12 +27,12 @@ pub enum Message {
   StopGame,
   PauseGame,
   TriggerSignup,
-  FinishSignup,
   Login,
   TriggerInvitation,
   FinishInvitation,
 
   StartSale,
+  FinishSignup,
   UpdateStateMachine {
     state: StateMachine,
   },
@@ -70,13 +72,19 @@ impl BrowserSystem {
     "BrowserSystem"
   }
 
-  pub fn handle_browser_messages(&self, backpack: &mut Backpack) -> Option<()> {
+  pub fn handle_browser_messages(&self, scene: &mut Scene, backpack: &mut Backpack) -> Option<()> {
     let machine = backpack.get_mut::<StateMachine>()?;
     for message in self.receiver.receive() {
-      log::info!("message: {message:?}");
       match message {
         Message::StartGame => {
           machine.start_game();
+        }
+        Message::FinishSignup => {
+          for (_, (network, _)) in scene.query_mut::<(&NetworkedPlayerComponent, &SelfComponent)>()
+          {
+            machine.signup(&network.connection_id, PlayerId::new());
+            machine.start_game();
+          }
         }
         _ => {}
       }
@@ -118,7 +126,7 @@ impl BrowserSystem {
 
 impl System for BrowserSystem {
   fn run(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
-    self.handle_browser_messages(backpack);
+    self.handle_browser_messages(scene, backpack);
     self.handle_game_start();
     self.handle_sales(scene, backpack);
   }

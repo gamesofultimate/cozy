@@ -230,10 +230,6 @@ export class Game {
     this.website.mode = WebsiteMode.SigningUp;
   }
 
-  finishSignup() {
-    this.website.mode = WebsiteMode.Normal;
-  }
-
   finishSales() {
     this.website.mode = WebsiteMode.Normal;
   }
@@ -275,6 +271,11 @@ export class Game {
 
   sendShareEvent() {
     sendToGame('Shared');
+  }
+
+  finishSignup() {
+    this.website.mode = WebsiteMode.Normal;
+    sendToGame('FinishSignup');
   }
 
   setDeveloperMode(key: string) {

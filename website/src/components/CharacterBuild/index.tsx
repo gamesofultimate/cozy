@@ -176,8 +176,11 @@ const CharacterBuild: React.FC<CharacterBuildProps> = () => {
     const current = latest.current;
     const nextPage = next[current];
 
+    console.log(current, nextPage);
+
     if (!nextPage) {
       // last page
+      game.finishSignup();
       return;
     }
 

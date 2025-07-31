@@ -479,6 +479,12 @@ impl StateMachine {
     }
   }
 
+  pub fn signup(&mut self, search: &ConnectionId, id: PlayerId) {
+    if let Some((_, _, player)) = self.players.iter_mut().find(|(id, _, _)| id == search) {
+      *player = Some(id);
+    }
+  }
+
   pub fn is_playing(&self) -> bool {
     if let GameState::Playing = &self.state {
       true
