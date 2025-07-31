@@ -116,7 +116,7 @@ impl ChannelEvents for NetworkController {
       .send(ServerControls::SyncWorld { connection_id });
 
     if let Some(machine) = backpack.get_mut::<StateMachine>() {
-      machine.connect(connection_id, &username);
+      machine.connect(connection_id, &username, player.map(|(id, _)| id));
     }
     self.connections.connections = connections.clone();
     backpack.insert::<PlayerConnections>(self.connections.clone());

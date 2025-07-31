@@ -564,7 +564,3 @@ impl System for PickupsSystem {
     //self.handle_update_ui(scene, backpack);
   }
 }
-
-fn lerp(a: f32, b: f32, percent: f32) -> f32 {
-  a * percent + b * (1.0 - percent)
-}

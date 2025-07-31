@@ -22,7 +22,7 @@ use engine::{
     interpolation::Interpolator,
     units::{Degrees, Radians, Seconds},
   },
-  ConnectionId,
+  ConnectionId, PlayerId,
 };
 use serde::{Deserialize, Serialize};
 use std::collections::{HashMap, HashSet};
@@ -86,11 +86,11 @@ impl System for StateMachineSystem {
     {
       self.handle_start(scene, backpack);
       self.handle_receive_from_server(scene, backpack);
+      self.handle_sign_up(scene, backpack);
       self.handle_camera_dof(scene, backpack);
       self.handle_game_loading(scene, backpack);
       self.handle_update_ui(scene);
     }
-    //self.handle_transitions(scene, backpack);
 
     self.handle_state(scene, backpack);
     #[cfg(not(target_arch = "wasm32"))]
@@ -106,171 +106,17 @@ impl StateMachineSystem {
     }
   }
 
-  fn handle_transitions(&mut self, scene: &mut Scene, backpack: &mut Backpack) {
-    /*
-    use engine::application::{
-      components::{LightComponent, SkyLightComponent},
-      scene::TransformComponent,
-    };
+  #[cfg(target_arch = "wasm32")]
+  fn handle_sign_up(&mut self, scene: &mut Scene, backpack: &mut Backpack) -> Option<()> {
+    let (machine, manager) = backpack.fetch_mut::<(StateMachine, AssetManager)>()?;
 
-    let delta_time = *backpack.get::<Seconds>().clone().unwrap();
-    let mut done = None;
-
-    for (entity, (sky, directional, (directional_intensity, sky_lighting, sky_background))) in scene
-      .query_mut::<(
-        &mut SkyLightComponent,
-        &mut LightComponent,
-        &mut (Interpolator, Interpolator, Interpolator),
-      )>()
-    {
-      directional_intensity.accumulate(*delta_time);
-      sky_lighting.accumulate(*delta_time);
-      sky_background.accumulate(*delta_time);
-
-      if let LightComponent::Directional { intensity, .. } = directional {
-        *intensity = directional_intensity.get();
-      }
-
-      // handle both cases, so that we can change without breaking
-      match sky {
-        SkyLightComponent::Dynamic {
-          lighting_intensity,
-          background_intensity,
-          ..
-        } => {
-          *lighting_intensity = sky_lighting.get();
-          *background_intensity = sky_background.get();
-        }
-        SkyLightComponent::Image {
-          lighting_intensity,
-          background_intensity,
-          ..
-        } => {
-          *lighting_intensity = sky_lighting.get();
-          *background_intensity = sky_background.get();
-        }
-      }
-
-      /*
-      log::info!("
-        *intensity = directional_intensity.get();
-        *lighting_intensity = sky_lighting.get();
-        *background_intensity = sky_background.get();
-      */
-
-      if directional_intensity.is_finished()
-        && sky_lighting.is_finished()
-        && sky_background.is_finished()
-      {
-        done = Some(entity);
+    for (_, (network, _)) in scene.query_mut::<(&NetworkedPlayerComponent, &SelfComponent)>() {
+      if machine.is_active() && !machine.is_logged_in(&network.connection_id) {
+        machine.set_signup();
       }
     }
 
-    if let Some(entity) = done {
-      let _ = scene.remove_local_component::<(Interpolator, Interpolator, Interpolator)>(entity);
-    }
-
-    if let Some((next, Prev(prev))) = backpack.fetch_mut::<(StateMachine, Prev<StateMachine>)>() {
-      match (&prev.state, &next.state) {
-        (GameState::TeamSelection { .. }, GameState::Starting { locations, .. }) => {
-          /*
-          for (_, (audio, _)) in scene.query_mut::<(&mut AudioSourceComponent, &SoundtrackIntro)>()
-          {
-            audio.state = SourceState::Stopped;
-          }
-          for (_, (audio, _)) in scene.query_mut::<(&mut AudioSourceComponent, &AudioGameStart)>() {
-            audio.state = SourceState::Playing;
-          }
-          */
-
-          let mut entities = vec![];
-
-          for (entity, (sky, directional)) in
-            scene.query_mut::<(&mut SkyLightComponent, &mut LightComponent)>()
-          {
-            let directional = if let LightComponent::Directional { intensity, .. } = directional {
-              let cached = *intensity;
-              *intensity = 0.0;
-              cached
-            } else {
-              continue;
-            };
-            // handle both cases, so that we can change without breaking
-            let (sky_lighting, sky_background) = match sky {
-              SkyLightComponent::Dynamic {
-                lighting_intensity,
-                background_intensity,
-                ..
-              } => {
-                let cached_lighting = *lighting_intensity;
-                let cached_background = *background_intensity;
-                *lighting_intensity = 0.0;
-                *background_intensity = 0.0;
-                (cached_lighting, cached_background)
-              }
-              SkyLightComponent::Image {
-                lighting_intensity,
-                background_intensity,
-                ..
-              } => {
-                let cached_lighting = *lighting_intensity;
-                let cached_background = *background_intensity;
-                *lighting_intensity = 0.0;
-                *background_intensity = 0.0;
-                (cached_lighting, cached_background)
-              }
-            };
-
-            entities.push((entity, directional, sky_lighting, sky_background));
-          }
-
-          for (entity, directional, sky_lighting, sky_background) in entities {
-            scene.add_local_component(
-              entity,
-              (
-                Interpolator::new(0.0, directional, Easing::Linear, 0.0..=0.600),
-                Interpolator::new(0.0, sky_lighting, Easing::Linear, 0.0..=0.600),
-                Interpolator::new(0.0, sky_background, Easing::Linear, 0.0..=0.600),
-              ),
-            );
-          }
-
-          let mut player_location = None;
-
-          for (_, (_, transform, network, maybe_self)) in scene.query_mut::<(
-            &Player,
-            &mut TransformComponent,
-            &NetworkedPlayerComponent,
-            Option<&SelfComponent>,
-          )>() {
-            if let Some(spawn_position) = locations.get(&network.connection_id) {
-              // It doesn't have a physics body yet, so it can't be moved by physics
-              transform.translation = *spawn_position;
-
-              if let Some(_) = maybe_self {
-                player_location = Some(*spawn_position);
-              }
-            }
-          }
-
-          #[cfg(target_arch = "wasm32")]
-          {
-            use engine::systems::rendering::CameraConfig;
-
-            if let Some(player_location) = player_location
-              && let Some(camera) = backpack.get_mut::<CameraConfig>()
-            {
-              camera.translation = player_location;
-            }
-          }
-
-          log::info!("Game is starting!");
-        }
-        // Normally do nothing
-        _ => {}
-      }
-    }
-    */
+    Some(())
   }
 
   #[cfg(target_arch = "wasm32")]
@@ -358,6 +204,37 @@ impl StateMachineSystem {
             transform.rotation = Vector3::new(0.0, 0.0, 0.0);
           }
         }
+        GameState::Signup => {
+          config.dof.focus_point = lerp(config.dof.focus_point, distance, 0.9);
+          config.dof.focus_scale = (config.dof.focus_scale - 0.001 * *delta_time).clamp(0.0, 3.0);
+          for (_, follower) in scene.query_mut::<&mut CameraFollower>() {
+            follower.interpolation_speed = 0.02;
+          }
+
+          let mut camera = None;
+
+          for (entity, (transform, _)) in
+            scene.query_mut::<(&mut TransformComponent, &CameraComponent)>()
+          {
+            camera = Some(transform.world_transform().translation);
+
+            transform.translation = Vector3::new(-1.0, 0.0, -3.0);
+            transform.rotation = Vector3::new(0.0, 0.0, 0.0);
+          }
+
+          if let Some(camera) = backpack.get_mut::<CameraConfig>() {
+            for (entity, (transform, _, _)) in
+              scene.query_mut::<(&mut TransformComponent, &Player, &SelfComponent)>()
+            {
+              let character = transform.world_transform().translation;
+              let direction = Unit::new_normalize(camera.translation - character);
+
+              let yaw = direction.x.atan2(direction.z);
+
+              transform.rotation = Vector3::new(0.0, yaw, 0.0);
+            }
+          }
+        }
         GameState::Playing => {
           config.dof.focus_point = lerp(config.dof.focus_point, distance, 0.9);
           config.dof.focus_scale = (config.dof.focus_scale - 0.001 * *delta_time).clamp(0.0, 3.0);
@@ -422,8 +299,28 @@ impl StateMachineSystem {
     if let Some((game, delta_time)) = backpack.fetch_mut::<(StateMachine, Seconds)>() {
       self.current_time += *delta_time;
 
-      if let Some(_) = game.bump_state(self.current_time) {
+      // if no one is online, go back to initializing
+      if game.players.len() == 0 {
+        game.state = GameState::Initializing;
         self.current_time = Seconds::new(0.0);
+      }
+
+      match game.state {
+        GameState::Initializing => {
+          game.state = GameState::Downloading;
+          self.current_time = Seconds::new(0.0);
+        }
+        GameState::RequestTransition => {
+          game.state = GameState::TransitionToGame {
+            timeout: Seconds::new(2.0),
+          };
+          self.current_time = Seconds::new(0.0);
+        }
+        GameState::TransitionToGame { timeout } if self.current_time > timeout => {
+          game.state = GameState::Playing;
+          self.current_time = Seconds::new(0.0);
+        }
+        _ => {}
       }
     }
   }
@@ -503,7 +400,6 @@ impl StateMachineSystem {
       for (_, (character, state, _)) in
         scene.query_mut::<(&Character, &CharacterState, &SelfComponent)>()
       {
-        log::info!("2");
         self.browser.send(Message::UpdateCharacter {
           character: character.clone(),
           state: match (state, &character.action) {
@@ -527,6 +423,7 @@ pub enum GameState {
   Downloading,
   Loaded,
   RequestTransition,
+  Signup,
   TransitionToGame { timeout: Seconds },
   Playing,
   Paused,
@@ -534,7 +431,7 @@ pub enum GameState {
 
 #[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 pub struct StateMachine {
-  pub players: Vec<(ConnectionId, String)>,
+  pub players: Vec<(ConnectionId, String, Option<PlayerId>)>,
   pub state: GameState,
   pub ready: HashSet<ConnectionId>,
   pub admin: Option<ConnectionId>,
@@ -561,6 +458,14 @@ impl StateMachine {
 
   pub fn check_readiness(&mut self, id: ConnectionId) -> bool {
     self.ready.contains(&id)
+  }
+
+  pub fn is_logged_in(&self, search: &ConnectionId) -> bool {
+    if let Some((_, _, Some(_))) = self.players.iter().find(|(id, _, _)| id == search) {
+      true
+    } else {
+      false
+    }
   }
 
   pub fn is_playing(&self) -> bool {
@@ -594,8 +499,8 @@ impl StateMachine {
   }
 
   #[cfg(not(target_arch = "wasm32"))]
-  pub fn connect(&mut self, id: ConnectionId, username: &str) {
-    self.players.push((id, String::from(username)));
+  pub fn connect(&mut self, id: ConnectionId, username: &str, player: Option<PlayerId>) {
+    self.players.push((id, String::from(username), player));
 
     if let None = self.admin {
       self.admin = Some(id);
@@ -632,38 +537,16 @@ impl StateMachine {
     self.state = GameState::Downloading;
   }
 
+  pub fn set_signup(&mut self) {
+    self.state = GameState::Signup;
+  }
+
   pub fn set_loaded(&mut self) {
     self.state = GameState::Loaded;
   }
 
   pub fn pause_game(&mut self) {
     self.state = GameState::Paused;
-  }
-
-  pub fn bump_state(&mut self, current_time: Seconds) -> Option<()> {
-    // if no one is online, go back to initializing
-    if self.players.len() == 0 {
-      self.state = GameState::Initializing;
-      return Some(());
-    }
-
-    match self.state {
-      GameState::Initializing => {
-        self.state = GameState::Downloading;
-        Some(())
-      }
-      GameState::RequestTransition => {
-        self.state = GameState::TransitionToGame {
-          timeout: Seconds::new(2.0),
-        };
-        Some(())
-      }
-      GameState::TransitionToGame { timeout } if current_time > timeout => {
-        self.state = GameState::Playing;
-        Some(())
-      }
-      _ => None,
-    }
   }
 }
 
