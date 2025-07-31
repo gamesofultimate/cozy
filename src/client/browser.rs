@@ -31,6 +31,9 @@ pub enum Message {
   FinishInvitation,
 
   StartSale,
+  UpdateStateMachine {
+    state: StateMachine,
+  },
   UpdateCharacter {
     character: Character,
     state: String,

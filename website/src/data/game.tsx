@@ -6,6 +6,7 @@ import type {
   Message,
   GameplayStats,
   InventoryItem,
+  StateMachine,
   // @ts-ignore
 } from 'types/ultimate';
 
@@ -36,6 +37,7 @@ export enum UiMode {
   Hidden,
   Small,
   Expanded,
+  Signup,
 }
 
 export enum WebsiteMode {
@@ -55,7 +57,7 @@ const defaultUi = (): Ui => {
     quantity: "Empty",
   }));
 
-  inventory[0] = {item:{Seed:"Pumpkin"},quantity:{Finite:6}};
+  //inventory[0] = {item:{Seed:"Pumpkin"},quantity:{Finite:6}};
 
   return {
     inventory,
@@ -92,17 +94,28 @@ const defaultStats = (): Stats => {
   return { };
 };
 
+const defaultStateMachine = (): StateMachine => {
+  return {
+    players: [],
+    state: "Initializing",
+    ready: {},
+    admin: null,
+  };
+};
+
 export class Game {
   ui: Ui;
   website: Website;
   config: Config;
   stats: GameplayStats;
+  machine: StateMachine;
 
   constructor() {
     this.website = defaultWebsite();
     this.config = defaultConfig();
     this.stats = defaultStats();
     this.ui = defaultUi();
+    this.machine = defaultStateMachine();
 
     makeAutoObservable(this);
   }
@@ -144,6 +157,9 @@ export class Game {
       if (document.fullscreenElement) {
         document.exitFullscreen();
       }
+    }
+    else if ("UpdateStateMachine" in message) {
+      this.machine = message.UpdateStateMachine.state;
     }
     else if ("UpdateCharacter" in message) {
       if (!message.UpdateCharacter) return;

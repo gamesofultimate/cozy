@@ -8,8 +8,13 @@ import PumpkinCrop from 'images/crops/pumpkin-crops.png';
 import PumpkinSeeds from 'images/crops/pumpkin-seeds.png';
 import ProgressBar from 'components/ProgressBar';
 
+import type {
+  GameState,
+  // @ts-ignore
+} from 'types/ultimate';
+
 type CenteredProps = {
-  mode: UiMode;
+  mode: GameState;
 };
 
 // @ts-ignore
@@ -35,10 +40,10 @@ const Centered = styled.div<CenteredProps>(({ mode }) => [
     left: 20,
     transition: 'opacity 300ms ease-in-out',
   },
-  mode === UiMode.Hidden && {
+  mode !== "Playing" && {
     opacity: 0,
   },
-  mode !== UiMode.Hidden && {
+  mode === "Playing" && {
     opacity: 1,
   },
 ]);
@@ -171,7 +176,7 @@ const GameUi: React.FC<GameUiProps> = () => {
   const game = useGameData();
 
   return (
-    <Centered mode={game.ui.mode}>
+    <Centered mode={game.machine.state}>
       <Character>
         <Card>
           <Subtitle>Name</Subtitle>

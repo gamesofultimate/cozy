@@ -17,6 +17,7 @@ use engine::{
     physics::PhysicsController, trusty::AssetManager, trusty::MultiplayerController, Backpack,
     Initializable, Inventory, System,
   },
+  tsify,
   utils::{
     easing::Easing,
     interpolation::Interpolator,
@@ -93,7 +94,6 @@ impl System for StateMachineSystem {
     }
 
     self.handle_state(scene, backpack);
-    #[cfg(not(target_arch = "wasm32"))]
     self.handle_replicate(backpack);
     self.handle_prev(backpack);
   }
@@ -335,6 +335,17 @@ impl StateMachineSystem {
   }
 
   #[cfg(target_arch = "wasm32")]
+  fn handle_replicate(&mut self, backpack: &mut Backpack) {
+    if let Some((state, Prev(prev))) = backpack.fetch_mut::<(StateMachine, Prev<StateMachine>)>() {
+      if state != prev {
+        self.browser.send(Message::UpdateStateMachine {
+          state: state.clone(),
+        });
+      }
+    }
+  }
+
+  #[cfg(target_arch = "wasm32")]
   fn handle_update_ui(&mut self, scene: &mut Scene) {
     for (_, (character, state, Prev(prev_character), Prev(prev_state), _)) in scene.query_mut::<(
       &Character,
@@ -417,7 +428,7 @@ impl StateMachineSystem {
   }
 }
 
-#[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Clone, Serialize, Deserialize, tsify::Tsify)]
 pub enum GameState {
   Initializing,
   Downloading,
@@ -429,7 +440,7 @@ pub enum GameState {
   Paused,
 }
 
-#[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Clone, Serialize, Deserialize, tsify::Tsify)]
 pub struct StateMachine {
   pub players: Vec<(ConnectionId, String, Option<PlayerId>)>,
   pub state: GameState,

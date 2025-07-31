@@ -5,16 +5,20 @@ import { Formik, Form } from 'formik';
 
 import Text from 'components/Text';
 import Button, { ButtonKind } from 'components/Button';
-import Gradient from 'components/Gradient';
 import ButtonSelect from 'components/ButtonSelect';
 
 import Blondie from 'images/character-select/blondie.png';
 import Barry from 'images/character-select/barry.png';
 
-import { UiMode, useGameData } from 'data/game';
+import { useGameData } from 'data/game';
+
+import type {
+  GameState,
+  // @ts-ignore
+} from 'types/ultimate';
 
 type CenteredProps = {
-  mode: UiMode;
+  mode: GameState;
 };
 
 function isInViewport(el: Element): boolean {
@@ -40,7 +44,6 @@ const Centered = styled.div<CenteredProps>(({ mode }) => [
     gridTemplateColumns: '60% minmax(0, 1fr)',
     gridTemplateRows: 'minmax(0, 1fr)',
     gap: '10px 10px',
-    pointerEvents: 'none',
 
     position: 'fixed',
     top: 20,
@@ -49,11 +52,13 @@ const Centered = styled.div<CenteredProps>(({ mode }) => [
     left: 20,
     transition: 'opacity 300ms ease-in-out',
   },
-  mode === UiMode.Hidden && {
-    //opacity: 0,
-    opacity: 1,
+  mode !== "Signup" && {
+    opacity: 0,
+    pointerEvents: 'none',
+    //opacity: 1,
   },
-  mode !== UiMode.Hidden && {
+  mode === "Signup" && {
+    pointerEvents: 'auto',
     opacity: 1,
   },
 ]);
@@ -210,7 +215,7 @@ const CharacterBuild: React.FC<CharacterBuildProps> = () => {
 
 
   return (
-    <Centered mode={game.ui.mode}>
+    <Centered mode={game.machine.state}>
       <Main>
         <Card id="scroller">
           <Formik<CharacterBuilder>
@@ -220,7 +225,7 @@ const CharacterBuild: React.FC<CharacterBuildProps> = () => {
           >
             {() => (
               <Form>
-                <a id="welcome" />
+                <div id="welcome" />
                 <Page>
                   <Body>Welcome to</Body>
                   <Subtitle>Fireflies Meadow</Subtitle>
@@ -230,7 +235,7 @@ const CharacterBuild: React.FC<CharacterBuildProps> = () => {
                     Press Enter to Continue
                   </Button>
                 </Page>
-                <a id="account" />
+                <div id="account" />
                 <Page>
                   <Subtitle>Fireflies Meadow</Subtitle>
                   <Body>
@@ -245,7 +250,7 @@ const CharacterBuild: React.FC<CharacterBuildProps> = () => {
                     Press Enter to Continue
                   </Button>
                 </Page>
-                <a id="meadow" />
+                <div id="meadow" />
                 <Page>
                   <Subtitle>Your Meadow</Subtitle>
                   <Body>
@@ -258,7 +263,7 @@ const CharacterBuild: React.FC<CharacterBuildProps> = () => {
                     Press Enter to Continue
                   </Button>
                 </Page>
-                <a id="character" />
+                <div id="character" />
                 <Page>
                   <Subtitle>Choose Your Character</Subtitle>
                   <Body>
