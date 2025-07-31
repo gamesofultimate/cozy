@@ -164,10 +164,10 @@ const Body = styled.div(({ theme }) => ({
   textShadow: '0px 0px 7px #091b0e',
 }));
 
-type PauseProps = {
+type GameUiProps = {
 };
 
-const Pause: React.FC<PauseProps> = () => {
+const GameUi: React.FC<GameUiProps> = () => {
   const game = useGameData();
 
   return (
@@ -246,4 +246,4 @@ const Pause: React.FC<PauseProps> = () => {
 };
 
 
-export default observer(Pause);
+export default observer(GameUi);

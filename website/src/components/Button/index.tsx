@@ -44,12 +44,14 @@ export const Link = styled.a<KindProps>(({ theme, kind = ButtonKind.Normal }) =>
 
 export const Button = styled.button<KindProps>(({ theme, kind = ButtonKind.Normal }) => [
   {
-    border: '1px solid #fff',
+    border: 0,
     fontFamily: theme.fonts.primary,
-    background: 'transparent',
+    background: '#B64040',
     color: '#fff',
     margin: 0,
     lineHeight: 1,
+    borderRadius: 40,
+    padding: '0px 20px',
     justifyItems: 'center',
     pointerEvents: 'auto',
     textDecoration: 'none',

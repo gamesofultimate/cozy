@@ -64,6 +64,7 @@ import Pause from 'components/Pause';
 import OutOfCapacity from 'components/OutOfCapacity';
 
 import UnsupportedGpu from 'components/UnsupportedGpu';
+import CharacterBuild from 'components/CharacterBuild';
 
 // @ts-ignore
 const Video = styled.video(() => ({
@@ -465,15 +466,16 @@ const MainPage: React.FC = () => {
           )}
         </Right>
         <Presentation>
+          {/*
           {config ? (
             <Memo key="game" config={config} />
           ) : (
             <div style={{ background: '#000', width: '100%', height: '100%' }} />
           )}
-          {/*
-          <img style={{ background: '#000', objectFit: 'cover', width: '100%', height: '100%' }} src={tmp} alt='test' />
           */}
+          <img style={{ background: '#000', objectFit: 'cover', width: '100%', height: '100%' }} src={tmp} alt='test' />
           <GameUi />
+          <CharacterBuild />
         </Presentation>
         <Main>
           <MoreContent>

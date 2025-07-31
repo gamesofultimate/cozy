@@ -148,13 +148,14 @@ export class Game {
     else if ("UpdateCharacter" in message) {
       if (!message.UpdateCharacter) return;
 
+      const rest = message.UpdateCharacter.character.rest;
+      const social = message.UpdateCharacter.character.social;
+      const hunger = message.UpdateCharacter.character.hunger;
+
       //console.log(message.UpdateCharacter);
       this.ui.inventory = message.UpdateCharacter.character.inventory;
       this.ui.cash = message.UpdateCharacter.character.cash;
       this.ui.current_action = message.UpdateCharacter.state;
-      const rest = message.UpdateCharacter.character.rest;
-      const social = message.UpdateCharacter.character.social;
-      const hunger = message.UpdateCharacter.character.hunger;
       this.ui.rest = rest.current / rest.max;
       this.ui.social = social.current / social.max;
       this.ui.hunger = hunger.current / hunger.max;

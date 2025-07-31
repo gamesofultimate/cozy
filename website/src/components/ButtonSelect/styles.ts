@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { padding } from 'polished';
+import { padding, transparentize } from 'polished';
 
 export const ErrorMessage = styled.div(({ theme }) => [
   {
@@ -20,15 +20,13 @@ export const Field = styled.div(() => ({
 export const Wrapper = styled.div(({ theme }) => [
   {
     position: 'relative',
-    display: 'block',
+    display: 'flex',
     width: '100%',
     fontSize: 32,
-    borderRadius: 999,
-    background: 'rgba(51,51,51,0.1)',
-    backdropFilter: 'blur(10px) url(#liquid)',
-    //border: '1px solid #000',
     border: 0,
     boxSizing: 'border-box',
+    grap: 10,
+    justifyContent: 'space-between',
   },
 ]);
 
@@ -58,29 +56,28 @@ export const Input = styled.input(({ theme }) => [
     padding: '10px 20px',
     textShadow: '1px 1px 3px #A3D9F8',
     boxSizing: 'border-box',
-
-    boxShadow: '0 0 0 #A3D9F8',
-    transition: 'box-shadow 200ms ease-in-out',
-
     '&::placeholder': {
       color: '#fff',
-    },
-
-    '&:focus': {
-      border: 0,
-      outline: 'none',
-      boxShadow: '0 0 11px #A3D9F8',
-      borderRadius: 999,
     },
   },
 ]);
 
 export const Space = styled.div(({ theme }) => [
   {
+    width: '48%',
+    height: 'auto',
+    fontSize: 32,
+    borderRadius: 40,
+    boxSizing: 'border-box',
+  },
+]);
+
+export const Image = styled.img(({ theme }) => [
+  {
     width: '100%',
     height: '100%',
-    fontSize: 32,
-    borderRadius: 999,
-    boxSizing: 'border-box',
+    borderRadius: 40,
+    boxShadow: '3px 3px 16px #a3d9f873',
+    cursor: 'pointer',
   },
 ]);
